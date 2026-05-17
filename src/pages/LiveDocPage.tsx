@@ -700,11 +700,11 @@ export function LiveDocPage() {
   };
 
   if (!payload) {
-    return <section className="h-full bg-[#f5f4f0]" />;
+    return <section className="h-full bg-bg" />;
   }
 
   return (
-    <section className="flex h-full flex-col overflow-hidden bg-[#f5f4f0]">
+    <section className="flex h-full flex-col overflow-hidden bg-bg">
       <style>{`
         @keyframes live-doc-diagram-shimmer {
           0% { background-position: 200% 0; }
@@ -712,12 +712,12 @@ export function LiveDocPage() {
         }
       `}</style>
 
-      <div className="flex h-12 shrink-0 items-center border-b-[1.5px] border-[#e8e8e4] bg-white px-6">
+      <div className="flex h-12 shrink-0 items-center border-b-[1.5px] border-[#e8e8e4] bg-bg px-6">
         <h1 className="font-syne text-[15px] font-semibold text-[#0a0a0a]">{payload.projectName} — Product requirements</h1>
       </div>
 
       <div className="flex min-h-0 flex-1 overflow-hidden">
-        <div className="min-w-0 flex-1 overflow-y-auto bg-white">
+        <div className="min-w-0 flex-1 overflow-y-auto bg-bg">
           <div className="px-14 py-12 pl-[140px]">
             <div className="mb-5 flex items-center justify-between gap-4">
               <p className="font-mono text-[12px] text-[#888888]">

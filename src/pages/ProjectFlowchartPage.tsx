@@ -385,7 +385,7 @@ export function ProjectFlowchartPage() {
   };
 
   return (
-    <section className="relative h-full overflow-hidden bg-[#f8f8f5]">
+    <section className="relative h-full overflow-hidden bg-bg">
       <div className="absolute inset-x-0 top-0 z-20 flex h-[52px] items-center border-b border-[rgba(0,0,0,0.06)] bg-[rgba(248,248,245,0.9)] px-7 backdrop-blur-md">
         <div className="flex min-w-0 items-center">
           <button

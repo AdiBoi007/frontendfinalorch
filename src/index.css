@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --bg: #f7f6f3;
-  --bg-1: #ffffff;
+  --bg: #f3eee5;
+  --bg-1: #fafaf8;
   --bg-2: #f7f6f3;
+  --grid-line: rgba(207, 197, 181, 0.5);
   --border: #eeeeea;
   --teal: #00b4a0;
   --teal-dim: rgba(0, 180, 160, 0.08);
@@ -14,7 +15,11 @@
   --text-3: #999999;
   font-family: "Syne", sans-serif;
   color: var(--text-1);
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 68px 68px;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -35,7 +40,11 @@ body {
   margin: 0;
   min-width: 320px;
   font-family: "Syne", sans-serif;
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 68px 68px;
   color: var(--text-1);
   overflow-x: hidden;
 }
@@ -63,9 +72,25 @@ textarea::placeholder {
 }
 
 .solid-card {
-  background: #ffffff;
+  background: var(--bg-1);
   border-radius: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 16px 48px rgba(0, 0, 0, 0.08);
+}
+
+.bg-white {
+  background-color: var(--bg-1) !important;
+}
+
+.hover\:bg-white:hover {
+  background-color: var(--bg-1) !important;
+}
+
+.bg-bg {
+  background-color: var(--bg) !important;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) !important;
+  background-size: 68px 68px !important;
 }
 
 .primary-button {

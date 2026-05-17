@@ -688,7 +688,7 @@ export function ProjectBrainPage() {
   };
 
   return (
-    <section className="relative h-full overflow-hidden bg-[#fafaf8]">
+    <section className="relative h-full overflow-hidden bg-bg">
       <div className="absolute inset-x-0 top-0 z-20 flex h-14 items-center border-b border-[rgba(0,0,0,0.06)] bg-[rgba(250,250,248,0.9)] px-7 backdrop-blur-md">
         <div className="flex min-w-0 items-center">
           <button
@@ -732,10 +732,11 @@ export function ProjectBrainPage() {
       <div
         ref={canvasRef}
         onWheel={handleWheel}
-        className="absolute inset-x-0 bottom-0 top-14 overflow-hidden bg-[#fafaf8]"
+        className="absolute inset-x-0 bottom-0 top-14 overflow-hidden bg-bg"
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(0,180,160,0.12) 1px, transparent 1px)",
-          backgroundSize: "28px 28px"
+          backgroundImage:
+            "radial-gradient(circle, rgba(0,180,160,0.12) 1px, transparent 1px), linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)",
+          backgroundSize: "28px 28px, 68px 68px, 68px 68px"
         }}
       >
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,180,160,0.06)_0%,transparent_70%)]" />

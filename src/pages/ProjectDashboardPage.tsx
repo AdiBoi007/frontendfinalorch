@@ -495,7 +495,7 @@ export function ProjectDashboardPage() {
 
   if (!project) {
     return (
-      <div className="h-full overflow-y-auto bg-[#f7f6f3] px-10 pb-10 pl-8 pt-10">
+      <div className="h-full overflow-y-auto bg-bg px-10 pb-10 pl-8 pt-10">
         <p className="font-syne text-[14px] text-[#888888]">Loading project…</p>
       </div>
     );
@@ -503,7 +503,7 @@ export function ProjectDashboardPage() {
 
   return (
     <>
-      <motion.div initial="hidden" animate="visible" variants={pageVariants} className="h-full overflow-y-auto bg-[#f7f6f3] px-10 pb-10 pl-8 pt-10">
+      <motion.div initial="hidden" animate="visible" variants={pageVariants} className="h-full overflow-y-auto bg-bg px-10 pb-10 pl-8 pt-10">
         <motion.section variants={sectionVariants} className="mb-10">
           <div className="max-w-[640px]">
             <div className="mb-2">

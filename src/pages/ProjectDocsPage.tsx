@@ -178,7 +178,7 @@ export function ProjectMemoryPage() {
   };
 
   return (
-    <section className="relative h-full overflow-y-auto bg-[#f0efe8]">
+    <section className="relative h-full overflow-y-auto bg-bg">
       <div className="flex min-h-full">
         <div className="flex-1 px-12 py-10">
           <div className="max-w-[920px]">

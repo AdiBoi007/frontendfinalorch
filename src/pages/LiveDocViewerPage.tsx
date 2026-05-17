@@ -275,7 +275,7 @@ export function LiveDocViewerPage() {
   };
 
   return (
-    <section className="doc-viewer-root relative h-full overflow-hidden bg-[#f7f6f3]">
+    <section className="doc-viewer-root relative h-full overflow-hidden bg-bg">
       <style>{`
         @media print {
           .doc-viewer-topbar,
