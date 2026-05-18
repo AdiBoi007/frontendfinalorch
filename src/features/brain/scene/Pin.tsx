@@ -24,20 +24,20 @@ export function Pin({ node }: PinProps) {
   const coreRef = useRef<THREE.Mesh>(null);
   const haloRef = useRef<THREE.Mesh>(null);
   const reducedMotion = useReducedMotion();
-  const hoveredNodeId = useBrainStore((state) => state.hoveredNodeId);
+  const hoveredNode = useBrainStore((state) => state.hoveredNode);
   const selectedNode = useBrainStore((state) => state.selectedNode);
   const matchesFilter = useBrainStore((state) => state.matchesFilter(node));
-  const setHoveredNodeId = useBrainStore((state) => state.setHoveredNodeId);
+  const setHovered = useBrainStore((state) => state.setHovered);
   const selectNode = useBrainStore((state) => state.selectNode);
 
-  const hovered = hoveredNodeId === node.id;
+  const hovered = hoveredNode?.id === node.id;
   const selected = selectedNode?.id === node.id;
-  const color = node.featured ? brainTokens.pin.featured : brainTokens.pin[node.category];
-  const baseOpacity = matchesFilter ? (selectedNode && !selected ? 0.3 : 1) : selectedNode ? 0.18 : 0.15;
+  const color = brainTokens.pin[node.category];
+  const baseOpacity = matchesFilter ? (selectedNode && !selected ? 0.2 : 1) : selectedNode ? 0.14 : 0.1;
 
   const surfacePosition = useMemo(() => sphericalToCartesian(node.position?.lat ?? 0, node.position?.lng ?? 0, 1.52), [node.position?.lat, node.position?.lng]);
-  const pinPosition = useMemo(() => surfacePosition.clone().normalize().multiplyScalar(1.62), [surfacePosition]);
-  const liftPoints = useMemo(() => [surfacePosition.clone().normalize().multiplyScalar(1.5), pinPosition.clone()], [pinPosition, surfacePosition]);
+  const pinPosition = useMemo(() => surfacePosition.clone().normalize().multiplyScalar(1.55), [surfacePosition]);
+  const liftPoints = useMemo(() => [surfacePosition.clone().normalize().multiplyScalar(1.51), pinPosition.clone()], [pinPosition, surfacePosition]);
 
   useFrame(({ clock }) => {
     if (!coreRef.current || !haloRef.current) {
@@ -63,19 +63,19 @@ export function Pin({ node }: PinProps) {
       </line>
 
       <mesh ref={haloRef}>
-        <sphereGeometry args={[0.06, 16, 16]} />
-        <meshBasicMaterial color={color} transparent opacity={(hovered || selected ? 0.5 : 0.25) * baseOpacity} depthWrite={false} blending={THREE.AdditiveBlending} />
+        <sphereGeometry args={[0.07, 16, 16]} />
+        <meshBasicMaterial color={color} transparent opacity={(hovered || selected ? 0.5 : 0.2) * baseOpacity} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
 
       <mesh
         ref={coreRef}
         onPointerOver={(event) => {
           event.stopPropagation();
-          setHoveredNodeId(node.id);
+          setHovered(node);
           document.body.style.cursor = "pointer";
         }}
         onPointerOut={() => {
-          setHoveredNodeId(null);
+          setHovered(null);
           document.body.style.cursor = "auto";
         }}
         onClick={(event) => {
@@ -83,14 +83,16 @@ export function Pin({ node }: PinProps) {
           selectNode(node);
         }}
       >
-        <sphereGeometry args={[0.024, 16, 16]} />
+        <sphereGeometry args={[0.028, 16, 16]} />
         <meshBasicMaterial color={color} transparent opacity={baseOpacity} />
       </mesh>
 
       {hovered && !selected && (
         <Html distanceFactor={6} center style={{ pointerEvents: "none" }}>
-          <div className="w-[180px] rounded-lg border border-[rgba(184,84,61,0.12)] bg-[#FAF8F5] p-2 text-left shadow-[0_4px_20px_rgba(26,22,18,0.3)]">
-            <div className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#78716C]">{getCategoryLabel(node.category)}</div>
+          <div className="w-[180px] rounded-lg border border-[rgba(26,22,18,0.08)] bg-[#FAF8F5] px-2.5 py-2 text-left shadow-[0_2px_12px_rgba(26,22,18,0.10)]">
+            <div className="font-mono text-[11px] font-medium uppercase tracking-[0.08em]" style={{ color: `${color}B3` }}>
+              {getCategoryLabel(node.category)}
+            </div>
             <div className="mt-1 font-sans text-[13px] font-medium leading-[1.3] text-[#1A1612]">{truncateTitle(node.title)}</div>
           </div>
         </Html>

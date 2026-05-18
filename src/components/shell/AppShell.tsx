@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { NavBar } from "./NavBar";
 import { SocratesPanel } from "./SocratesPanel";
 
@@ -12,6 +12,8 @@ const navTransition = {
 
 export function AppShell() {
   const [navExpanded, setNavExpanded] = useState(false);
+  const location = useLocation();
+  const isBrainRoute = location.pathname.includes("/brain");
 
   return (
     <div className="flex h-screen overflow-hidden bg-bg">
@@ -23,7 +25,7 @@ export function AppShell() {
         transition={navTransition}
         className="h-screen flex-shrink-0"
       />
-      <SocratesPanel />
+      {isBrainRoute ? null : <SocratesPanel />}
       <main className="min-w-0 flex-1 overflow-hidden bg-bg">
         <Outlet />
       </main>

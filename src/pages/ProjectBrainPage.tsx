@@ -20,7 +20,7 @@ function toBrainNode(node: BrainNodeData, index: number, count: number): BrainNo
   }
 
   const category = categoryMap[node.category];
-  const title = node.label;
+  const title = /^[A-Z\s]+$/.test(node.label) ? node.label.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase()) : node.label;
   const description =
     node.detailItems?.map((item) => item.description).join(" ") || node.tooltip || `${node.label} is part of the project brain.`;
 

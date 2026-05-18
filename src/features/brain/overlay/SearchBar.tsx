@@ -10,8 +10,8 @@ type SearchBarProps = {
 
 export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(function SearchBar({ value, onChange, onFocus, onBlur }, ref) {
   return (
-    <label className="pointer-events-auto flex h-11 w-[480px] items-center gap-3 rounded-xl border border-[rgba(184,84,61,0.12)] bg-[#241D17] px-4 text-[#FAF8F5]">
-      <TbSearch size={18} className="text-[#FAF8F5]/55" strokeWidth={1.6} />
+    <label className="flex h-11 w-[480px] items-center gap-3 rounded-xl border border-[rgba(26,22,18,0.08)] bg-white px-4 text-[#1A1612] focus-within:border-[rgba(184,84,61,0.4)] focus-within:ring-2 focus-within:ring-[rgba(184,84,61,0.12)]">
+      <TbSearch size={18} className="text-[#78716C]" strokeWidth={1.6} />
       <input
         ref={ref}
         value={value}
@@ -19,9 +19,9 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(function S
         onFocus={onFocus}
         onBlur={onBlur}
         placeholder="Search the brain..."
-        className="min-w-0 flex-1 bg-transparent font-sans text-[14px] text-[#FAF8F5] outline-none placeholder:text-[#FAF8F5]/40"
+        className="min-w-0 flex-1 bg-transparent font-sans text-[14px] text-[#1A1612] outline-none placeholder:text-[#78716C]/70"
       />
-      <span className="rounded-full border border-[rgba(250,248,245,0.12)] px-2 py-1 font-mono text-[11px] text-[#FAF8F5]/55">Cmd K</span>
+      <span className="rounded-full bg-[rgba(26,22,18,0.06)] px-2 py-1 font-mono text-[11px] text-[#78716C]">Cmd K</span>
     </label>
   );
 });

@@ -1,7 +1,7 @@
 import { TbMinus, TbPlus, TbRefresh } from "react-icons/tb";
 
 export function CameraControlButtons({ onZoomIn, onZoomOut, onReset }: { onZoomIn: () => void; onZoomOut: () => void; onReset: () => void }) {
-  const buttonClass = "pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(250,248,245,0.12)] bg-[#241D17] text-[#FAF8F5]/65 transition-colors hover:border-[#B8543D] hover:text-[#B8543D]";
+  const buttonClass = "flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(26,22,18,0.08)] bg-white text-[#1A1612] transition-colors hover:border-[#B8543D] hover:text-[#B8543D]";
 
   return (
     <div className="flex flex-col gap-2">

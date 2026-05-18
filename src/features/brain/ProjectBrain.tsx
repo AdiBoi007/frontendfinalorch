@@ -1,45 +1,32 @@
-import { Canvas } from "@react-three/fiber";
-import { Suspense } from "react";
 import type { BrainData } from "./brain.types";
 import { BrainOverlay } from "./overlay/BrainOverlay";
 import { DetailPanel } from "./panel/DetailPanel";
 import { Atmosphere } from "./scene/Atmosphere";
 import { BrainSphere } from "./scene/BrainSphere";
 import { CameraController } from "./scene/CameraController";
-import { DustParticles } from "./scene/DustParticles";
-import { Pins } from "./scene/Pins";
-import { brainTokens } from "./tokens";
+import { BrainScene } from "./scene/BrainScene";
+import { NodeList } from "./sidebar/NodeList";
 import { useBrainStore } from "./state/brainStore";
 
 export function ProjectBrain({ data }: { data: BrainData }) {
   const selectedNode = useBrainStore((state) => state.selectedNode);
   const clearSelection = useBrainStore((state) => state.clearSelection);
+  const searchQuery = useBrainStore((state) => state.searchQuery);
 
   return (
-    <div className="relative h-full min-h-0 overflow-hidden bg-[#1A1612]" role="region" aria-label="Project brain knowledge sphere">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 45 }}
-        gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
-        dpr={[1, 2]}
-        className="h-full w-full"
-        onPointerMissed={clearSelection}
-      >
-        <color attach="background" args={[brainTokens.void]} />
-        <fog attach="fog" args={[brainTokens.void, 6, 14]} />
-        <ambientLight intensity={0.3} />
-        <pointLight position={[5, 5, 5]} intensity={0.7} color="#FAF8F5" />
-        <pointLight position={[-3, -2, -4]} intensity={0.25} color="#B8543D" />
-        <Suspense fallback={null}>
-          <BrainSphere />
-          <Atmosphere />
-          <DustParticles />
-          <Pins nodes={data.nodes} />
-        </Suspense>
-        <CameraController targetNode={selectedNode} />
-      </Canvas>
+    <div className="relative flex h-full min-h-0 flex-col overflow-hidden bg-[#FAF8F5] text-[#1A1612]" role="region" aria-label="Project brain knowledge sphere">
       <BrainOverlay data={data} />
-      <DetailPanel />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_58%,rgba(0,0,0,0.08)_100%)]" />
+      <div className="flex min-h-0 flex-1 overflow-hidden">
+        <NodeList data={data} />
+        <div className="relative min-w-0 flex-1 transition-[width,opacity] duration-300 ease-out" style={{ opacity: searchQuery ? 0.85 : 1 }}>
+          <BrainScene onPointerMissed={clearSelection}>
+            <BrainSphere nodes={data.nodes} />
+            <Atmosphere />
+            <CameraController targetNode={selectedNode} />
+          </BrainScene>
+        </div>
+        <DetailPanel data={data} />
+      </div>
     </div>
   );
 }

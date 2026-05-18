@@ -4,8 +4,11 @@ import * as THREE from "three";
 import { useReducedMotion } from "../lib/useReducedMotion";
 import { useBrainStore } from "../state/brainStore";
 import { brainTokens } from "../tokens";
+import type { BrainNode } from "../brain.types";
+import { ContinentLayer } from "./ContinentLayer";
+import { Pins } from "./Pins";
 
-export function BrainSphere() {
+export function BrainSphere({ nodes }: { nodes: BrainNode[] }) {
   const groupRef = useRef<THREE.Group>(null);
   const isPaused = useBrainStore((state) => state.isRotationPaused);
   const reducedMotion = useReducedMotion();
@@ -47,17 +50,20 @@ export function BrainSphere() {
     >
       <mesh frustumCulled={false}>
         <sphereGeometry args={[1.48, 64, 64]} />
-        <meshStandardMaterial color={brainTokens.sphereCore} roughness={0.9} metalness={0.1} />
+        <meshBasicMaterial color={brainTokens.sphereCore} />
       </mesh>
 
       <points geometry={dotGeometry} frustumCulled={false}>
-        <pointsMaterial size={0.018} color="#FAF8F5" transparent opacity={0.45} sizeAttenuation depthWrite={false} />
+        <pointsMaterial size={0.016} color={brainTokens.ink} transparent opacity={0.12} sizeAttenuation depthWrite={false} />
       </points>
 
       <mesh frustumCulled={false}>
         <sphereGeometry args={[1.502, 24, 16]} />
-        <meshBasicMaterial color="#FAF8F5" wireframe transparent opacity={0.04} depthWrite={false} />
+        <meshBasicMaterial color={brainTokens.ink} wireframe transparent opacity={0.04} depthWrite={false} />
       </mesh>
+
+      <ContinentLayer nodes={nodes} />
+      <Pins nodes={nodes} />
     </group>
   );
 }

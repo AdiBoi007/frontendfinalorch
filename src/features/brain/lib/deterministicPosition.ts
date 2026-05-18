@@ -1,12 +1,12 @@
 import type { BrainCategory } from "../brain.types";
 import { fibonacciSphere } from "./fibonacciSphere";
 
-const CATEGORY_BANDS: Record<BrainCategory, { lat: number; lng: number }> = {
-  doc: { lat: 38, lng: -72 },
-  decision: { lat: 8, lng: -148 },
-  comms: { lat: 24, lng: 58 },
-  team: { lat: -36, lng: 92 },
-  change: { lat: -28, lng: -38 }
+const CATEGORY_BANDS: Record<BrainCategory, { lat: [number, number]; lng: [number, number] }> = {
+  doc: { lat: [-20, 40], lng: [-120, -30] },
+  decision: { lat: [30, 70], lng: [20, 100] },
+  comms: { lat: [-50, -10], lng: [40, 140] },
+  team: { lat: [10, 50], lng: [-60, 20] },
+  change: { lat: [-30, 20], lng: [100, 180] }
 };
 
 function hashId(id: string) {
@@ -19,14 +19,18 @@ function hashId(id: string) {
 }
 
 export function deterministicPosition(id: string, category: BrainCategory, index: number, count: number) {
-  const base = CATEGORY_BANDS[category];
+  const band = CATEGORY_BANDS[category];
   const distributed = fibonacciSphere(index, count);
   const hash = hashId(id);
-  const jitterLat = (((hash & 255) / 255) - 0.5) * 18;
-  const jitterLng = ((((hash >> 8) & 255) / 255) - 0.5) * 34;
+  const latT = (distributed.lat + 90) / 180;
+  const lngT = (distributed.lng + 180) / 360;
+  const jitterLat = (((hash & 255) / 255) - 0.5) * 8;
+  const jitterLng = ((((hash >> 8) & 255) / 255) - 0.5) * 10;
+  const lat = band.lat[0] + (band.lat[1] - band.lat[0]) * latT + jitterLat;
+  const lng = band.lng[0] + (band.lng[1] - band.lng[0]) * lngT + jitterLng;
 
   return {
-    lat: Math.max(-68, Math.min(68, base.lat + distributed.lat * 0.08 + jitterLat)),
-    lng: ((base.lng + distributed.lng * 0.08 + jitterLng + 540) % 360) - 180
+    lat: Math.max(-72, Math.min(72, lat)),
+    lng: ((lng + 540) % 360) - 180
   };
 }
