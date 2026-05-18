@@ -7,8 +7,10 @@ type BrainState = {
   filter: BrainCategory | null;
   searchQuery: string;
   isRotationPaused: boolean;
+  savedNodeIds: string[];
   selectNode: (node: BrainNode) => void;
   clearSelection: () => void;
+  saveSelectedNode: () => void;
   setHoveredNodeId: (id: string | null) => void;
   setFilter: (category: BrainCategory | null) => void;
   setSearchQuery: (query: string) => void;
@@ -22,6 +24,7 @@ export const useBrainStore = create<BrainState>((set, get) => ({
   filter: null,
   searchQuery: "",
   isRotationPaused: false,
+  savedNodeIds: [],
   selectNode: (node) => set({ selectedNode: node, isRotationPaused: true }),
   clearSelection: () => {
     set({ selectedNode: null });
@@ -31,6 +34,13 @@ export const useBrainStore = create<BrainState>((set, get) => ({
       }
     }, 2000);
   },
+  saveSelectedNode: () =>
+    set((state) => {
+      if (!state.selectedNode || state.savedNodeIds.includes(state.selectedNode.id)) {
+        return state;
+      }
+      return { savedNodeIds: [...state.savedNodeIds, state.selectedNode.id] };
+    }),
   setHoveredNodeId: (id) => set({ hoveredNodeId: id, isRotationPaused: Boolean(id) || Boolean(get().selectedNode) }),
   setFilter: (category) => set((state) => ({ filter: state.filter === category ? null : category })),
   setSearchQuery: (query) => set({ searchQuery: query }),
