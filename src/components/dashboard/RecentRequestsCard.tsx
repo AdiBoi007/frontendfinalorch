@@ -29,14 +29,14 @@ const itemVariants = {
 
 function getPlatformTone(platform: RequestItem["platform"]) {
   if (platform === "slack") {
-    return { background: "#4A154B", label: "S" };
+    return { background: "#5A5450", label: "S" };
   }
 
   if (platform === "email") {
-    return { background: "#1a73e8", label: "G" };
+    return { background: "#5A5450", label: "G" };
   }
 
-  return { background: "#25D366", label: "W" };
+  return { background: "#5A5450", label: "W" };
 }
 
 function getStatusTone(status: RequestItem["status"]) {

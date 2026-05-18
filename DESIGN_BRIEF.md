@@ -30,15 +30,15 @@ The result is a product workspace aesthetic that sits between a dashboard, a kno
 
 ### Brand / semantic accents
 
-- Primary brand teal: `#00b4a0`
+- Primary brand teal: `#B8543D`
 - Teal tints: `#f0faf8`, `#c8f0e8`, `#e8faf6`, `#e8faf7`
-- Purple accent: `#8b7fd4`
+- Purple accent: `#8B7FD4`
 - Purple tints: `#f4f2fc`, `#e0dbf5`, `#f0eeff`
-- Orange accent: `#f59340`
+- Orange accent: `#B8543D`
 - Orange tints: `#fef6ec`, `#fceee4`, `#fef3e8`
-- Red accent: `#e05555`
+- Red accent: `#9E3B2E`
 - Red tints: `#fff0f0`, `#ffe8e8`
-- Blue integration accent: `#3b82f6`, `#1d4ed8`
+- Blue integration accent: `#5A5450`, `#5A5450`
 
 ### Usage pattern
 
@@ -52,15 +52,15 @@ The result is a product workspace aesthetic that sits between a dashboard, a kno
 
 Three fonts define the system:
 
-- `Bebas Neue`: headings, labels, tabs, buttons, section markers
-- `Syne`: body copy, UI copy, cards, paragraphs, controls
-- `DM Mono`: metadata, timestamps, versions, IDs, evidence labels, system text
+- `Geist`: headings, labels, tabs, buttons, section markers
+- `Geist`: body copy, UI copy, cards, paragraphs, controls
+- `Geist Mono`: metadata, timestamps, versions, IDs, evidence labels, system text
 
 ### Type roles
 
-- `Bebas Neue` is typically uppercase or visually uppercase, with letter spacing around `0.06em` to `0.18em`.
-- `Syne` is the default font on `:root` and `body`, and carries nearly all long-form and UI text.
-- `DM Mono` is used as an information layer for technical or provenance-like details.
+- `Geist` is typically uppercase or visually uppercase, with letter spacing around `0.06em` to `0.18em`.
+- `Geist` is the default font on `:root` and `body`, and carries nearly all long-form and UI text.
+- `Geist Mono` is used as an information layer for technical or provenance-like details.
 
 ### Tone
 
@@ -78,7 +78,7 @@ Typography mixes:
 - Main canvas centered between both rails
 - Frequent slide-over right panels for evidence/detail views
 - Large internal padding and spacious card gutters
-- Many screens use top utility bars with translucent backgrounds and `backdrop-blur`
+- Many screens use top utility bars with translucent backgrounds and `flat opacity`
 
 ### Surface treatment
 
@@ -146,7 +146,7 @@ Characteristics:
 - circular crop
 - white border
 - soft shadow
-- pastel linear-gradient background variants
+- pastel flat tint background variants
 - deterministic seeds tied to initials or names for role consistency
 
 The avatar style is more playful than the rest of the system, but kept controlled through small size, soft colors, and minimal framing.

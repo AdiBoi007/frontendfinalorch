@@ -34,15 +34,15 @@ graph TD
   B -->|admin access| I[Admin Panel]
   I -->|approves| D
   
-  style A fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style F fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style G fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
-  style B fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style C fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style D fill:rgba(158,59,46,0.10),stroke:#9E3B2E,color:#1A1612
-  style E fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style H fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style I fill:rgba(120,113,108,0.10),stroke:#5A5450,color:#1A1612
+  style A fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style F fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style G fill:#F3E8D9,stroke:#B8543D,color:#1A1612
+  style B fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style C fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style D fill:#F3E7E5,stroke:#9E3B2E,color:#1A1612
+  style E fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style H fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style I fill:#EFEEEC,stroke:#5A5450,color:#1A1612
 `;
 
 const useCaseDiagram = `
@@ -79,9 +79,9 @@ graph LR
   Admin --> UC10
   Admin --> UC11
   
-  style UC2 fill:rgba(45,74,62,0.10),stroke:#B8543D
-  style UC10 fill:rgba(120,113,108,0.10),stroke:#5A5450
-  style UC11 fill:rgba(158,59,46,0.10),stroke:#9E3B2E
+  style UC2 fill:#E9EFEC,stroke:#B8543D
+  style UC10 fill:#EFEEEC,stroke:#5A5450
+  style UC11 fill:#F3E7E5,stroke:#9E3B2E
 `;
 
 const flowchartDiagram = `
@@ -105,13 +105,13 @@ flowchart TD
   N --> O[Real-time Tracking Active]
   O --> P([Delivery Complete])
   
-  style A fill:rgba(45,74,62,0.10),stroke:#B8543D
-  style P fill:rgba(45,74,62,0.10),stroke:#B8543D
-  style B fill:rgba(194,136,64,0.12),stroke:#B8543D
-  style E fill:rgba(194,136,64,0.12),stroke:#B8543D
-  style H fill:rgba(194,136,64,0.12),stroke:#B8543D
-  style L fill:rgba(194,136,64,0.12),stroke:#B8543D
-  style M fill:rgba(158,59,46,0.10),stroke:#9E3B2E
+  style A fill:#E9EFEC,stroke:#B8543D
+  style P fill:#E9EFEC,stroke:#B8543D
+  style B fill:#F3E8D9,stroke:#B8543D
+  style E fill:#F3E8D9,stroke:#B8543D
+  style H fill:#F3E8D9,stroke:#B8543D
+  style L fill:#F3E8D9,stroke:#B8543D
+  style M fill:#F3E7E5,stroke:#9E3B2E
 `;
 
 const sequenceDiagram = `
@@ -138,9 +138,9 @@ sequenceDiagram
   DA->>D: Dispatch Notification
   D-->>DA: En Route
   DA->>OS: Status Update
-  OS->>B: SMS — Driver En Route
+  OS->>B: SMS · Driver En Route
   D->>OS: Delivered
-  OS->>B: SMS — Delivered
+  OS->>B: SMS · Delivered
   OS->>S: Trigger Payout
 `;
 
@@ -215,7 +215,7 @@ const diagramActions = [
     chart: useCaseDiagram,
     accent: "#5A5450",
     icon: UsersIcon,
-    hoverClass: "hover:border-[#5A5450] hover:bg-[rgba(120,113,108,0.10)]"
+    hoverClass: "hover:border-[#5A5450] hover:bg-[#EFEEEC]"
   },
   {
     key: "flowchart" as const,
@@ -235,7 +235,7 @@ const diagramActions = [
     chart: sequenceDiagram,
     accent: "#5A5450",
     icon: GitBranchIcon,
-    hoverClass: "hover:border-[#5A5450] hover:bg-[rgba(120,113,108,0.10)]"
+    hoverClass: "hover:border-[#5A5450] hover:bg-[#EFEEEC]"
   }
 ] as const;
 
@@ -530,19 +530,19 @@ export function LiveDocPage() {
         htmlLabels: true
       },
       themeVariables: {
-        primaryColor: "rgba(45,74,62,0.10)",
+        primaryColor: "#E9EFEC",
         primaryTextColor: "#1A1612",
         primaryBorderColor: "#B8543D",
         lineColor: "#B8543D",
-        secondaryColor: "rgba(120,113,108,0.10)",
-        tertiaryColor: "rgba(194,136,64,0.12)",
+        secondaryColor: "#EFEEEC",
+        tertiaryColor: "#F3E8D9",
         background: "#ffffff",
-        mainBkg: "rgba(45,74,62,0.10)",
+        mainBkg: "#E9EFEC",
         nodeBorder: "#B8543D",
         clusterBkg: "#FAF8F5",
         titleColor: "#1A1612",
         edgeLabelBackground: "#ffffff",
-        fontFamily: "DM Mono, monospace",
+        fontFamily: "Geist Mono, ui-monospace, SF Mono, Menlo, monospace",
         fontSize: "13px"
       }
     });
@@ -713,7 +713,7 @@ export function LiveDocPage() {
       `}</style>
 
       <div className="flex h-12 shrink-0 items-center border-b-[1.5px] border-[rgba(26,22,18,0.08)] bg-bg px-6">
-        <h1 className="font-sans text-[15px] font-medium text-[#1A1612]">{payload.projectName} — Product requirements</h1>
+        <h1 className="font-sans text-[15px] font-medium text-[#1A1612]">{payload.projectName} · Product requirements</h1>
       </div>
 
       <div className="flex min-h-0 flex-1 overflow-hidden">

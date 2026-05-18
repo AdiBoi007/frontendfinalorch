@@ -120,12 +120,12 @@ function buildDependencyDiagram(projectName: string) {
   Changes -.-> Decisions([Decisions])
   DAG --> Changes
   
-  style Brief fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style DAG fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style Build fill:#eef4ff,stroke:#5A5450,color:#1A1612
-  style Messages fill:rgba(120,113,108,0.10),stroke:#5A5450,color:#1A1612
-  style Changes fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
-  style Decisions fill:#eef4ff,stroke:#5A5450,color:#1A1612`;
+  style Brief fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style DAG fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style Build fill:#EFEEEC,stroke:#5A5450,color:#1A1612
+  style Messages fill:#EFEEEC,stroke:#5A5450,color:#1A1612
+  style Changes fill:#F3E8D9,stroke:#B8543D,color:#1A1612
+  style Decisions fill:#EFEEEC,stroke:#5A5450,color:#1A1612`;
 }
 
 function buildFlowchartDiagram(projectName: string) {
@@ -141,11 +141,11 @@ function buildFlowchartDiagram(projectName: string) {
   H -->|No| G
   I --> J([Delivered])
   
-  style A fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style J fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style B fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
-  style E fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
-  style H fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612`;
+  style A fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style J fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style B fill:#F3E8D9,stroke:#B8543D,color:#1A1612
+  style E fill:#F3E8D9,stroke:#B8543D,color:#1A1612
+  style H fill:#F3E8D9,stroke:#B8543D,color:#1A1612`;
 }
 
 function buildSequenceDiagram(projectName: string) {
@@ -186,9 +186,9 @@ function buildUseCaseDiagram(projectName: string) {
   Manager --> Approve
   Driver --> Assign
   
-  style Checkout fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
-  style Approve fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
-  style Assign fill:#eef4ff,stroke:#5A5450,color:#1A1612`;
+  style Checkout fill:#E9EFEC,stroke:#B8543D,color:#1A1612
+  style Approve fill:#F3E8D9,stroke:#B8543D,color:#1A1612
+  style Assign fill:#EFEEEC,stroke:#5A5450,color:#1A1612`;
 }
 
 function pickTextResponse(pageContext: PageContext, content: string, projectName: string) {
@@ -196,7 +196,7 @@ function pickTextResponse(pageContext: PageContext, content: string, projectName
     dashboard: [
       `You have **3 deadlines this week**: Payment Integration (3 days), Auth Module Handoff (5 days), and Dashboard v2 Delivery (11 days). ${projectName === "Portfolio" ? "BloomFast" : projectName} has the most urgent items.`,
       `**2 pending requests** need your attention: Jack from BloomFast wants a promo code system, and Elena from Elara Games is requesting dark mode support.`,
-      `You have **3 meetings today**: BloomFast Standup at 9:00 AM, API Gateway Review at 11:30 AM, and Client Sync — Elara at 2:00 PM.`
+      `You have **3 meetings today**: BloomFast Standup at 9:00 AM, API Gateway Review at 11:30 AM, and Client Sync · Elara at 2:00 PM.`
     ],
     brain: [
       `${projectName} has **8 documents** indexed. The core flows are: Buyer Ordering → Florist Dashboard → Driver Assignment. Two nodes are still unresolved: Subscription Model and Third-party Driver API.`,
@@ -439,7 +439,7 @@ export function SocratesProvider({ children }: { children: ReactNode }) {
         const citations = includesAny(lowerContent, ["where", "source"])
           ? [
               {
-                source: `${projectName} PRD v2 — Section 3`,
+                source: `${projectName} PRD v2 · Section 3`,
                 excerpt: "Manager approval required before driver assignment confirmed.",
                 anchor: "driver-body"
               }

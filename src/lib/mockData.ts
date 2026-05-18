@@ -121,7 +121,7 @@ export const mockDocs: Doc[] = [
     status: "ready",
     uploadedBy: "JW",
     uploadedAt: "Apr 14, 2026",
-    excerpt: "Design mockups v3 — buyer ordering flow, florist dashboard, and driver assignment screens."
+    excerpt: "Design mockups v3 · buyer ordering flow, florist dashboard, and driver assignment screens."
   },
   {
     id: "6",
@@ -168,7 +168,7 @@ export const mockFlowGraph: FlowGraph = {
       status: "critical",
       description:
         "End-to-end buyer journey from product browse to checkout. Includes cart, address selection, payment, and order confirmation.",
-      docRefs: ["PRD v2 — Section 3.1", "SRS — Section 5"],
+      docRefs: ["PRD v2 · Section 3.1", "SRS · Section 5"],
       position: { x: 340, y: 180 }
     },
     {
@@ -178,7 +178,7 @@ export const mockFlowGraph: FlowGraph = {
       status: "critical",
       description:
         "Florist-facing order management interface. Shows incoming orders, fulfillment status, and inventory management.",
-      docRefs: ["PRD v2 — Section 3.2"],
+      docRefs: ["PRD v2 · Section 3.2"],
       position: { x: 580, y: 180 }
     },
     {
@@ -188,7 +188,7 @@ export const mockFlowGraph: FlowGraph = {
       status: "at-risk",
       description:
         "Automated and manual driver assignment logic. Manager approval required before any driver is assigned to an order.",
-      docRefs: ["SRS — Section 7", "Client Kickoff Transcript"],
+      docRefs: ["SRS · Section 7", "Client Kickoff Transcript"],
       position: { x: 820, y: 300 }
     },
     {
@@ -197,7 +197,7 @@ export const mockFlowGraph: FlowGraph = {
       type: "integration",
       status: "critical",
       description: "Stripe payment integration. Covers buyer checkout, florist payouts, and revenue share model.",
-      docRefs: ["Tech Spec — Section 4"],
+      docRefs: ["Tech Spec · Section 4"],
       position: { x: 120, y: 300 }
     },
     {
@@ -215,7 +215,7 @@ export const mockFlowGraph: FlowGraph = {
       type: "approval",
       status: "stable",
       description: "Internal admin dashboard for order oversight, dispute resolution, and manager approval workflows.",
-      docRefs: ["PRD v2 — Section 6"],
+      docRefs: ["PRD v2 · Section 6"],
       position: { x: 1020, y: 180 }
     },
     {
@@ -224,7 +224,7 @@ export const mockFlowGraph: FlowGraph = {
       type: "integration",
       status: "stable",
       description: "Push and email notifications for buyers and florists. Order status updates, delivery confirmations.",
-      docRefs: ["SRS — Section 8"],
+      docRefs: ["SRS · Section 8"],
       position: { x: 340, y: 420 }
     },
     {
@@ -233,7 +233,7 @@ export const mockFlowGraph: FlowGraph = {
       type: "integration",
       status: "unresolved",
       description: "External driver network API integration. Provider not confirmed. Availability and pricing TBD.",
-      docRefs: ["Tech Spec — Section 9"],
+      docRefs: ["Tech Spec · Section 9"],
       position: { x: 820, y: 480 }
     }
   ],
@@ -261,7 +261,7 @@ export const mockDocViewer: DocViewerPayload = {
       anchorId: "overview",
       type: "heading",
       level: 1,
-      content: "BloomFast — Product Requirements Document",
+      content: "BloomFast · Product Requirements Document",
       hasChange: false
     },
     {
@@ -362,14 +362,14 @@ export const mockDocViewer: DocViewerPayload = {
 export const mockProvenance: Record<string, AnchorProvenance> = {
   "scope-detail": {
     anchorId: "scope-detail",
-    sourceDoc: "BloomFast PRD v2 — Section 1",
+    sourceDoc: "BloomFast PRD v2 · Section 1",
     excerpt: "No Pro subscription in v1.",
     linkedMessages: [
       {
         id: "m1",
         from: "Jack (BloomFast)",
         platform: "slack",
-        content: "Confirmed — no Pro subscription for MVP. Keep it simple for launch.",
+        content: "Confirmed · no Pro subscription for MVP. Keep it simple for launch.",
         sentAt: "Apr 14, 2026"
       }
     ],
@@ -384,7 +384,7 @@ export const mockProvenance: Record<string, AnchorProvenance> = {
   },
   "auth-detail": {
     anchorId: "auth-detail",
-    sourceDoc: "BloomFast PRD v2 — Section 2",
+    sourceDoc: "BloomFast PRD v2 · Section 2",
     excerpt: "OAuth removed from v1 scope.",
     linkedMessages: [
       {
@@ -526,7 +526,7 @@ export const mockLiveDoc: LiveDocPayload = {
       sectionLabel: "",
       type: "body",
       content:
-        "Driver payouts must never block dispatch — if payout fails, queue and retry without cancelling the route. Stripe Connect for buyer payments and florist payouts. Revenue share: 70% florist, 30% platform.",
+        "Driver payouts must never block dispatch · if payout fails, queue and retry without cancelling the route. Stripe Connect for buyer payments and florist payouts. Revenue share: 70% florist, 30% platform.",
       sourceIds: ["c3"]
     },
     {
@@ -582,7 +582,7 @@ export const mockLiveDoc: LiveDocPayload = {
       sectionLabel: "",
       type: "body",
       content:
-        "V1 is single-metro only. No Pro subscription for florists in v1 — deferred to v2. OAuth removed from scope — email and password only. Multi-driver routing and cross-region pooling deferred. Native mobile apps for drivers deferred — web-only for launch.",
+        "V1 is single-metro only. No Pro subscription for florists in v1 · deferred to v2. OAuth removed from scope · email and password only. Multi-driver routing and cross-region pooling deferred. Native mobile apps for drivers deferred · web-only for launch.",
       sourceIds: ["c1"]
     },
     {
@@ -603,7 +603,7 @@ export const mockLiveDoc: LiveDocPayload = {
       date: "12 Mar 2026",
       content:
         "We need same-day slots before 10am to feel credible for florists. If we miss that window, they won't trust us.",
-      source: 'Slack #bloomfast-client — thread "Same-day credibility"',
+      source: 'Slack #bloomfast-client · thread "Same-day credibility"',
       linkedSectionId: "sec-goals"
     },
     {
@@ -623,8 +623,8 @@ export const mockLiveDoc: LiveDocPayload = {
       time: "11:22 AM",
       date: "18 Mar 2026",
       content:
-        "Driver payouts must never block dispatch — if payout fails, queue and retry without cancelling the route.",
-      source: 'Email ops@bloomfast.co — subject "Payouts vs dispatch"',
+        "Driver payouts must never block dispatch · if payout fails, queue and retry without cancelling the route.",
+      source: 'Email ops@bloomfast.co · subject "Payouts vs dispatch"',
       linkedSectionId: "sec-payments"
     },
     {
@@ -635,7 +635,7 @@ export const mockLiveDoc: LiveDocPayload = {
       date: "18 Mar 2026",
       content:
         "Manager approval is required before any driver is confirmed on an order. If a florist manager rejects it, the system should immediately re-queue and find the next closest available driver.",
-      source: "Kickoff follow-up — WhatsApp thread",
+      source: "Kickoff follow-up · WhatsApp thread",
       linkedSectionId: "sec-driver"
     },
     {
@@ -645,7 +645,7 @@ export const mockLiveDoc: LiveDocPayload = {
       time: "10:30 AM",
       date: "19 Mar 2026",
       content: "Notification failures must never block dispatch. Queue and retry independently.",
-      source: "Internal design review — Slack #engineering",
+      source: "Internal design review · Slack #engineering",
       linkedSectionId: "sec-notifications"
     }
   ]
@@ -1111,7 +1111,7 @@ export const mockDeadlines: DeadlineItem[] = [
 export const mockRequests: RequestItem[] = [
   {
     id: "1",
-    from: "Jack — BloomFast",
+    from: "Jack · BloomFast",
     message: "Can we add a promo code system to checkout?",
     time: "2h ago",
     status: "pending",
@@ -1119,7 +1119,7 @@ export const mockRequests: RequestItem[] = [
   },
   {
     id: "2",
-    from: "Elena — Elara Games",
+    from: "Elena · Elara Games",
     message: "Need dark mode support across dashboard",
     time: "5h ago",
     status: "pending",
@@ -1127,7 +1127,7 @@ export const mockRequests: RequestItem[] = [
   },
   {
     id: "3",
-    from: "Mike — API Gateway",
+    from: "Mike · API Gateway",
     message: "Confirmed: remove OAuth from v1 scope",
     time: "1d ago",
     status: "accepted",
@@ -1135,7 +1135,7 @@ export const mockRequests: RequestItem[] = [
   },
   {
     id: "4",
-    from: "Jack — BloomFast",
+    from: "Jack · BloomFast",
     message: "Florist onboarding flow needs a tutorial step",
     time: "2d ago",
     status: "accepted",
@@ -1146,7 +1146,7 @@ export const mockRequests: RequestItem[] = [
 export const mockMeetings: MeetingItem[] = [
   { id: "1", title: "BloomFast Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "BloomFast" },
   { id: "2", title: "API Gateway Review", time: "11:30 AM", duration: "45 min", type: "review", project: "API Gateway" },
-  { id: "3", title: "Client Sync — Elara", time: "2:00 PM", duration: "30 min", type: "client", project: "Elara Games" }
+  { id: "3", title: "Client Sync · Elara", time: "2:00 PM", duration: "30 min", type: "client", project: "Elara Games" }
 ];
 
 export const mockCalendarEvents: Record<string, CalendarDayData> = {
@@ -1154,7 +1154,7 @@ export const mockCalendarEvents: Record<string, CalendarDayData> = {
     meetings: [
       { id: "1", title: "BloomFast Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "BloomFast" },
       { id: "2", title: "API Gateway Review", time: "11:30 AM", duration: "45 min", type: "review", project: "API Gateway" },
-      { id: "3", title: "Client Sync — Elara", time: "2:00 PM", duration: "30 min", type: "client", project: "Elara Games" }
+      { id: "3", title: "Client Sync · Elara", time: "2:00 PM", duration: "30 min", type: "client", project: "Elara Games" }
     ],
     deadlines: []
   },
