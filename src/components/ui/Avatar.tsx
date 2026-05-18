@@ -57,7 +57,7 @@ export default function Avatar({
         style={{
           borderRadius: "50%",
           border: "2px solid white",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+          boxShadow: "none",
           display: "block"
         }}
         alt={name ?? resolvedSeed}

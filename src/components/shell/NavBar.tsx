@@ -118,7 +118,7 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
     },
     {
       key: "flow",
-      label: "FLOW",
+      label: "Flow",
       icon: <GitBranchIcon />,
       route: `/projects/${currentProjectId}/flow`,
       active: /^\/projects\/[^/]+\/flow$/.test(pathname)
@@ -215,7 +215,7 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
       transition={navTransition}
       onHoverStart={() => onExpandedChange(true)}
       onHoverEnd={() => onExpandedChange(false)}
-      className="fixed left-0 top-0 z-50 flex h-screen flex-col overflow-hidden border-r border-[rgba(26,22,18,0.08)] bg-white shadow-[4px_0_16px_rgba(0,0,0,0.04)]"
+      className="fixed left-0 top-0 z-50 flex h-screen flex-col overflow-hidden border-r border-[rgba(26,22,18,0.08)] bg-white"
     >
       <div className="flex h-16 items-center px-[14px]">
         <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#B8543D]">

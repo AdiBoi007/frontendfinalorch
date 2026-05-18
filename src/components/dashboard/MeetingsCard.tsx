@@ -36,7 +36,7 @@ function getMeetingDot(type: MeetingItem["type"]) {
     return "#B8543D";
   }
 
-  return "#8b7fd4";
+  return "#5A5450";
 }
 
 function getTodayLabel() {

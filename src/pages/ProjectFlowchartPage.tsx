@@ -52,39 +52,39 @@ const typeStyles: Record<
   }
 > = {
   flow: {
-    bg: "#e8faf6",
-    border: "rgba(184,84,61,0.4)",
-    accent: "#B8543D",
-    tagBg: "rgba(184,84,61,0.15)",
-    tagText: "#00806f"
+    bg: "#FFFFFF",
+    border: "rgba(26,22,18,0.08)",
+    accent: "#2D4A3E",
+    tagBg: "rgba(45,74,62,0.10)",
+    tagText: "#2D4A3E"
   },
   module: {
-    bg: "#f0eeff",
-    border: "rgba(139,127,212,0.4)",
-    accent: "#8b7fd4",
-    tagBg: "rgba(139,127,212,0.15)",
-    tagText: "#6b5dc4"
+    bg: "#FFFFFF",
+    border: "rgba(26,22,18,0.08)",
+    accent: "#8B7FD4",
+    tagBg: "rgba(139,127,212,0.12)",
+    tagText: "#8B7FD4"
   },
   integration: {
-    bg: "#eef4ff",
-    border: "rgba(59,130,246,0.4)",
-    accent: "#3b82f6",
-    tagBg: "rgba(59,130,246,0.15)",
-    tagText: "#1d4ed8"
+    bg: "#FFFFFF",
+    border: "rgba(26,22,18,0.08)",
+    accent: "#5A5450",
+    tagBg: "rgba(120,113,108,0.10)",
+    tagText: "#5A5450"
   },
   approval: {
-    bg: "#f0eeff",
-    border: "rgba(139,127,212,0.4)",
-    accent: "#8b7fd4",
-    tagBg: "rgba(139,127,212,0.15)",
-    tagText: "#6b5dc4"
+    bg: "#FFFFFF",
+    border: "rgba(26,22,18,0.08)",
+    accent: "#8C5D1E",
+    tagBg: "rgba(194,136,64,0.12)",
+    tagText: "#8C5D1E"
   },
   unresolved: {
-    bg: "#fef3e8",
-    border: "rgba(184,84,61,0.4)",
-    accent: "#B8543D",
-    tagBg: "rgba(184,84,61,0.15)",
-    tagText: "#c4650a"
+    bg: "#FFFFFF",
+    border: "rgba(26,22,18,0.08)",
+    accent: "#9E3B2E",
+    tagBg: "rgba(158,59,46,0.10)",
+    tagText: "#9E3B2E"
   }
 };
 
@@ -98,23 +98,23 @@ const statusStyles: Record<
 > = {
   critical: {
     dot: "#9E3B2E",
-    pillBg: "#ffe0e0",
+    pillBg: "rgba(158,59,46,0.10)",
     pillText: "#9E3B2E"
   },
   "at-risk": {
-    dot: "#B8543D",
-    pillBg: "#ffefd6",
-    pillText: "#B8543D"
+    dot: "#8C5D1E",
+    pillBg: "rgba(194,136,64,0.12)",
+    pillText: "#8C5D1E"
   },
   stable: {
-    dot: "#B8543D",
-    pillBg: "#e8faf6",
-    pillText: "#B8543D"
+    dot: "#2D4A3E",
+    pillBg: "rgba(45,74,62,0.10)",
+    pillText: "#2D4A3E"
   },
   unresolved: {
-    dot: "rgba(184,84,61,0.6)",
-    pillBg: "#fff3e0",
-    pillText: "#B8543D"
+    dot: "#9E3B2E",
+    pillBg: "rgba(158,59,46,0.10)",
+    pillText: "#9E3B2E"
   }
 };
 
@@ -125,18 +125,18 @@ function clamp(value: number, min: number, max: number) {
 function formatNodeId(id: string) {
   const match = id.match(/^n(\d+)$/i);
   if (!match) {
-    return id.toUpperCase();
+    return id;
   }
 
   return `N-${match[1].padStart(2, "0")}`;
 }
 
 function getTypeLabel(type: FlowNode["type"]) {
-  return type.replace("-", " ").toUpperCase();
+  return type.replace("-", " ");
 }
 
 function getStatusLabel(status: FlowNode["status"]) {
-  return status.toUpperCase();
+  return status;
 }
 
 function buildNodePositions(nodes: FlowNode[]): NodePositions {
@@ -386,7 +386,7 @@ export function ProjectFlowchartPage() {
 
   return (
     <section className="relative h-full overflow-hidden bg-bg">
-      <div className="absolute inset-x-0 top-0 z-20 flex h-[52px] items-center border-b border-[rgba(0,0,0,0.06)] bg-[rgba(248,248,245,0.9)] px-7 backdrop-blur-md">
+      <div className="absolute inset-x-0 top-0 z-20 flex h-[52px] items-center border-b border-[rgba(0,0,0,0.06)] bg-[rgba(248,248,245,0.9)] px-7">
         <div className="flex min-w-0 items-center">
           <button
             type="button"
@@ -396,18 +396,18 @@ export function ProjectFlowchartPage() {
             <ArrowLeftIcon className="h-4 w-4" />
           </button>
           <span className="mx-4 h-4 w-px bg-[rgba(26,22,18,0.08)]" />
-          <p className="truncate font-sans text-[15px] text-[#1A1612]">{projectName.toUpperCase()}</p>
+          <p className="truncate font-sans text-[15px] text-[#1A1612]">{projectName}</p>
           <span className="mx-2 font-sans text-[13px] text-[rgba(120,113,108,0.6)]">/</span>
-          <p className="font-sans text-[12px] tracking-[0.12em] text-[#B8543D]">FLOWCHART</p>
+          <p className="font-sans text-[12px] tracking-[0.12em] text-[#B8543D]">Flowchart</p>
         </div>
 
         <div className="ml-auto flex items-center gap-3">
           {([
-            ["FLOW", "#B8543D"],
-            ["MODULE", "#8b7fd4"],
-            ["INTEGRATION", "#3b82f6"],
-            ["APPROVAL", "#8b7fd4"],
-            ["UNRESOLVED", "#B8543D"]
+            ["Flow", "#B8543D"],
+            ["Module", "#8B7FD4"],
+            ["Integration", "#5A5450"],
+            ["Approval", "#8C5D1E"],
+            ["Unresolved", "#9E3B2E"]
           ] as const).map(([label, color]) => (
             <div key={label} className="flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full" style={{ background: color }} />
@@ -516,7 +516,7 @@ export function ProjectFlowchartPage() {
                   }}
                   whileHover={{
                     scale: 1.02,
-                    boxShadow: "0 8px 40px rgba(0,0,0,0.14)"
+                    boxShadow: "none"
                   }}
                   className="pointer-events-auto absolute z-[2]"
                   style={{ left: position.x, top: position.y, width: nodeWidth }}
@@ -536,7 +536,7 @@ export function ProjectFlowchartPage() {
                     style={{
                       background: typeStyle.bg,
                       border: `1.5px solid ${hoveredNodeId === node.id ? typeStyle.accent : typeStyle.border}`,
-                      boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                      boxShadow: "none",
                       cursor: dragLocked ? "pointer" : "grab"
                     }}
                   >
@@ -587,7 +587,7 @@ export function ProjectFlowchartPage() {
         ) : null}
 
         <div
-          className="absolute bottom-6 left-6 z-10 overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+          className="absolute bottom-6 left-6 z-10 overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white"
           onMouseDown={(event) => event.stopPropagation()}
         >
           {[
@@ -609,7 +609,7 @@ export function ProjectFlowchartPage() {
         </div>
 
         <div
-          className="absolute bottom-6 z-10 overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-[rgba(255,255,255,0.9)] shadow-[0_4px_16px_rgba(0,0,0,0.06)]"
+          className="absolute bottom-6 z-10 overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-[rgba(255,255,255,0.9)]"
           style={{ width: miniMapWidth, height: miniMapHeight, right: selectedNode ? 384 : 24 }}
           onMouseDown={(event) => event.stopPropagation()}
         >
@@ -652,7 +652,7 @@ export function ProjectFlowchartPage() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: detailPanelWidth, opacity: 0 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute bottom-0 right-0 top-0 z-20 flex w-[360px] flex-col overflow-y-auto border-l border-[rgba(0,0,0,0.08)] bg-[rgba(255,255,255,0.97)] shadow-[-8px_0_48px_rgba(0,0,0,0.1)] backdrop-blur-[20px]"
+              className="absolute bottom-0 right-0 top-0 z-20 flex w-[360px] flex-col overflow-y-auto border-l border-[rgba(0,0,0,0.08)] bg-[rgba(255,255,255,0.97)]-[20px]"
               onMouseDown={(event) => event.stopPropagation()}
               onWheel={(event) => event.stopPropagation()}
             >

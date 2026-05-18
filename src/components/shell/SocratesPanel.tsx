@@ -163,11 +163,11 @@ function AssistantDiagramCard({ message }: { message: Message }) {
       <div className="overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white">
         <div className="flex items-center gap-2 border-b border-[#FAF8F5] px-[14px] py-[10px]">
           <p className="font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">
-            {isDependency ? "LIVE DEPENDENCY MAP" : `${message.diagram.kind.toUpperCase()} DIAGRAM`}
+            {isDependency ? "LIVE DEPENDENCY MAP" : `${message.diagram.kind} DIAGRAM`}
           </p>
 
           {isDependency ? (
-            <span className="ml-auto rounded-md border border-[#B8543D] bg-[#fceee4] px-2 py-[2px] font-sans text-[10px] tracking-[0.08em] text-[#B8543D]">
+            <span className="ml-auto rounded-md border border-[#B8543D] bg-[rgba(194,136,64,0.12)] px-2 py-[2px] font-sans text-[10px] tracking-[0.08em] text-[#B8543D]">
               2 UNRESOLVED
             </span>
           ) : null}
@@ -240,7 +240,7 @@ function MessageRow({
     return (
       <div className="flex justify-end">
         <div className="max-w-[85%]">
-          <div className="rounded-2xl rounded-br-sm border border-[rgba(255,255,255,0.8)] bg-[linear-gradient(135deg,rgba(232,250,246,0.92),rgba(244,242,252,0.9))] px-[14px] py-[10px] font-sans text-[13px] text-[#254842] shadow-[0_10px_24px_rgba(139,127,212,0.12)] backdrop-blur-[18px]">
+          <div className="rounded-2xl rounded-br-sm border border-[rgba(255,255,255,0.8)] bg-white px-[14px] py-[10px] font-sans text-[13px] text-[#254842]-[18px]">
             {message.content}
           </div>
           <p className="mt-1 text-right font-mono text-[9px] text-[rgba(37,72,66,0.45)]">{formatTimestamp(message.timestamp)}</p>
@@ -392,7 +392,7 @@ function SocratesPanelContent() {
   };
 
   return (
-    <aside className="flex h-screen w-[300px] flex-shrink-0 flex-col border-r border-[rgba(26,22,18,0.08)] bg-white shadow-[4px_0_24px_rgba(0,0,0,0.04)]">
+    <aside className="flex h-screen w-[300px] flex-shrink-0 flex-col border-r border-[rgba(26,22,18,0.08)] bg-white">
       <header className="px-6 pb-5 pt-8 text-center">
         <div className="mt-8 flex justify-center">
           <OmniLogo size={56} />
@@ -400,7 +400,7 @@ function SocratesPanelContent() {
         <p className="mt-3 font-sans text-[11px] tracking-[3px] text-[rgba(120,113,108,0.6)]">SOCRATES</p>
         <div className="mt-1 flex items-center justify-center gap-2">
           <span className="h-2 w-2 rounded-full bg-[#B8543D]" />
-          <p className="font-sans text-[12px] font-medium text-[#B8543D]">ONLINE</p>
+          <p className="font-sans text-[12px] font-medium text-[#B8543D]">online</p>
         </div>
       </header>
 
@@ -439,7 +439,7 @@ function SocratesPanelContent() {
           <SuggestionChips onSelect={handleSuggestionSelect} />
         </div>
 
-        <div className="relative rounded-[18px] border-[1.5px] border-[rgba(255,255,255,0.9)] bg-[rgba(255,255,255,0.8)] px-4 pb-3 pr-[52px] pt-3 shadow-[0_4px_24px_rgba(0,0,0,0.08)] backdrop-blur-[16px]">
+        <div className="relative rounded-[18px] border-[1.5px] border-[rgba(255,255,255,0.9)] bg-[rgba(255,255,255,0.8)] px-4 pb-3 pr-[52px] pt-3-[16px]">
           <textarea
             ref={textareaRef}
             rows={2}
@@ -456,7 +456,7 @@ function SocratesPanelContent() {
             whileHover={{ scale: isStreaming ? 1 : 1.03 }}
             whileTap={{ scale: isStreaming ? 1 : 0.96 }}
             disabled={isStreaming}
-            className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#e8e8e2] text-[#1a1a1a] shadow-[0_6px_18px_rgba(0,0,0,0.12)] transition-colors hover:bg-[#ddddd6] disabled:cursor-not-allowed disabled:opacity-60"
+            className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#e8e8e2] text-[#1a1a1a] transition-colors hover:bg-[#ddddd6] disabled:cursor-not-allowed disabled:opacity-60"
           >
             <TbArrowUp size={20} strokeWidth={1.6} />
           </motion.button>

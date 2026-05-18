@@ -20,9 +20,9 @@ import type {
 } from "./types";
 
 export const mockProjects: ProjectCardItem[] = [
-  { id: "1", name: "BloomFast MVP", progress: 34, health: "HEALTHY", color: "#c8f0e8" },
-  { id: "2", name: "Elara Games", progress: 38, health: "AT RISK", color: "#e0dbf5" },
-  { id: "3", name: "API Gateway", progress: 79, health: "CRITICAL", color: "#fceee4" }
+  { id: "1", name: "BloomFast MVP", progress: 34, health: "HEALTHY", color: "rgba(45,74,62,0.10)" },
+  { id: "2", name: "Elara Games", progress: 38, health: "AT RISK", color: "rgba(120,113,108,0.10)" },
+  { id: "3", name: "API Gateway", progress: 79, health: "Critical", color: "rgba(194,136,64,0.12)" }
 ];
 
 export const mockProjectDetail: ProjectDetail = {
@@ -782,7 +782,7 @@ function createProjectBrainData({
         x: 50,
         y: 50,
         size: 80,
-        background: "linear-gradient(135deg, #B8543D, #0a8a80)",
+        background: "#FAF8F5",
         borderColor: "#ffffff",
         textColor: "#ffffff",
         accentColor: "#B8543D",
@@ -807,7 +807,7 @@ function createProjectBrainData({
         x: 72,
         y: 36,
         icon: "message-square",
-        accentColor: "#8b7fd4",
+        accentColor: "#5A5450",
         tooltip: `${projectName} comms`,
         countLabel: `${commsItems.length} active channels`,
         detailItems: commsItems
@@ -825,7 +825,7 @@ function createProjectBrainData({
       }),
       createCategoryNode({
         id: "changes",
-        label: "CHANGES",
+        label: "Changes",
         x: 35,
         y: 68,
         icon: "git-branch",
@@ -852,8 +852,8 @@ function createProjectBrainData({
         label: docs[0].label,
         x: 48,
         y: 8,
-        background: "#c8f0e8",
-        borderColor: "#c8f0e8",
+        background: "rgba(45,74,62,0.10)",
+        borderColor: "rgba(45,74,62,0.10)",
         accentColor: "#B8543D",
         tooltip: docs[0].label,
         countLabel: "1 doc node"
@@ -865,8 +865,8 @@ function createProjectBrainData({
         label: docs[1].label,
         x: 54,
         y: 8,
-        background: "#c8f0e8",
-        borderColor: "#c8f0e8",
+        background: "rgba(45,74,62,0.10)",
+        borderColor: "rgba(45,74,62,0.10)",
         accentColor: "#B8543D",
         tooltip: docs[1].label,
         countLabel: "1 doc node"
@@ -878,8 +878,8 @@ function createProjectBrainData({
         label: docs[2].label,
         x: 42,
         y: 12,
-        background: "#c8f0e8",
-        borderColor: "#c8f0e8",
+        background: "rgba(45,74,62,0.10)",
+        borderColor: "rgba(45,74,62,0.10)",
         accentColor: "#B8543D",
         tooltip: docs[2].label,
         countLabel: "1 doc node"
@@ -891,9 +891,9 @@ function createProjectBrainData({
         label: comms[0].label,
         x: 82,
         y: 28,
-        background: "#e0dbf5",
-        borderColor: "#e0dbf5",
-        accentColor: "#8b7fd4",
+        background: "rgba(120,113,108,0.10)",
+        borderColor: "rgba(120,113,108,0.10)",
+        accentColor: "#5A5450",
         tooltip: comms[0].label,
         countLabel: "1 channel node"
       }),
@@ -904,9 +904,9 @@ function createProjectBrainData({
         label: comms[1].label,
         x: 84,
         y: 42,
-        background: "#e0dbf5",
-        borderColor: "#e0dbf5",
-        accentColor: "#8b7fd4",
+        background: "rgba(120,113,108,0.10)",
+        borderColor: "rgba(120,113,108,0.10)",
+        accentColor: "#5A5450",
         tooltip: comms[1].label,
         countLabel: "1 channel node"
       }),
@@ -917,9 +917,9 @@ function createProjectBrainData({
         label: comms[2].label,
         x: 76,
         y: 26,
-        background: "#e0dbf5",
-        borderColor: "#e0dbf5",
-        accentColor: "#8b7fd4",
+        background: "rgba(120,113,108,0.10)",
+        borderColor: "rgba(120,113,108,0.10)",
+        accentColor: "#5A5450",
         tooltip: comms[2].label,
         countLabel: "1 channel node"
       }),
@@ -930,8 +930,8 @@ function createProjectBrainData({
         label: team[0].label,
         x: 72,
         y: 76,
-        background: "#fceee4",
-        borderColor: "#fceee4",
+        background: "rgba(194,136,64,0.12)",
+        borderColor: "rgba(194,136,64,0.12)",
         accentColor: "#B8543D",
         tooltip: team[0].label,
         countLabel: "1 team node"
@@ -943,8 +943,8 @@ function createProjectBrainData({
         label: team[1].label,
         x: 64,
         y: 82,
-        background: "#fceee4",
-        borderColor: "#fceee4",
+        background: "rgba(194,136,64,0.12)",
+        borderColor: "rgba(194,136,64,0.12)",
         accentColor: "#B8543D",
         tooltip: team[1].label,
         countLabel: "1 team node"
@@ -956,8 +956,8 @@ function createProjectBrainData({
         label: team[2].label,
         x: 56,
         y: 74,
-        background: "#fceee4",
-        borderColor: "#fceee4",
+        background: "rgba(194,136,64,0.12)",
+        borderColor: "rgba(194,136,64,0.12)",
         accentColor: "#B8543D",
         tooltip: team[2].label,
         countLabel: "1 team node"
@@ -969,7 +969,7 @@ function createProjectBrainData({
         label: changes[0].label,
         x: 28,
         y: 78,
-        background: "#fff0f0",
+        background: "rgba(158,59,46,0.10)",
         borderColor: changes[0].borderColor,
         accentColor: changes[0].accentColor,
         tooltip: changes[0].label,
@@ -982,7 +982,7 @@ function createProjectBrainData({
         label: changes[1].label,
         x: 20,
         y: 68,
-        background: "#fff0f0",
+        background: "rgba(158,59,46,0.10)",
         borderColor: changes[1].borderColor,
         accentColor: changes[1].accentColor,
         tooltip: changes[1].label,
@@ -995,8 +995,8 @@ function createProjectBrainData({
         label: decisions[0].label,
         x: 16,
         y: 28,
-        background: "#c8f0e8",
-        borderColor: "#c8f0e8",
+        background: "rgba(45,74,62,0.10)",
+        borderColor: "rgba(45,74,62,0.10)",
         accentColor: "#B8543D",
         tooltip: decisions[0].label,
         countLabel: "1 decision node"
@@ -1008,8 +1008,8 @@ function createProjectBrainData({
         label: decisions[1].label,
         x: 22,
         y: 22,
-        background: "#c8f0e8",
-        borderColor: "#c8f0e8",
+        background: "rgba(45,74,62,0.10)",
+        borderColor: "rgba(45,74,62,0.10)",
         accentColor: "#B8543D",
         tooltip: decisions[1].label,
         countLabel: "1 decision node"
@@ -1181,9 +1181,9 @@ export const mockCalendarEvents: Record<string, CalendarDayData> = {
 };
 
 export const mockRoles: RoleOption[] = [
-  { key: "manager", label: "MANAGER", icon: "briefcase" },
-  { key: "dev", label: "DEV", icon: "code" },
-  { key: "client", label: "CLIENT", icon: "eye" }
+  { key: "manager", label: "Manager", icon: "briefcase" },
+  { key: "dev", label: "Dev", icon: "code" },
+  { key: "client", label: "Client", icon: "eye" }
 ];
 
 export const mockSocratesSuggestions: SocratesSuggestionGroups = {

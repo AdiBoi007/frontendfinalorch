@@ -34,15 +34,15 @@ graph TD
   B -->|admin access| I[Admin Panel]
   I -->|approves| D
   
-  style A fill:#c8f0e8,stroke:#B8543D,color:#1A1612
-  style F fill:#c8f0e8,stroke:#B8543D,color:#1A1612
-  style G fill:#fceee4,stroke:#B8543D,color:#1A1612
-  style B fill:#f0faf8,stroke:#B8543D,color:#1A1612
-  style C fill:#f0faf8,stroke:#B8543D,color:#1A1612
-  style D fill:#fff0f0,stroke:#9E3B2E,color:#1A1612
-  style E fill:#f0faf8,stroke:#B8543D,color:#1A1612
-  style H fill:#f0faf8,stroke:#B8543D,color:#1A1612
-  style I fill:#e0dbf5,stroke:#8b7fd4,color:#1A1612
+  style A fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style F fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style G fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
+  style B fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style C fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style D fill:rgba(158,59,46,0.10),stroke:#9E3B2E,color:#1A1612
+  style E fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style H fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style I fill:rgba(120,113,108,0.10),stroke:#5A5450,color:#1A1612
 `;
 
 const useCaseDiagram = `
@@ -79,9 +79,9 @@ graph LR
   Admin --> UC10
   Admin --> UC11
   
-  style UC2 fill:#c8f0e8,stroke:#B8543D
-  style UC10 fill:#e0dbf5,stroke:#8b7fd4
-  style UC11 fill:#fff0f0,stroke:#9E3B2E
+  style UC2 fill:rgba(45,74,62,0.10),stroke:#B8543D
+  style UC10 fill:rgba(120,113,108,0.10),stroke:#5A5450
+  style UC11 fill:rgba(158,59,46,0.10),stroke:#9E3B2E
 `;
 
 const flowchartDiagram = `
@@ -105,13 +105,13 @@ flowchart TD
   N --> O[Real-time Tracking Active]
   O --> P([Delivery Complete])
   
-  style A fill:#c8f0e8,stroke:#B8543D
-  style P fill:#c8f0e8,stroke:#B8543D
-  style B fill:#fceee4,stroke:#B8543D
-  style E fill:#fceee4,stroke:#B8543D
-  style H fill:#fceee4,stroke:#B8543D
-  style L fill:#fceee4,stroke:#B8543D
-  style M fill:#fff0f0,stroke:#9E3B2E
+  style A fill:rgba(45,74,62,0.10),stroke:#B8543D
+  style P fill:rgba(45,74,62,0.10),stroke:#B8543D
+  style B fill:rgba(194,136,64,0.12),stroke:#B8543D
+  style E fill:rgba(194,136,64,0.12),stroke:#B8543D
+  style H fill:rgba(194,136,64,0.12),stroke:#B8543D
+  style L fill:rgba(194,136,64,0.12),stroke:#B8543D
+  style M fill:rgba(158,59,46,0.10),stroke:#9E3B2E
 `;
 
 const sequenceDiagram = `
@@ -213,9 +213,9 @@ const diagramActions = [
     triggerLabel: "GENERATE USE CASE DIAGRAM",
     subtitle: "Ask Socrates to render a use case diagram",
     chart: useCaseDiagram,
-    accent: "#8b7fd4",
+    accent: "#5A5450",
     icon: UsersIcon,
-    hoverClass: "hover:border-[#8b7fd4] hover:bg-[rgba(139,127,212,0.04)]"
+    hoverClass: "hover:border-[#5A5450] hover:bg-[rgba(120,113,108,0.10)]"
   },
   {
     key: "flowchart" as const,
@@ -233,9 +233,9 @@ const diagramActions = [
     triggerLabel: "GENERATE SEQUENCE DIAGRAM",
     subtitle: "Ask Socrates to render an interaction sequence diagram",
     chart: sequenceDiagram,
-    accent: "#8b7fd4",
+    accent: "#5A5450",
     icon: GitBranchIcon,
-    hoverClass: "hover:border-[#8b7fd4] hover:bg-[rgba(139,127,212,0.04)]"
+    hoverClass: "hover:border-[#5A5450] hover:bg-[rgba(120,113,108,0.10)]"
   }
 ] as const;
 
@@ -247,7 +247,7 @@ function formatDiagramTimestamp() {
       hour: "numeric",
       minute: "2-digit"
     })
-    .toUpperCase();
+    ;
 }
 
 function sectionValue(section: LiveDocSection, drafts: SectionDrafts) {
@@ -366,7 +366,7 @@ function renderHighlightedContent({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 4 }}
               transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute bottom-[calc(100%+8px)] left-1/2 z-50 w-max max-w-[320px] -translate-x-1/2 rounded-lg bg-[#1A1612] px-[10px] py-[6px] text-center font-sans text-[11px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
+              className="absolute bottom-[calc(100%+8px)] left-1/2 z-50 w-max max-w-[320px] -translate-x-1/2 rounded-lg bg-[#1A1612] px-[10px] py-[6px] text-center font-sans text-[11px] text-white"
             >
               SOURCE: {tooltipSource}
             </motion.span>
@@ -385,7 +385,7 @@ function DiagramLoadingCard() {
       animate={{ opacity: 1, y: 0 }}
       className="mt-3 flex h-[200px] w-full items-center justify-center rounded-2xl border border-[rgba(26,22,18,0.08)] px-6"
       style={{
-        background: "linear-gradient(90deg, #FAF8F5, #eeede8, #FAF8F5)",
+        background: "#FAF8F5",
         backgroundSize: "200% 100%",
         animation: "live-doc-diagram-shimmer 1.5s linear infinite"
       }}
@@ -420,7 +420,7 @@ function DiagramCard({
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-5 overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
+      className="mb-5 overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white"
     >
       <div className="flex items-center justify-between border-b border-[#FAF8F5] px-5 py-[14px]">
         <div className="flex items-center gap-2">
@@ -473,7 +473,7 @@ function CommentCard({
       transition={{ duration: 0.2 }}
       className={[
         "rounded-2xl border bg-white p-4",
-        active ? "shadow-[0_0_0_3px_rgba(184,84,61,0.12)]" : ""
+        active ? "" : ""
       ].join(" ")}
     >
       <div className="flex items-center gap-2">
@@ -530,14 +530,14 @@ export function LiveDocPage() {
         htmlLabels: true
       },
       themeVariables: {
-        primaryColor: "#c8f0e8",
+        primaryColor: "rgba(45,74,62,0.10)",
         primaryTextColor: "#1A1612",
         primaryBorderColor: "#B8543D",
         lineColor: "#B8543D",
-        secondaryColor: "#e0dbf5",
-        tertiaryColor: "#fceee4",
+        secondaryColor: "rgba(120,113,108,0.10)",
+        tertiaryColor: "rgba(194,136,64,0.12)",
         background: "#ffffff",
-        mainBkg: "#f0faf8",
+        mainBkg: "rgba(45,74,62,0.10)",
         nodeBorder: "#B8543D",
         clusterBkg: "#FAF8F5",
         titleColor: "#1A1612",
@@ -732,9 +732,7 @@ export function LiveDocPage() {
                   setTooltipSectionId(null);
                 }}
                 className="rounded-lg border border-[rgba(26,22,18,0.08)] px-3 py-1.5 font-sans text-[12px] text-[#5A5450] transition-colors hover:bg-[#FAF8F5]"
-              >
-                EDIT
-              </button>
+              >Edit</button>
             </div>
 
             <motion.div variants={sectionListVariants} initial="hidden" animate="visible">
@@ -851,9 +849,7 @@ export function LiveDocPage() {
                                 onMouseDown={(event) => event.preventDefault()}
                                 onClick={() => void handleSaveSection(section.id)}
                                 className="rounded-lg bg-[#B8543D] px-[10px] py-1 font-sans text-[11px] tracking-[0.08em] text-white"
-                              >
-                                SAVE
-                              </button>
+                              >Save</button>
                             </motion.div>
                           ) : null}
                         </AnimatePresence>

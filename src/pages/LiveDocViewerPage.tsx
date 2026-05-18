@@ -33,23 +33,23 @@ const sectionItem = {
 function platformBadge(platform: AnchorProvenance["linkedMessages"][number]["platform"]) {
   if (platform === "slack") {
     return {
-      bg: "#4A154B20",
-      text: "#4A154B",
+      bg: "rgba(120,113,108,0.10)",
+      text: "#5A5450",
       label: "S"
     };
   }
 
   if (platform === "email") {
     return {
-      bg: "#1a73e820",
-      text: "#1a73e8",
+      bg: "rgba(120,113,108,0.10)",
+      text: "#5A5450",
       label: "G"
     };
   }
 
   return {
-    bg: "#25D36620",
-    text: "#25D366",
+    bg: "rgba(120,113,108,0.10)",
+    text: "#5A5450",
     label: "W"
   };
 }
@@ -247,9 +247,7 @@ export function LiveDocViewerPage() {
           }}
         >
           {isChanged ? (
-            <span className="absolute right-0 top-0 rounded-full bg-[rgba(184,84,61,0.1)] px-2 py-[2px] font-sans text-[9px] tracking-[0.18em] text-[#B8543D]">
-              CHANGED
-            </span>
+            <span className="absolute right-0 top-0 rounded-full bg-[rgba(184,84,61,0.1)] px-2 py-[2px] font-sans text-[9px] tracking-[0.18em] text-[#B8543D]">Changed</span>
           ) : null}
 
           <p className="font-sans text-[15px] leading-[1.8] text-[#1A1612]">{currentValue}</p>
@@ -299,7 +297,7 @@ export function LiveDocViewerPage() {
         }
       `}</style>
 
-      <div className="doc-viewer-topbar absolute inset-x-0 top-0 z-10 flex h-[52px] items-center gap-4 border-b border-[rgba(0,0,0,0.06)] bg-[rgba(247,246,243,0.95)] px-8 backdrop-blur-md">
+      <div className="doc-viewer-topbar absolute inset-x-0 top-0 z-10 flex h-[52px] items-center gap-4 border-b border-[rgba(0,0,0,0.06)] bg-[rgba(247,246,243,0.95)] px-8">
         <div className="flex min-w-0 items-center gap-4">
           <button
             type="button"
@@ -309,9 +307,9 @@ export function LiveDocViewerPage() {
             <ArrowLeftIcon className="h-4 w-4" />
           </button>
           <span className="h-4 w-px bg-[rgba(26,22,18,0.08)]" />
-          <p className="truncate font-sans text-[15px] text-[#1A1612]">{projectName.toUpperCase()}</p>
+          <p className="truncate font-sans text-[15px] text-[#1A1612]">{projectName}</p>
           <span className="font-sans text-[13px] text-[rgba(120,113,108,0.6)]">/</span>
-          <p className="truncate font-sans text-[13px] tracking-[0.08em] text-[#B8543D]">{viewer?.title.toUpperCase() ?? "DOCUMENT"}</p>
+          <p className="truncate font-sans text-[13px] tracking-[0.08em] text-[#B8543D]">{viewer?.title ?? "DOCUMENT"}</p>
         </div>
 
         <div className="ml-auto flex items-center gap-3">
@@ -325,9 +323,7 @@ export function LiveDocViewerPage() {
             whileTap={{ scale: 0.98 }}
             onClick={() => setEditMode((current) => !current)}
             className="rounded-xl border border-[rgba(26,22,18,0.08)] px-[14px] py-[6px] font-sans text-[12px] text-[#5A5450]"
-          >
-            EDIT
-          </motion.button>
+          >Edit</motion.button>
 
           {editMode ? (
             <motion.button
@@ -336,9 +332,7 @@ export function LiveDocViewerPage() {
               whileTap={{ scale: 0.98 }}
               onClick={handleSave}
               className="rounded-xl bg-[#B8543D] px-[14px] py-[6px] font-sans text-[12px] tracking-[0.08em] text-white"
-            >
-              SAVE
-            </motion.button>
+            >Save</motion.button>
           ) : null}
 
           <motion.button
@@ -347,9 +341,7 @@ export function LiveDocViewerPage() {
             whileTap={{ scale: 0.98 }}
             onClick={() => window.print()}
             className="rounded-xl bg-[#1A1612] px-[14px] py-[6px] font-sans text-[12px] tracking-[0.08em] text-white"
-          >
-            EXPORT PDF
-          </motion.button>
+          >Export PDF</motion.button>
         </div>
       </div>
 
@@ -358,7 +350,7 @@ export function LiveDocViewerPage() {
           <div className="doc-viewer-content mx-auto max-w-[720px] px-12 pb-20 pt-[72px]">
             <div className="mb-10">
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#f0faf8] text-[#B8543D]">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[rgba(45,74,62,0.10)] text-[#B8543D]">
                   <FileTextIcon className="h-5 w-5" />
                 </div>
                 <div>
@@ -403,7 +395,7 @@ export function LiveDocViewerPage() {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 360, opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="doc-viewer-provenance fixed bottom-0 right-0 top-0 z-30 w-[360px] overflow-y-auto border-l border-[rgba(0,0,0,0.08)] bg-[rgba(255,255,255,0.98)] p-6 shadow-[-8px_0_48px_rgba(0,0,0,0.1)] backdrop-blur-[20px]"
+            className="doc-viewer-provenance fixed bottom-0 right-0 top-0 z-30 w-[360px] overflow-y-auto border-l border-[rgba(0,0,0,0.08)] bg-[rgba(255,255,255,0.98)] p-6-[20px]"
           >
             <div className="mb-5 flex items-center">
               <p className="font-sans text-[13px] tracking-[0.12em] text-[#1A1612]">SOURCE EVIDENCE</p>
@@ -464,10 +456,10 @@ export function LiveDocViewerPage() {
                 <div className="mt-5">
                   <p className="mb-3 font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">ACCEPTED CHANGES</p>
                   {provenance.acceptedChanges.map((change) => (
-                    <div key={change.id} className="mb-[10px] rounded-2xl border border-[rgba(184,84,61,0.2)] bg-[#f0faf8] p-[14px]">
+                    <div key={change.id} className="mb-[10px] rounded-2xl border border-[rgba(184,84,61,0.2)] bg-[rgba(45,74,62,0.10)] p-[14px]">
                       <p className="font-sans text-[13px] font-medium text-[#1A1612]">{change.summary}</p>
                       <div className="mt-2 flex items-center">
-                        <span className="font-sans text-[10px] tracking-[0.12em] text-[#B8543D]">ACCEPTED</span>
+                        <span className="font-sans text-[10px] tracking-[0.12em] text-[#B8543D]">Accepted</span>
                         <span className="ml-2 font-sans text-[11px] text-[#78716C]">{change.acceptedBy}</span>
                         <span className="ml-auto font-mono text-[11px] text-[#78716C]">{change.acceptedAt}</span>
                       </div>
@@ -478,9 +470,7 @@ export function LiveDocViewerPage() {
                 <button
                   type="button"
                   className="mt-6 w-full rounded-xl border-[1.5px] border-dashed border-[rgba(26,22,18,0.20)] py-3 text-center font-sans text-[12px] text-[#78716C] transition-colors hover:border-[#B8543D] hover:bg-[rgba(184,84,61,0.04)] hover:text-[#B8543D]"
-                >
-                  ASK SOCRATES ABOUT THIS SECTION
-                </button>
+                >Ask Socrates about this section</button>
               </>
             ) : (
               <div>

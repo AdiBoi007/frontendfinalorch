@@ -103,44 +103,44 @@ const categoryVisuals: Record<
   }
 > = {
   docs: {
-    accent: "#B8543D",
-    tint: "#f0faf8",
-    border: "rgba(184,84,61,0.2)",
-    text: "#00806f",
+    accent: "#2D4A3E",
+    tint: "rgba(45,74,62,0.10)",
+    border: "rgba(26,22,18,0.08)",
+    text: "#2D4A3E",
     icon: "file-text",
-    typeLabel: "DOC"
+    typeLabel: "Docs"
   },
   comms: {
-    accent: "#8b7fd4",
-    tint: "#f4f2fc",
-    border: "rgba(139,127,212,0.2)",
-    text: "#6b5dc4",
+    accent: "#8B7FD4",
+    tint: "rgba(139,127,212,0.12)",
+    border: "rgba(26,22,18,0.08)",
+    text: "#8B7FD4",
     icon: "message-square",
-    typeLabel: "COMMS"
+    typeLabel: "Comms"
   },
   team: {
-    accent: "#B8543D",
-    tint: "#fef6ec",
-    border: "rgba(184,84,61,0.2)",
-    text: "#c4650a",
+    accent: "#1A1612",
+    tint: "rgba(26,22,18,0.06)",
+    border: "rgba(26,22,18,0.08)",
+    text: "#1A1612",
     icon: "users",
-    typeLabel: "TEAM"
+    typeLabel: "Team"
   },
   changes: {
-    accent: "#9E3B2E",
-    tint: "#fff0f0",
-    border: "rgba(224,85,85,0.2)",
-    text: "#9E3B2E",
+    accent: "#8C5D1E",
+    tint: "rgba(194,136,64,0.12)",
+    border: "rgba(26,22,18,0.08)",
+    text: "#8C5D1E",
     icon: "git-pull-request",
-    typeLabel: "CHANGE"
+    typeLabel: "Change"
   },
   decisions: {
-    accent: "#B8543D",
-    tint: "#f0faf8",
-    border: "rgba(184,84,61,0.2)",
-    text: "#00806f",
+    accent: "#5A5450",
+    tint: "rgba(120,113,108,0.10)",
+    border: "rgba(26,22,18,0.08)",
+    text: "#5A5450",
     icon: "check-square",
-    typeLabel: "DECISION"
+    typeLabel: "Decision"
   }
 };
 
@@ -263,7 +263,7 @@ function createVisualNodes(seedNodes: BrainNodeData[]) {
         x: categoryLayout.core.left,
         y: categoryLayout.core.top,
         size: centerNodeSize,
-        background: "linear-gradient(145deg, #f5f0e8 0%, #ede8de 100%)",
+        background: "#FAF8F5",
         borderColor: "rgba(184,84,61,0.3)",
         textColor: "#1A1612",
         accentColor: "#B8543D"
@@ -363,7 +363,7 @@ function getDetailStatus(item: BrainDetailItem, index: number): DetailStatus {
 
   const slot = index % 3;
   if (slot === 0) {
-    return { label: "ready", color: "#00b46e" };
+    return { label: "ready", color: "#2D4A3E" };
   }
 
   if (slot === 1) {
@@ -577,7 +577,7 @@ export function ProjectBrainPage() {
         {
           id: detailId,
           label: trimmedName,
-          description: `${detailLabel} added to ${targetCategory.toUpperCase()} from the upload modal.`,
+          description: `${detailLabel} added to ${targetCategory} from the upload modal.`,
           action: "detail" as const
         }
       ];
@@ -689,7 +689,7 @@ export function ProjectBrainPage() {
 
   return (
     <section className="relative h-full overflow-hidden bg-bg">
-      <div className="absolute inset-x-0 top-0 z-20 flex h-14 items-center border-b border-[rgba(0,0,0,0.06)] bg-[rgba(250,250,248,0.9)] px-7 backdrop-blur-md">
+      <div className="absolute inset-x-0 top-0 z-20 flex h-14 items-center border-b border-[rgba(0,0,0,0.06)] bg-[rgba(250,250,248,0.9)] px-7">
         <div className="flex min-w-0 items-center">
           <button
             type="button"
@@ -699,15 +699,15 @@ export function ProjectBrainPage() {
             <ArrowLeftIcon className="h-4 w-4" />
           </button>
           <span className="mx-4 h-4 w-px bg-[rgba(26,22,18,0.08)]" />
-          <p className="font-sans text-[15px] text-[#1A1612]">{project.name.toUpperCase()}</p>
+          <p className="font-sans text-[15px] text-[#1A1612]">{project.name}</p>
           <span className="mx-2 font-sans text-[13px] text-[rgba(120,113,108,0.6)]">/</span>
-          <p className="font-sans text-[12px] tracking-[0.12em] text-[#B8543D]">BRAIN</p>
+          <p className="font-sans text-[12px] tracking-[0.12em] text-[#B8543D]">Brain</p>
         </div>
 
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <div className="flex items-center gap-2 rounded-full border border-[rgba(184,84,61,0.2)] bg-[rgba(184,84,61,0.08)] px-3 py-1">
-            <span className="h-2 w-2 rounded-full bg-[#00b46e]" />
-            <span className="font-sans text-[11px] font-medium text-[#B8543D]">BRAIN ACTIVE</span>
+            <span className="h-2 w-2 rounded-full bg-[#2D4A3E]" />
+            <span className="font-sans text-[11px] font-medium text-[#B8543D]">Brain active</span>
           </div>
         </div>
 
@@ -716,16 +716,12 @@ export function ProjectBrainPage() {
             type="button"
             onClick={() => openUploadModal()}
             className="rounded-xl border border-[rgba(26,22,18,0.08)] px-[14px] py-[7px] font-sans text-[12px] text-[#5A5450] transition-colors hover:border-[#B8543D] hover:text-[#B8543D]"
-          >
-            UPLOAD
-          </button>
+          >Upload</button>
           <button
             type="button"
             onClick={resetBrainView}
-            className="rounded-xl border border-[rgba(255,255,255,0.78)] bg-[linear-gradient(135deg,rgba(244,242,252,0.94),rgba(232,250,246,0.92))] px-[14px] py-[7px] font-sans text-[12px] tracking-[0.08em] text-[#38524d] shadow-[0_10px_24px_rgba(139,127,212,0.1)] backdrop-blur-[16px] transition-all hover:border-[rgba(184,84,61,0.28)] hover:text-[#B8543D]"
-          >
-            REBUILD
-          </button>
+            className="rounded-xl border border-[rgba(255,255,255,0.78)] bg-white px-[14px] py-[7px] font-sans text-[12px] tracking-[0.08em] text-[#5A5450] transition-all hover:border-[rgba(184,84,61,0.28)] hover:text-[#B8543D]"
+          >Rebuild</button>
         </div>
       </div>
 
@@ -734,7 +730,7 @@ export function ProjectBrainPage() {
         onWheel={handleWheel}
         className="absolute inset-x-0 bottom-0 top-14 overflow-hidden bg-bg"
       >
-        <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(184,84,61,0.06)_0%,transparent_70%)]" />
+        <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-transparent" />
 
         <motion.div initial={hasAnimated.current ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: hasAnimated.current ? 0 : 0.3 }} className="absolute inset-0">
           <motion.div
@@ -914,13 +910,13 @@ export function ProjectBrainPage() {
                       <div
                         className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-1 rounded-full"
                         style={{
-                          background: "linear-gradient(145deg, #f5f0e8 0%, #ede8de 100%)",
+                          background: "#FAF8F5",
                           border: "2px solid rgba(184,84,61,0.3)",
-                          boxShadow: "0 0 0 10px rgba(184,84,61,0.06), 0 0 0 20px rgba(184,84,61,0.03), 0 16px 48px rgba(0,0,0,0.12)"
+                          boxShadow: "none"
                         }}
                       >
                         <span className="mb-1 block h-[6px] w-[6px] rotate-45 bg-[#B8543D]" />
-                        <span className="font-sans text-[15px] tracking-[0.16em] text-[#1A1612]">BRAIN</span>
+                        <span className="font-sans text-[15px] tracking-[0.16em] text-[#1A1612]">Brain</span>
                         <span className="mt-1 block h-[1.5px] w-5 rounded-full bg-[rgba(184,84,61,0.8)]" />
                       </div>
                     </div>
@@ -977,7 +973,7 @@ export function ProjectBrainPage() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 320, opacity: 0 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute bottom-0 right-0 top-0 z-20 w-[320px] overflow-y-auto border-l border-[rgba(0,0,0,0.08)] bg-[rgba(255,255,255,0.95)] px-6 py-7 shadow-[-8px_0_40px_rgba(0,0,0,0.08)] backdrop-blur-[20px]"
+                className="absolute bottom-0 right-0 top-0 z-20 w-[320px] overflow-y-auto border-l border-[rgba(0,0,0,0.08)] bg-[rgba(255,255,255,0.95)] px-6 py-7-[20px]"
               >
                 <div className="mb-6 flex items-center gap-3">
                   <div
@@ -1065,7 +1061,7 @@ export function ProjectBrainPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={closeUploadModal}
-                className="absolute inset-0 z-30 flex items-center justify-center bg-[rgba(0,0,0,0.4)] backdrop-blur-sm"
+                className="absolute inset-0 z-30 flex items-center justify-center bg-[rgba(0,0,0,0.4)]"
               >
                 <motion.div
                   initial={{ scale: 0.95, opacity: 0 }}
@@ -1073,9 +1069,9 @@ export function ProjectBrainPage() {
                   exit={{ scale: 0.95, opacity: 0 }}
                   transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                   onClick={(event) => event.stopPropagation()}
-                  className="w-full max-w-[400px] rounded-2xl bg-white p-8 shadow-[0_24px_80px_rgba(0,0,0,0.2)]"
+                  className="w-full max-w-[400px] rounded-2xl bg-white p-8"
                 >
-                  <p className="font-sans text-[20px] tracking-[0.06em] text-[#1A1612]">ADD TO BRAIN</p>
+                  <p className="font-sans text-[20px] tracking-[0.06em] text-[#1A1612]">Add to brain</p>
                   <p className="mt-2 font-sans text-[13px] text-[#78716C]">What type of document is this?</p>
 
                   <div className="mt-5 grid grid-cols-2 gap-2.5">
@@ -1119,9 +1115,7 @@ export function ProjectBrainPage() {
                       onClick={handleUploadSubmit}
                       disabled={!uploadName.trim()}
                       className="rounded-xl bg-[#1A1612] px-5 py-2.5 font-sans text-[13px] tracking-[0.06em] text-white transition-colors hover:bg-[#B8543D] disabled:cursor-not-allowed disabled:bg-[rgba(120,113,108,0.6)]"
-                    >
-                      ADD TO BRAIN
-                    </button>
+                    >Add to brain</button>
                   </div>
                 </motion.div>
               </motion.div>

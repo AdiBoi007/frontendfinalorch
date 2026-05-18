@@ -152,9 +152,9 @@ const selectedMeetingItemVariants = {
 };
 
 const roleBadgeStyles = {
-  manager: { background: "#e0dbf5", color: "#8b7fd4", label: "MANAGER" },
-  dev: { background: "#c8f0e8", color: "#B8543D", label: "DEV" },
-  client: { background: "#fceee4", color: "#B8543D", label: "CLIENT" }
+  manager: { background: "rgba(120,113,108,0.10)", color: "#5A5450", label: "Manager" },
+  dev: { background: "rgba(45,74,62,0.10)", color: "#B8543D", label: "Dev" },
+  client: { background: "rgba(194,136,64,0.12)", color: "#B8543D", label: "Client" }
 } as const;
 
 const miniCalendarDays = ["M", "T", "W", "T", "F", "S", "S"] as const;
@@ -183,12 +183,12 @@ const meetingsByDate: Record<number, typeof mockMeetings> = {
 };
 
 const serviceGradients: Record<string, string> = {
-  aws: "linear-gradient(135deg, #B8543D, #e07020)",
-  supabase: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-  stripe: "linear-gradient(135deg, #8b7fd4, #6b5dc4)",
-  firebase: "linear-gradient(135deg, #B8543D, #9E3B2E)",
-  vercel: "linear-gradient(135deg, #1A1612, #1A1612)",
-  sentry: "linear-gradient(135deg, #9E3B2E, #9E3B2E)"
+  aws: "#B8543D",
+  supabase: "#5A5450",
+  stripe: "#5A5450",
+  firebase: "#8C5D1E",
+  vercel: "#1A1612",
+  sentry: "#9E3B2E"
 };
 
 const SERVICE_LOGOS: Record<string, string> = {
@@ -230,7 +230,7 @@ function getSubscriptionKey(name: string) {
 
 function getSubscriptionInitial(name: string) {
   const match = name.match(/[A-Z]/);
-  return match?.[0] ?? name.charAt(0).toUpperCase();
+  return match?.[0] ?? name.charAt(0);
 }
 
 function SubscriptionLogo({ name }: { name: string }) {
@@ -272,13 +272,13 @@ function getStatusTone(status: ProjectDetail["recentChanges"][number]["status"])
   if (status === "accepted") {
     return {
       bar: "#B8543D",
-      badgeClassName: "bg-[#e8faf7] text-[#B8543D]"
+      badgeClassName: "bg-[rgba(45,74,62,0.10)] text-[#B8543D]"
     };
   }
 
   return {
     bar: "#B8543D",
-    badgeClassName: "bg-[#fceee4] text-[#B8543D]"
+    badgeClassName: "bg-[rgba(194,136,64,0.12)] text-[#B8543D]"
   };
 }
 
@@ -292,7 +292,7 @@ function getMeetingTypeColor(type: (typeof mockMeetings)[number]["type"]) {
   }
 
   if (type === "client") {
-    return "#8b7fd4";
+    return "#5A5450";
   }
 
   return "rgba(120,113,108,0.6)";
@@ -340,7 +340,7 @@ function TeamAvatar({ member, size = 36, openSlot = false }: TeamAvatarProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.96 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-none absolute bottom-[110%] left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg bg-[#1A1612] px-2 py-1 font-sans text-[11px] text-white shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+            className="pointer-events-none absolute bottom-[110%] left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg bg-[#1A1612] px-2 py-1 font-sans text-[11px] text-white"
           >
             {member.name}
           </motion.div>
@@ -388,10 +388,10 @@ function QuickLaunchCard({
       whileHover={{
         y: -3,
         borderColor: accent,
-        boxShadow: "0 8px 24px rgba(0,0,0,0.08), 0 16px 36px rgba(0,0,0,0.08)"
+        boxShadow: "none"
       }}
       onClick={onClick}
-      className="rounded-2xl border border-transparent bg-white px-6 py-5 text-left shadow-[0_2px_8px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.06)] transition-colors"
+      className="rounded-2xl border border-transparent bg-white px-6 py-5 text-left transition-colors"
     >
       <div className="flex items-start justify-between gap-4">
         <span style={{ color: accent }}>{icon}</span>
@@ -453,9 +453,9 @@ export function ProjectDashboardPage() {
     const clientPercent = Math.max(0, 100 - managerPercent - devPercent);
 
     return [
-      { label: "MANAGERS", color: "#8b7fd4", width: `${managerPercent}%` },
-      { label: "DEVS", color: "#B8543D", width: `${devPercent}%` },
-      { label: "CLIENTS", color: "#B8543D", width: `${clientPercent}%` }
+      { label: "Managers", color: "#5A5450", width: `${managerPercent}%` },
+      { label: "Devs", color: "#B8543D", width: `${devPercent}%` },
+      { label: "Clients", color: "#B8543D", width: `${clientPercent}%` }
     ];
   }, [members]);
 
@@ -534,9 +534,7 @@ export function ProjectDashboardPage() {
           <div className="solid-card px-7 py-6">
             <div className="flex items-center">
               <p className="font-sans text-[11px] tracking-[0.18em] text-[rgba(120,113,108,0.6)]">TEAM</p>
-              <button type="button" className="ml-auto font-sans text-[11px] text-[#B8543D]">
-                MANAGE
-              </button>
+              <button type="button" className="ml-auto font-sans text-[11px] text-[#B8543D]">Manage</button>
             </div>
 
             <div className="mt-4 flex flex-wrap items-start gap-x-6 gap-y-5 min-[1700px]:flex-nowrap min-[1700px]:items-center">
@@ -548,7 +546,7 @@ export function ProjectDashboardPage() {
 
               <div className="flex-shrink-0">
                 <p className="font-sans text-[28px] leading-none text-[#1A1612]">{members.length} MEMBERS</p>
-                <p className="mt-1 font-sans text-[11px] leading-none text-[#78716C]">CURRENT TEAM SIZE</p>
+                <p className="mt-1 font-sans text-[11px] leading-none text-[#78716C]">Current team size</p>
               </div>
 
               <div className="hidden h-8 w-px flex-shrink-0 bg-[#FAF8F5] min-[1700px]:block" />
@@ -664,9 +662,7 @@ export function ProjectDashboardPage() {
             <div className="flex items-center">
               <p className="font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">RECENT CHANGES</p>
               <button type="button" onClick={() => navigate(`/projects/${id}/requests`)} className="ml-auto font-sans text-[11px] text-[#B8543D]">
-                <span className="inline-flex items-center gap-1">
-                  VIEW ALL
-                  <ArrowRightIcon className="h-[14px] w-[14px]" />
+                <span className="inline-flex items-center gap-1">View all<ArrowRightIcon className="h-[14px] w-[14px]" />
                 </span>
               </button>
             </div>
@@ -688,7 +684,7 @@ export function ProjectDashboardPage() {
                         <p className="mt-1 font-mono text-[11px] text-[#78716C]">{change.timeAgo}</p>
                       </div>
                       <span className={`rounded-full px-2 py-[3px] font-sans text-[10px] tracking-[0.12em] ${tone.badgeClassName}`}>
-                        {change.status.toUpperCase()}
+                        {change.status}
                       </span>
                     </div>
                   </motion.div>
@@ -734,7 +730,7 @@ export function ProjectDashboardPage() {
                       <span className="font-sans text-[10px] tracking-[0.12em] text-[rgba(120,113,108,0.6)]">{subscription.category}</span>
                       <div className="ml-auto flex items-end gap-1">
                         {subscription.cost === 0 ? (
-                          <span className="font-sans text-[14px] leading-none text-[#78716C]">USAGE</span>
+                          <span className="font-sans text-[14px] leading-none text-[#78716C]">Usage</span>
                         ) : (
                           <span className="font-sans text-[20px] leading-none text-[#1A1612]">{formatCurrency(subscription.cost)}</span>
                         )}
@@ -752,7 +748,7 @@ export function ProjectDashboardPage() {
               className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-[1.5px] border-dashed border-[rgba(26,22,18,0.20)] px-5 py-3.5 font-sans text-[13px] text-[#78716C] transition-colors hover:border-[#B8543D] hover:bg-[rgba(184,84,61,0.04)] hover:text-[#B8543D]"
             >
               <PlusIcon className="h-4 w-4" />
-              <span>ADD SUBSCRIPTION</span>
+              <span>Add subscription</span>
             </button>
           </div>
         </motion.section>
@@ -768,7 +764,7 @@ export function ProjectDashboardPage() {
             />
             <QuickLaunchCard
               icon={<GitBranchIcon className="h-6 w-6" />}
-              accent="#8b7fd4"
+              accent="#5A5450"
               title="FLOWCHART"
               subtitle="System architecture"
               onClick={() => navigate(`/projects/${id}/flow`)}
@@ -797,16 +793,16 @@ export function ProjectDashboardPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-[rgba(0,0,0,0.35)] px-4 backdrop-blur-sm"
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-[rgba(0,0,0,0.35)] px-4"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 8 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full max-w-[420px] rounded-[24px] bg-white p-8 shadow-[0_24px_80px_rgba(0,0,0,0.18)]"
+              className="w-full max-w-[420px] rounded-[24px] bg-white p-8"
             >
-              <p className="font-sans text-[20px] tracking-[0.06em] text-[#1A1612]">ADD SUBSCRIPTION</p>
+              <p className="font-sans text-[20px] tracking-[0.06em] text-[#1A1612]">Add subscription</p>
 
               <div className="mt-5 space-y-4">
                 <label className="block">
@@ -839,16 +835,12 @@ export function ProjectDashboardPage() {
               </div>
 
               <div className="mt-6 flex justify-end gap-3">
-                <button type="button" onClick={closeModal} className="px-4 py-2 font-sans text-[13px] text-[#78716C]">
-                  CANCEL
-                </button>
+                <button type="button" onClick={closeModal} className="px-4 py-2 font-sans text-[13px] text-[#78716C]">Cancel</button>
                 <button
                   type="button"
                   onClick={handleAddSubscription}
                   className="rounded-xl bg-[#1A1612] px-5 py-2.5 font-sans text-[13px] tracking-[0.08em] text-white transition-colors hover:bg-[#B8543D]"
-                >
-                  ADD
-                </button>
+                >Add</button>
               </div>
             </motion.div>
           </motion.div>

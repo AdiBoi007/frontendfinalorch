@@ -17,7 +17,7 @@ const tabOptions: Array<{ id: MemoryTab; label: string }> = [
   { id: "source-docs", label: "SOURCE DOCS" },
   { id: "communications", label: "COMMUNICATIONS" },
   { id: "decisions", label: "DECISIONS" },
-  { id: "changes", label: "CHANGES" }
+  { id: "changes", label: "Changes" }
 ];
 
 const uploadOptions: Array<{ id: Doc["type"]; label: string }> = [
@@ -32,14 +32,14 @@ const uploadOptions: Array<{ id: Doc["type"]; label: string }> = [
 ];
 
 const typeVisuals: Record<Doc["type"], TypeVisual> = {
-  prd: { bg: "#f0faf8", iconColor: "#B8543D" },
-  srs: { bg: "#f0faf8", iconColor: "#B8543D" },
-  spec: { bg: "#f4f2fc", iconColor: "#8b7fd4" },
-  transcript: { bg: "#fef6ec", iconColor: "#B8543D" },
-  audio: { bg: "#fef6ec", iconColor: "#B8543D" },
+  prd: { bg: "rgba(45,74,62,0.10)", iconColor: "#B8543D" },
+  srs: { bg: "rgba(45,74,62,0.10)", iconColor: "#B8543D" },
+  spec: { bg: "rgba(120,113,108,0.10)", iconColor: "#5A5450" },
+  transcript: { bg: "rgba(194,136,64,0.12)", iconColor: "#B8543D" },
+  audio: { bg: "rgba(194,136,64,0.12)", iconColor: "#B8543D" },
   image: { bg: "#fff0f8", iconColor: "#e05590" },
-  change: { bg: "#fff0f0", iconColor: "#9E3B2E" },
-  decision: { bg: "#f4f2fc", iconColor: "#8b7fd4" }
+  change: { bg: "rgba(158,59,46,0.10)", iconColor: "#9E3B2E" },
+  decision: { bg: "rgba(120,113,108,0.10)", iconColor: "#5A5450" }
 };
 
 const extensionMap: Record<Doc["type"], string> = {
@@ -183,10 +183,10 @@ export function ProjectMemoryPage() {
         <div className="flex-1 px-12 py-10">
           <div className="max-w-[920px]">
             <div>
-              <p className="mb-2 font-sans text-[11px] tracking-[0.18em] text-[#8b7fd4]">MEMORY</p>
-              <h1 className="font-sans text-[56px] leading-none text-[#1A1612]">PROJECT MEMORY</h1>
+              <p className="mb-2 font-sans text-[11px] tracking-[0.18em] text-[#5A5450]">MEMORY</p>
+              <h1 className="font-sans text-[56px] leading-none text-[#1A1612]">Project memory</h1>
               <div className="mt-3 flex items-center gap-2">
-                <span className="h-[3px] w-10 rounded-full bg-[#8b7fd4]" />
+                <span className="h-[3px] w-10 rounded-full bg-[#5A5450]" />
                 <span className="h-[3px] w-5 rounded-full bg-[rgba(26,22,18,0.08)]" />
               </div>
               <p className="mb-10 mt-4 max-w-[760px] font-sans text-[15px] leading-7 text-[#78716C]">
@@ -195,7 +195,7 @@ export function ProjectMemoryPage() {
             </div>
 
             <div
-              className="mb-10 flex h-16 items-center gap-4 rounded-[20px] border-[1.5px] border-[rgba(255,255,255,0.9)] bg-[rgba(255,255,255,0.7)] px-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] backdrop-blur-[20px]"
+              className="mb-10 flex h-16 items-center gap-4 rounded-[20px] border-[1.5px] border-[rgba(255,255,255,0.9)] bg-[rgba(255,255,255,0.7)] px-6-[20px]"
             >
               <div className="flex-shrink-0 text-[rgba(120,113,108,0.6)]">
                 <SearchIcon className="h-5 w-5" />
@@ -222,7 +222,7 @@ export function ProjectMemoryPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={[
                       "border-b-2 px-5 py-3 font-sans text-[12px] tracking-[0.12em] transition-colors",
-                      active ? "border-[#8b7fd4] text-[#1A1612]" : "border-transparent text-[#78716C] hover:text-[#1A1612]"
+                      active ? "border-[#5A5450] text-[#1A1612]" : "border-transparent text-[#78716C] hover:text-[#1A1612]"
                     ].join(" ")}
                   >
                     {tab.label}
@@ -315,7 +315,7 @@ export function ProjectMemoryPage() {
                   animate={{ opacity: 1, y: 0 }}
                   className="rounded-[16px] border border-[rgba(26,22,18,0.08)] bg-white px-6 py-8"
                 >
-                  <p className="font-sans text-[16px] tracking-[0.08em] text-[#1A1612]">NO MEMORY FOUND</p>
+                  <p className="font-sans text-[16px] tracking-[0.08em] text-[#1A1612]">No memory found</p>
                   <p className="mt-2 font-sans text-[13px] text-[#78716C]">Try a different query or switch tabs.</p>
                 </motion.div>
               )}
@@ -329,12 +329,10 @@ export function ProjectMemoryPage() {
         onClick={() => setIsUploadOpen(true)}
       whileHover={{ scale: 1.04, backgroundColor: "#B8543D" }}
       whileTap={{ scale: 0.98 }}
-      className="fixed bottom-8 z-20 inline-flex items-center gap-2 rounded-full bg-[#1A1612] px-6 py-[14px] font-sans text-[14px] tracking-[0.08em] text-white shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
+      className="fixed bottom-8 z-20 inline-flex items-center gap-2 rounded-full bg-[#1A1612] px-6 py-[14px] font-sans text-[14px] tracking-[0.08em] text-white"
       style={{ right: "340px" }}
     >
-      <UploadIcon className="h-4 w-4" />
-      UPLOAD
-    </motion.button>
+      <UploadIcon className="h-4 w-4" />Upload</motion.button>
 
       <AnimatePresence>
         {isUploadOpen ? (
@@ -343,7 +341,7 @@ export function ProjectMemoryPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeUploadModal}
-            className="fixed inset-0 z-30 flex items-center justify-center bg-[rgba(0,0,0,0.4)] backdrop-blur-sm"
+            className="fixed inset-0 z-30 flex items-center justify-center bg-[rgba(0,0,0,0.4)]"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
@@ -351,9 +349,9 @@ export function ProjectMemoryPage() {
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               onClick={(event) => event.stopPropagation()}
-              className="w-full max-w-[420px] rounded-2xl bg-white p-8 shadow-[0_24px_80px_rgba(0,0,0,0.2)]"
+              className="w-full max-w-[420px] rounded-2xl bg-white p-8"
             >
-              <p className="font-sans text-[20px] tracking-[0.06em] text-[#1A1612]">UPLOAD DOCUMENT</p>
+              <p className="font-sans text-[20px] tracking-[0.06em] text-[#1A1612]">Upload document</p>
               <p className="mb-5 mt-2 font-sans text-[13px] text-[#78716C]">Add a new file to the project docs library.</p>
 
               <div
@@ -431,9 +429,7 @@ export function ProjectMemoryPage() {
                   disabled={!selectedFile || !selectedUploadType || isUploading}
                   onClick={() => void handleUpload()}
                   className="rounded-xl bg-[#1A1612] px-5 py-2.5 font-sans text-[13px] tracking-[0.08em] text-white transition-colors hover:bg-[#B8543D] disabled:cursor-not-allowed disabled:bg-[rgba(120,113,108,0.6)]"
-                >
-                  UPLOAD
-                </button>
+                >Upload</button>
               </div>
             </motion.div>
           </motion.div>

@@ -41,10 +41,10 @@ function getPlatformTone(platform: RequestItem["platform"]) {
 
 function getStatusTone(status: RequestItem["status"]) {
   if (status === "pending") {
-    return "border-[#B8543D] bg-[#fceee4] text-[#B8543D]";
+    return "border-[#B8543D] bg-[rgba(194,136,64,0.12)] text-[#B8543D]";
   }
 
-  return "border-[#B8543D] bg-[#e8faf7] text-[#B8543D]";
+  return "border-[#B8543D] bg-[rgba(45,74,62,0.10)] text-[#B8543D]";
 }
 
 export function RecentRequestsCard({ requests }: RecentRequestsCardProps) {
@@ -54,7 +54,7 @@ export function RecentRequestsCard({ requests }: RecentRequestsCardProps) {
     <Card
       label="RECENT REQUESTS"
       action={
-        <span className="rounded-full bg-[#fceee4] px-3 py-1 font-sans text-[11px] tracking-[0.14em] text-[#B8543D]">
+        <span className="rounded-full bg-[rgba(194,136,64,0.12)] px-3 py-1 font-sans text-[11px] tracking-[0.14em] text-[#B8543D]">
           {pendingCount} PENDING
         </span>
       }

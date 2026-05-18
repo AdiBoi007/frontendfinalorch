@@ -54,10 +54,10 @@ function getTypePillClasses(type: MeetingItem["type"]) {
   }
 
   if (type === "client") {
-    return "text-[#8b7fd4] border-[#8b7fd4]";
+    return "text-[#5A5450] border-[#5A5450]";
   }
 
-  return "text-[#8b7fd4] border-[#8b7fd4]";
+  return "text-[#5A5450] border-[#5A5450]";
 }
 
 function getDeadlineValue(daysLeft: number) {
@@ -169,7 +169,7 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
     <motion.section
       whileHover={{
         y: -3,
-        boxShadow: "0 4px 14px rgba(0,0,0,0.08), 0 24px 60px rgba(0,0,0,0.1)"
+        boxShadow: "none"
       }}
       transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
       className="solid-card p-8"
@@ -271,7 +271,7 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
             )}
           </div>
 
-          <div className="hidden w-px flex-shrink-0 self-stretch bg-[linear-gradient(to_bottom,transparent,rgba(26,22,18,0.08)_20%,rgba(26,22,18,0.08)_80%,transparent)] lg:block" />
+          <div className="hidden w-px flex-shrink-0 self-stretch bg-white lg:block" />
 
           <div className="min-w-0">
             <ScheduleColumnHeader label="MEETINGS" />

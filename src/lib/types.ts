@@ -34,7 +34,7 @@ export interface ProjectCardItem {
   id: string;
   name: string;
   progress: number;
-  health: "HEALTHY" | "AT RISK" | "CRITICAL";
+  health: "HEALTHY" | "AT RISK" | "Critical";
   color: string;
 }
 
@@ -63,7 +63,7 @@ export interface ProjectRecentChange {
 export interface ProjectDetail {
   id: string;
   name: string;
-  health: "HEALTHY" | "AT RISK" | "CRITICAL";
+  health: "HEALTHY" | "AT RISK" | "Critical";
   progress: number;
   description: string;
   deadline: string;
@@ -233,7 +233,7 @@ export interface ProjectBrainData {
 
 export interface RoleOption {
   key: "manager" | "dev" | "client";
-  label: "MANAGER" | "DEV" | "CLIENT";
+  label: "Manager" | "Dev" | "Client";
   icon: "briefcase" | "code" | "eye";
 }
 

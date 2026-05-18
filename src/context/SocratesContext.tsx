@@ -120,12 +120,12 @@ function buildDependencyDiagram(projectName: string) {
   Changes -.-> Decisions([Decisions])
   DAG --> Changes
   
-  style Brief fill:#e8faf6,stroke:#B8543D,color:#1A1612
-  style DAG fill:#e8faf6,stroke:#B8543D,color:#1A1612
-  style Build fill:#eef4ff,stroke:#3b82f6,color:#1A1612
-  style Messages fill:#f4f2fc,stroke:#8b7fd4,color:#1A1612
-  style Changes fill:#fef3e8,stroke:#B8543D,color:#1A1612
-  style Decisions fill:#eef4ff,stroke:#3b82f6,color:#1A1612`;
+  style Brief fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style DAG fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style Build fill:#eef4ff,stroke:#5A5450,color:#1A1612
+  style Messages fill:rgba(120,113,108,0.10),stroke:#5A5450,color:#1A1612
+  style Changes fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
+  style Decisions fill:#eef4ff,stroke:#5A5450,color:#1A1612`;
 }
 
 function buildFlowchartDiagram(projectName: string) {
@@ -141,11 +141,11 @@ function buildFlowchartDiagram(projectName: string) {
   H -->|No| G
   I --> J([Delivered])
   
-  style A fill:#c8f0e8,stroke:#B8543D,color:#1A1612
-  style J fill:#c8f0e8,stroke:#B8543D,color:#1A1612
-  style B fill:#fceee4,stroke:#B8543D,color:#1A1612
-  style E fill:#fceee4,stroke:#B8543D,color:#1A1612
-  style H fill:#fceee4,stroke:#B8543D,color:#1A1612`;
+  style A fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style J fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style B fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
+  style E fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
+  style H fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612`;
 }
 
 function buildSequenceDiagram(projectName: string) {
@@ -186,9 +186,9 @@ function buildUseCaseDiagram(projectName: string) {
   Manager --> Approve
   Driver --> Assign
   
-  style Checkout fill:#c8f0e8,stroke:#B8543D,color:#1A1612
-  style Approve fill:#fceee4,stroke:#B8543D,color:#1A1612
-  style Assign fill:#eef4ff,stroke:#3b82f6,color:#1A1612`;
+  style Checkout fill:rgba(45,74,62,0.10),stroke:#B8543D,color:#1A1612
+  style Approve fill:rgba(194,136,64,0.12),stroke:#B8543D,color:#1A1612
+  style Assign fill:#eef4ff,stroke:#5A5450,color:#1A1612`;
 }
 
 function pickTextResponse(pageContext: PageContext, content: string, projectName: string) {
@@ -427,9 +427,9 @@ export function SocratesProvider({ children }: { children: ReactNode }) {
             stats:
               kind === "dependency"
                 ? [
-                    { label: "CRITICAL", value: 4, color: "#9E3B2E" },
-                    { label: "RISKY", value: 3, color: "#B8543D" },
-                    { label: "CHANGES", value: 2, color: "#8b7fd4" }
+                    { label: "Critical", value: 4, color: "#9E3B2E" },
+                    { label: "Risky", value: 3, color: "#B8543D" },
+                    { label: "Changes", value: 2, color: "#5A5450" }
                   ]
                 : undefined
           },

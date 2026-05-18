@@ -1,5 +1,5 @@
 type BadgeProps = {
-  variant: "HEALTHY" | "AT RISK" | "CRITICAL";
+  variant: "HEALTHY" | "AT RISK" | "Critical";
 };
 
 function getTone(variant: BadgeProps["variant"]) {

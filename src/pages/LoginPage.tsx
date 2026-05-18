@@ -73,7 +73,7 @@ export function LoginPage() {
         className="solid-card w-full max-w-[480px] p-12"
       >
         <div className="text-center">
-          <h1 className="font-sans text-[56px] leading-none text-[#1A1612]">ORCHESTRA</h1>
+          <h1 className="font-sans text-[56px] leading-none text-[#1A1612]">Orchestra</h1>
           <p className="mt-2 font-sans text-[14px] text-[#78716C]">Your product brain.</p>
         </div>
 
@@ -89,7 +89,7 @@ export function LoginPage() {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleRoleSelect(role.key)}
-                className="group flex h-[56px] w-full items-center justify-between rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white px-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-colors duration-200 hover:border-teal"
+                className="group flex h-[56px] w-full items-center justify-between rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white px-5 transition-colors duration-200 hover:border-teal"
               >
                 <span className="flex w-8 items-center justify-start text-teal">{iconByRole[role.icon]}</span>
                 <span className="font-sans text-[18px] tracking-[0.06em] text-[#1A1612]">{role.label}</span>

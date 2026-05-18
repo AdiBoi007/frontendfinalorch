@@ -40,15 +40,15 @@ const teamMembers = [
 ] as const satisfies ReadonlyArray<{ initials: string; role: TeamRole; name: string }>;
 
 const teamRoleStyles: Record<TeamRole, { background: string; color: string; label: string }> = {
-  manager: { background: "#e0dbf5", color: "#8b7fd4", label: "Manager" },
-  dev: { background: "#c8f0e8", color: "#B8543D", label: "Dev" },
-  client: { background: "#fceee4", color: "#B8543D", label: "Client" }
+  manager: { background: "rgba(120,113,108,0.10)", color: "#5A5450", label: "Manager" },
+  dev: { background: "rgba(45,74,62,0.10)", color: "#B8543D", label: "Dev" },
+  client: { background: "rgba(194,136,64,0.12)", color: "#B8543D", label: "Client" }
 };
 
 const teamSplit = [
-  { label: "MANAGERS 25%", color: "#8b7fd4", width: "25%" },
-  { label: "DEVS 58%", color: "#B8543D", width: "58%" },
-  { label: "CLIENTS 17%", color: "#B8543D", width: "17%" }
+  { label: "Managers 25%", color: "#5A5450", width: "25%" },
+  { label: "Devs 58%", color: "#B8543D", width: "58%" },
+  { label: "Clients 17%", color: "#B8543D", width: "17%" }
 ] as const;
 
 const avatarListVariants = {
@@ -74,10 +74,10 @@ const avatarItemVariants = {
 
 function getViewerName() {
   if (typeof window === "undefined") {
-    return "MANAGER";
+    return "Manager";
   }
 
-  return (window.localStorage.getItem("orchestra_role") ?? "manager").toUpperCase();
+  return (window.localStorage.getItem("orchestra_role") ?? "manager");
 }
 
 function getTodayLabel() {
@@ -106,7 +106,7 @@ function TeamHeadcountCard() {
     <motion.section
       whileHover={{
         y: -3,
-        boxShadow: "0 4px 14px rgba(0,0,0,0.08), 0 24px 60px rgba(0,0,0,0.1)"
+        boxShadow: "none"
       }}
       transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
       className="solid-card px-8 py-7"
@@ -149,18 +149,18 @@ function TeamHeadcountCard() {
           </motion.div>
         </div>
 
-        <div className="hidden w-px flex-shrink-0 self-stretch bg-[linear-gradient(to_bottom,transparent,rgba(26,22,18,0.08)_20%,rgba(26,22,18,0.08)_80%,transparent)] xl:block" />
+        <div className="hidden w-px flex-shrink-0 self-stretch bg-white xl:block" />
 
         <div className="flex min-w-0 flex-1 flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap gap-8">
             <div>
               <p className="font-sans text-[40px] leading-none text-[#1A1612]">6</p>
-              <p className="mt-1 font-sans text-[12px] text-[#78716C]">ACTIVE MEMBERS</p>
+              <p className="mt-1 font-sans text-[12px] text-[#78716C]">Active members</p>
             </div>
 
             <div>
-              <p className="font-sans text-[40px] leading-none text-[#8b7fd4]">2</p>
-              <p className="mt-1 font-sans text-[12px] text-[#78716C]">OPEN ROLES</p>
+              <p className="font-sans text-[40px] leading-none text-[#5A5450]">2</p>
+              <p className="mt-1 font-sans text-[12px] text-[#78716C]">Open roles</p>
             </div>
           </div>
 
@@ -236,9 +236,9 @@ export function DashboardPage() {
                 whileHover={{
                   y: -4,
                   borderColor: "#B8543D",
-                  boxShadow: "0 6px 18px rgba(0,0,0,0.08), 0 20px 40px rgba(0,0,0,0.08)"
+                  boxShadow: "none"
                 }}
-                className="rounded-[20px] border border-transparent bg-white px-7 py-6 text-left shadow-[0_2px_8px_rgba(0,0,0,0.06),0_8px_32px_rgba(0,0,0,0.06)]"
+                className="rounded-[20px] border border-transparent bg-white px-7 py-6 text-left"
               >
                 <div className="flex items-start gap-4">
                   <div className="flex min-w-0 items-center gap-3">
