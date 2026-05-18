@@ -23,7 +23,14 @@ export const useBrainStore = create<BrainState>((set, get) => ({
   searchQuery: "",
   isRotationPaused: false,
   selectNode: (node) => set({ selectedNode: node, isRotationPaused: true }),
-  clearSelection: () => set({ selectedNode: null }),
+  clearSelection: () => {
+    set({ selectedNode: null });
+    window.setTimeout(() => {
+      if (!get().selectedNode && !get().hoveredNodeId) {
+        set({ isRotationPaused: false });
+      }
+    }, 2000);
+  },
   setHoveredNodeId: (id) => set({ hoveredNodeId: id, isRotationPaused: Boolean(id) || Boolean(get().selectedNode) }),
   setFilter: (category) => set((state) => ({ filter: state.filter === category ? null : category })),
   setSearchQuery: (query) => set({ searchQuery: query }),

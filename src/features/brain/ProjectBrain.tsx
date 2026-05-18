@@ -9,8 +9,12 @@ import { CameraController } from "./scene/CameraController";
 import { DustParticles } from "./scene/DustParticles";
 import { Pins } from "./scene/Pins";
 import { brainTokens } from "./tokens";
+import { useBrainStore } from "./state/brainStore";
 
 export function ProjectBrain({ data }: { data: BrainData }) {
+  const selectedNode = useBrainStore((state) => state.selectedNode);
+  const clearSelection = useBrainStore((state) => state.clearSelection);
+
   return (
     <div className="relative h-full min-h-0 overflow-hidden bg-[#1A1612]">
       <Canvas
@@ -18,6 +22,7 @@ export function ProjectBrain({ data }: { data: BrainData }) {
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
         dpr={[1, 2]}
         className="h-full w-full"
+        onPointerMissed={clearSelection}
       >
         <color attach="background" args={[brainTokens.void]} />
         <fog attach="fog" args={[brainTokens.void, 6, 14]} />
@@ -30,7 +35,7 @@ export function ProjectBrain({ data }: { data: BrainData }) {
           <DustParticles />
           <Pins nodes={data.nodes} />
         </Suspense>
-        <CameraController />
+        <CameraController targetNode={selectedNode} />
       </Canvas>
       <BrainOverlay data={data} />
       <DetailPanel />

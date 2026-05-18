@@ -1,5 +1,32 @@
 import { CameraControls } from "@react-three/drei";
+import { useEffect, useRef } from "react";
+import type { BrainNode } from "../brain.types";
+import { sphericalToCartesian } from "../lib/sphericalToCartesian";
+import { useReducedMotion } from "../lib/useReducedMotion";
 
-export function CameraController() {
-  return <CameraControls minDistance={3} maxDistance={8} draggingSmoothTime={0.05} dollyToCursor={false} truckSpeed={0} />;
+type CameraControllerProps = {
+  targetNode: BrainNode | null;
+};
+
+export function CameraController({ targetNode }: CameraControllerProps) {
+  const ref = useRef<CameraControls>(null);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    const smooth = !reducedMotion;
+    if (targetNode?.position) {
+      const pinPosition = sphericalToCartesian(targetNode.position.lat, targetNode.position.lng, 1.52);
+      const cameraPosition = pinPosition.clone().normalize().multiplyScalar(4.1);
+      void ref.current.setLookAt(cameraPosition.x, cameraPosition.y, cameraPosition.z, 0, 0, 0, smooth);
+      return;
+    }
+
+    void ref.current.setLookAt(0, 0, 5, 0, 0, 0, smooth);
+  }, [reducedMotion, targetNode]);
+
+  return <CameraControls ref={ref} minDistance={3} maxDistance={8} smoothTime={reducedMotion ? 0 : 0.7} draggingSmoothTime={0.05} dollyToCursor={false} truckSpeed={0} />;
 }
