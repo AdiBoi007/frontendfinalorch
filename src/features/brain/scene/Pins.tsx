@@ -1,6 +1,12 @@
 import type { BrainNode } from "../brain.types";
+import { Pin } from "./Pin";
 
 export function Pins({ nodes }: { nodes: BrainNode[] }) {
-  void nodes;
-  return null;
+  return (
+    <group>
+      {nodes.map((node) => (
+        <Pin key={node.id} node={node} />
+      ))}
+    </group>
+  );
 }
