@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { TbBookmark, TbExternalLink, TbX } from "react-icons/tb";
 import { useReducedMotion } from "../lib/useReducedMotion";
 import { useBrainStore } from "../state/brainStore";
@@ -24,6 +25,13 @@ export function DetailPanel() {
   const reducedMotion = useReducedMotion();
   const color = node ? (node.featured ? brainTokens.pin.featured : brainTokens.pin[node.category]) : brainTokens.pin.doc;
   const isSaved = Boolean(node && nodesSaved.includes(node.id));
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (node) {
+      closeButtonRef.current?.focus();
+    }
+  }, [node]);
 
   return (
     <AnimatePresence>
@@ -34,13 +42,14 @@ export function DetailPanel() {
           exit={reducedMotion ? { opacity: 0 } : { x: 440, opacity: 0 }}
           transition={reducedMotion ? { duration: 0.2, ease: "easeOut" } : { type: "spring", damping: 28, stiffness: 240 }}
           className="absolute bottom-0 right-0 top-0 z-30 flex w-[440px] flex-col border-l border-[#B8543D] bg-[#FAF8F5] text-[#1A1612]"
+          aria-label={`${node.title} details`}
         >
           <header className="flex h-16 flex-shrink-0 items-center justify-between border-b border-[rgba(26,22,18,0.08)] px-6">
             <div className="flex items-center gap-3">
               <span className="h-2 w-2 rounded-full" style={{ background: color }} />
               <span className="font-sans text-[12px] font-medium uppercase leading-[1.3] tracking-[0.08em] text-[#78716C]">{categoryLabel(node.category)}</span>
             </div>
-            <button type="button" onClick={close} className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(26,22,18,0.08)] text-[#78716C] transition-colors hover:border-[rgba(26,22,18,0.20)] hover:text-[#1A1612]" aria-label="Close detail panel">
+            <button ref={closeButtonRef} type="button" onClick={close} className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(26,22,18,0.08)] text-[#78716C] transition-colors hover:border-[rgba(26,22,18,0.20)] hover:text-[#1A1612]" aria-label="Close detail panel">
               <TbX size={16} strokeWidth={1.6} />
             </button>
           </header>

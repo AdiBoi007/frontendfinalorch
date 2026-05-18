@@ -16,7 +16,7 @@ export function ProjectBrain({ data }: { data: BrainData }) {
   const clearSelection = useBrainStore((state) => state.clearSelection);
 
   return (
-    <div className="relative h-full min-h-0 overflow-hidden bg-[#1A1612]">
+    <div className="relative h-full min-h-0 overflow-hidden bg-[#1A1612]" role="region" aria-label="Project brain knowledge sphere">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 45 }}
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
@@ -39,6 +39,7 @@ export function ProjectBrain({ data }: { data: BrainData }) {
       </Canvas>
       <BrainOverlay data={data} />
       <DetailPanel />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_58%,rgba(0,0,0,0.08)_100%)]" />
     </div>
   );
 }

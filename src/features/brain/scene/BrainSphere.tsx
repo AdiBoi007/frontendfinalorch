@@ -38,7 +38,13 @@ export function BrainSphere() {
   });
 
   return (
-    <group ref={groupRef} onPointerEnter={() => useBrainStore.getState().setRotationPaused(true)} onPointerLeave={() => useBrainStore.getState().setRotationPaused(false)}>
+    <group
+      ref={groupRef}
+      onPointerEnter={() => useBrainStore.getState().setRotationPaused(true)}
+      onPointerLeave={() => useBrainStore.getState().setRotationPaused(false)}
+      onPointerDown={() => useBrainStore.getState().setRotationPaused(true)}
+      onPointerUp={() => useBrainStore.getState().setRotationPaused(false)}
+    >
       <mesh frustumCulled={false}>
         <sphereGeometry args={[1.48, 64, 64]} />
         <meshStandardMaterial color={brainTokens.sphereCore} roughness={0.9} metalness={0.1} />
