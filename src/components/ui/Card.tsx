@@ -12,13 +12,13 @@ export function Card({ label, action, children }: CardProps) {
     <motion.section
       whileHover={{
         y: -3,
-        boxShadow: "0 4px 14px rgba(0,0,0,0.08), 0 24px 60px rgba(0,0,0,0.1)"
+        borderColor: "rgba(26,22,18,0.2)"
       }}
       transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="solid-card p-7"
+      className="solid-card p-6"
     >
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <p className="font-bebas text-[11px] tracking-[3px] text-[#999999]">{label}</p>
+      <div className="mb-6 flex items-center justify-between gap-3">
+        <p className="font-sans text-[12px] font-medium uppercase leading-[1.3] tracking-[0.08em] text-[#78716C]">{label}</p>
         {action}
       </div>
       {children}

@@ -41,14 +41,14 @@ const teamMembers = [
 
 const teamRoleStyles: Record<TeamRole, { background: string; color: string; label: string }> = {
   manager: { background: "#e0dbf5", color: "#8b7fd4", label: "Manager" },
-  dev: { background: "#c8f0e8", color: "#00b4a0", label: "Dev" },
-  client: { background: "#fceee4", color: "#f59340", label: "Client" }
+  dev: { background: "#c8f0e8", color: "#B8543D", label: "Dev" },
+  client: { background: "#fceee4", color: "#B8543D", label: "Client" }
 };
 
 const teamSplit = [
   { label: "MANAGERS 25%", color: "#8b7fd4", width: "25%" },
-  { label: "DEVS 58%", color: "#00b4a0", width: "58%" },
-  { label: "CLIENTS 17%", color: "#f59340", width: "17%" }
+  { label: "DEVS 58%", color: "#B8543D", width: "58%" },
+  { label: "CLIENTS 17%", color: "#B8543D", width: "17%" }
 ] as const;
 
 const avatarListVariants = {
@@ -91,14 +91,14 @@ function getTodayLabel() {
 
 function getHealthColor(health: ProjectCardItem["health"]) {
   if (health === "HEALTHY") {
-    return "#00b4a0";
+    return "#B8543D";
   }
 
   if (health === "AT RISK") {
-    return "#f59340";
+    return "#B8543D";
   }
 
-  return "#e05555";
+  return "#9E3B2E";
 }
 
 function TeamHeadcountCard() {
@@ -113,7 +113,7 @@ function TeamHeadcountCard() {
     >
       <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:gap-10">
         <div className="min-w-0 xl:w-[280px]">
-          <p className="mb-3 font-bebas text-[11px] tracking-[0.16em] text-[#999999]">TEAM</p>
+          <p className="mb-3 font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">TEAM</p>
 
           <motion.div
             initial="hidden"
@@ -141,7 +141,7 @@ function TeamHeadcountCard() {
               <button
                 key={`open-slot-${index}`}
                 type="button"
-                className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-[#d0d0cc] bg-transparent font-syne text-[18px] leading-none text-[#cccccc] transition-colors hover:border-[#00b4a0] hover:text-[#00b4a0]"
+                className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-[rgba(26,22,18,0.20)] bg-transparent font-sans text-[18px] leading-none text-[rgba(120,113,108,0.6)] transition-colors hover:border-[#B8543D] hover:text-[#B8543D]"
               >
                 <PlusIcon className="h-[18px] w-[18px]" />
               </button>
@@ -149,18 +149,18 @@ function TeamHeadcountCard() {
           </motion.div>
         </div>
 
-        <div className="hidden w-px flex-shrink-0 self-stretch bg-[linear-gradient(to_bottom,transparent,#e5e5e0_20%,#e5e5e0_80%,transparent)] xl:block" />
+        <div className="hidden w-px flex-shrink-0 self-stretch bg-[linear-gradient(to_bottom,transparent,rgba(26,22,18,0.08)_20%,rgba(26,22,18,0.08)_80%,transparent)] xl:block" />
 
         <div className="flex min-w-0 flex-1 flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap gap-8">
             <div>
-              <p className="font-bebas text-[40px] leading-none text-[#0a0a0a]">6</p>
-              <p className="mt-1 font-syne text-[12px] text-[#888888]">ACTIVE MEMBERS</p>
+              <p className="font-sans text-[40px] leading-none text-[#1A1612]">6</p>
+              <p className="mt-1 font-sans text-[12px] text-[#78716C]">ACTIVE MEMBERS</p>
             </div>
 
             <div>
-              <p className="font-bebas text-[40px] leading-none text-[#8b7fd4]">2</p>
-              <p className="mt-1 font-syne text-[12px] text-[#888888]">OPEN ROLES</p>
+              <p className="font-sans text-[40px] leading-none text-[#8b7fd4]">2</p>
+              <p className="mt-1 font-sans text-[12px] text-[#78716C]">OPEN ROLES</p>
             </div>
           </div>
 
@@ -175,7 +175,7 @@ function TeamHeadcountCard() {
               {teamSplit.map((item) => (
                 <div key={item.label} className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="font-syne text-[11px] text-[#888888]">{item.label}</span>
+                  <span className="font-sans text-[11px] text-[#78716C]">{item.label}</span>
                 </div>
               ))}
             </div>
@@ -200,9 +200,9 @@ export function DashboardPage() {
       <motion.section variants={childVariants} className="mb-10">
         <motion.header className="flex items-start justify-between gap-6">
           <div>
-            <p className="font-bebas text-[12px] tracking-[3px] text-[#999999]">GOOD MORNING</p>
-            <h1 className="mt-2 font-bebas text-[64px] leading-[0.95] text-[#0a0a0a]">{getViewerName()}</h1>
-            <p className="mt-1 font-syne text-[14px] text-[#888888]">{getTodayLabel()}</p>
+            <p className="font-sans text-[12px] tracking-[3px] text-[rgba(120,113,108,0.6)]">GOOD MORNING</p>
+            <h1 className="mt-2 font-sans text-[64px] leading-[0.95] text-[#1A1612]">{getViewerName()}</h1>
+            <p className="mt-1 font-sans text-[14px] text-[#78716C]">{getTodayLabel()}</p>
           </div>
 
           <motion.button
@@ -215,11 +215,11 @@ export function DashboardPage() {
           </motion.button>
         </motion.header>
 
-        <div className="mt-7 border-b border-[#eeeeea]" />
+        <div className="mt-7 border-b border-[rgba(26,22,18,0.08)]" />
       </motion.section>
 
       <motion.section variants={childVariants} className="mb-10">
-        <p className="mb-4 font-bebas text-[11px] tracking-[0.16em] text-[#999999]">YOUR PROJECTS</p>
+        <p className="mb-4 font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">YOUR PROJECTS</p>
 
         <div className="grid gap-4 xl:grid-cols-3">
           {projects.map((project, index) => {
@@ -235,7 +235,7 @@ export function DashboardPage() {
                 transition={{ duration: 0.35, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{
                   y: -4,
-                  borderColor: "#00b4a0",
+                  borderColor: "#B8543D",
                   boxShadow: "0 6px 18px rgba(0,0,0,0.08), 0 20px 40px rgba(0,0,0,0.08)"
                 }}
                 className="rounded-[20px] border border-transparent bg-white px-7 py-6 text-left shadow-[0_2px_8px_rgba(0,0,0,0.06),0_8px_32px_rgba(0,0,0,0.06)]"
@@ -243,14 +243,14 @@ export function DashboardPage() {
                 <div className="flex items-start gap-4">
                   <div className="flex min-w-0 items-center gap-3">
                     <span className="h-2.5 w-2.5 flex-shrink-0 rounded-full" style={{ backgroundColor: project.color }} />
-                    <p className="truncate font-syne text-[16px] font-bold text-[#0a0a0a]">{project.name}</p>
+                    <p className="truncate font-sans text-[16px] font-medium text-[#1A1612]">{project.name}</p>
                   </div>
                   <div className="ml-auto flex-shrink-0">
                     <Badge variant={project.health} />
                   </div>
                 </div>
 
-                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#f0f0ec]">
+                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#FAF8F5]">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${project.progress}%` }}
@@ -261,8 +261,8 @@ export function DashboardPage() {
                 </div>
 
                 <div className="mt-4 flex items-center">
-                  <p className="font-mono text-[13px] text-[#888888]">{project.progress}%</p>
-                  <span className="ml-auto text-[#00b4a0]">
+                  <p className="font-mono text-[13px] text-[#78716C]">{project.progress}%</p>
+                  <span className="ml-auto text-[#B8543D]">
                     <ArrowRightIcon className="h-[18px] w-[18px]" />
                   </span>
                 </div>
@@ -277,7 +277,7 @@ export function DashboardPage() {
       </motion.div>
 
       <motion.section variants={childVariants}>
-        <p className="mb-4 font-bebas text-[11px] tracking-[0.16em] text-[#999999]">SCHEDULE</p>
+        <p className="mb-4 font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">SCHEDULE</p>
         <CalendarCard eventsByDate={mockCalendarEvents} />
       </motion.section>
     </motion.div>

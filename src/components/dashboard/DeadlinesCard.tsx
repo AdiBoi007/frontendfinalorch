@@ -31,14 +31,14 @@ const ringCircumference = 169.6;
 
 function getStatusColor(status: DeadlineItem["status"]) {
   if (status === "on-track") {
-    return "#00b4a0";
+    return "#B8543D";
   }
 
   if (status === "at-risk") {
-    return "#f59340";
+    return "#B8543D";
   }
 
-  return "#e05555";
+  return "#9E3B2E";
 }
 
 function getDeadlineValue(daysLeft: number) {
@@ -60,7 +60,7 @@ function CircularRing({
   return (
     <div className="relative h-16 w-16">
       <svg width="64" height="64" viewBox="0 0 64 64" className="block">
-        <circle cx="32" cy="32" r="27" fill="none" stroke="#f0f0ec" strokeWidth="5" />
+        <circle cx="32" cy="32" r="27" fill="none" stroke="#FAF8F5" strokeWidth="5" />
         <motion.circle
           cx="32"
           cy="32"
@@ -78,10 +78,10 @@ function CircularRing({
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center pt-[1px]">
-        <span className="font-bebas text-[16px] leading-none" style={{ color }}>
+        <span className="font-sans text-[16px] leading-none" style={{ color }}>
           {daysLeft}
         </span>
-        <span className="mt-0.5 font-bebas text-[9px] leading-none text-[#999999]">D</span>
+        <span className="mt-0.5 font-sans text-[9px] leading-none text-[rgba(120,113,108,0.6)]">D</span>
       </div>
     </div>
   );
@@ -102,11 +102,11 @@ export function DeadlinesCard({ deadlines }: DeadlinesCardProps) {
             <motion.div
               key={item.id}
               variants={itemVariants}
-              className="flex items-center gap-5 border-b border-[#f5f5f2] py-5 last:border-0"
+              className="flex items-center gap-5 border-b border-[#FAF8F5] py-5 last:border-0"
             >
               <div className="min-w-0 flex-1">
-                <p className="mb-[3px] font-syne text-[11px] text-[#888888]">{item.project}</p>
-                <p className="font-syne text-[16px] font-bold text-[#0a0a0a]">{item.task}</p>
+                <p className="mb-[3px] font-sans text-[11px] text-[#78716C]">{item.project}</p>
+                <p className="font-sans text-[16px] font-medium text-[#1A1612]">{item.task}</p>
               </div>
 
               <div className="flex-shrink-0">

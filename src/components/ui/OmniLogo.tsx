@@ -20,8 +20,8 @@ export default function OmniLogo({ size = 52 }: { size?: number }) {
                 position: 'absolute',
                 width: ds, height: ds,
                 borderRadius: '35%',
-                background: '#00b4a0',
-                opacity: 0.4 + (i % 4) * 0.18,
+                background: '#1A1612',
+                opacity: 0.28 + (i % 4) * 0.12,
                 left: size/2 + r * Math.cos(angle) - ds/2,
                 top: size/2 + r * Math.sin(angle) - ds/2,
               }}/>
@@ -32,8 +32,8 @@ export default function OmniLogo({ size = 52 }: { size?: number }) {
           position: 'absolute',
           inset: '20%',
           borderRadius: '50%',
-          background: 'white',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          background: '#FAF8F5',
+          border: '1px solid rgba(26,22,18,0.08)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -44,7 +44,7 @@ export default function OmniLogo({ size = 52 }: { size?: number }) {
               width: size * 0.1,
               height: size * 0.14,
               borderRadius: '50%',
-              background: '#0a0a0a',
+              background: '#1A1612',
             }}/>
           ))}
         </div>

@@ -75,13 +75,13 @@ function NavItemButton({ item, expanded, onClick }: { item: Extract<NavItem, { k
       onClick={onClick}
       className={[
         "relative flex h-11 w-full items-center gap-[14px] px-[14px] text-left transition-colors",
-        item.active ? "bg-[rgba(0,180,160,0.08)]" : "hover:bg-[#f7f6f3]"
+        item.active ? "bg-[rgba(184,84,61,0.08)]" : "hover:bg-[#FAF8F5]"
       ].join(" ")}
     >
-      {item.active ? <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-[#00b4a0]" /> : null}
+      {item.active ? <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-[#B8543D]" /> : null}
 
-      <span className={item.active ? "text-[#00b4a0]" : "text-[#888888]"}>{item.icon}</span>
-      <motion.span animate={labelAnimation(expanded)} className="whitespace-nowrap font-bebas text-[13px] text-[#0a0a0a]">
+      <span className={item.active ? "text-[#B8543D]" : "text-[#78716C]"}>{item.icon}</span>
+      <motion.span animate={labelAnimation(expanded)} className="whitespace-nowrap font-sans text-[13px] text-[#1A1612]">
         {item.label}
       </motion.span>
     </button>
@@ -215,14 +215,14 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
       transition={navTransition}
       onHoverStart={() => onExpandedChange(true)}
       onHoverEnd={() => onExpandedChange(false)}
-      className="fixed left-0 top-0 z-50 flex h-screen flex-col overflow-hidden border-r border-[#eeeeea] bg-white shadow-[4px_0_16px_rgba(0,0,0,0.04)]"
+      className="fixed left-0 top-0 z-50 flex h-screen flex-col overflow-hidden border-r border-[rgba(26,22,18,0.08)] bg-white shadow-[4px_0_16px_rgba(0,0,0,0.04)]"
     >
       <div className="flex h-16 items-center px-[14px]">
-        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#00b4a0]">
-          <span className="font-bebas text-[16px] leading-none text-white">O</span>
+        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#B8543D]">
+          <span className="font-sans text-[16px] leading-none text-white">O</span>
         </div>
 
-        <motion.span animate={labelAnimation(expanded)} className="ml-[10px] whitespace-nowrap font-bebas text-[15px] text-[#0a0a0a]">
+        <motion.span animate={labelAnimation(expanded)} className="ml-[10px] whitespace-nowrap font-sans text-[15px] text-[#1A1612]">
           ORCHESTRA
         </motion.span>
       </div>
@@ -230,7 +230,7 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
       <div className="flex-1 pt-2">
         {items.map((item) => {
           if (item.kind === "divider") {
-            return <div key={item.key} className="mx-[22px] my-2 h-px bg-[#e8e8e4]" />;
+            return <div key={item.key} className="mx-[22px] my-2 h-px bg-[rgba(26,22,18,0.08)]" />;
           }
 
           return <NavItemButton key={item.key} item={item} expanded={expanded} onClick={() => navigate(item.route)} />;
@@ -250,7 +250,7 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -4 }}
                 transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                className="ml-[10px] whitespace-nowrap font-syne text-[11px] text-[#888888]"
+                className="ml-[10px] whitespace-nowrap font-sans text-[11px] text-[#78716C]"
               >
                 {viewer.label}
               </motion.span>

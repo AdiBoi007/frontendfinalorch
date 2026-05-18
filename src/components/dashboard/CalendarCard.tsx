@@ -34,23 +34,23 @@ const ringCircumference = 169.6;
 
 function getDeadlineColor(status: DeadlineItem["status"]) {
   if (status === "on-track") {
-    return "#00b4a0";
+    return "#B8543D";
   }
 
   if (status === "at-risk") {
-    return "#f59340";
+    return "#B8543D";
   }
 
-  return "#e05555";
+  return "#9E3B2E";
 }
 
 function getTypePillClasses(type: MeetingItem["type"]) {
   if (type === "standup") {
-    return "text-[#00b4a0] border-[#00b4a0]";
+    return "text-[#B8543D] border-[#B8543D]";
   }
 
   if (type === "review") {
-    return "text-[#f59340] border-[#f59340]";
+    return "text-[#B8543D] border-[#B8543D]";
   }
 
   if (type === "client") {
@@ -67,8 +67,8 @@ function getDeadlineValue(daysLeft: number) {
 function ScheduleColumnHeader({ label }: { label: string }) {
   return (
     <div className="mb-6">
-      <p className="font-bebas text-[13px] tracking-[0.16em] text-[#0a0a0a]">{label}</p>
-      <span className="mt-2 block h-0.5 w-5 bg-[#00b4a0]" />
+      <p className="font-sans text-[13px] tracking-[0.16em] text-[#1A1612]">{label}</p>
+      <span className="mt-2 block h-0.5 w-5 bg-[#B8543D]" />
     </div>
   );
 }
@@ -88,7 +88,7 @@ function CircularRing({
   return (
     <div className="relative h-16 w-16">
       <svg width="64" height="64" viewBox="0 0 64 64" className="block">
-        <circle cx="32" cy="32" r="27" fill="none" stroke="#f0f0ec" strokeWidth="5" />
+        <circle cx="32" cy="32" r="27" fill="none" stroke="#FAF8F5" strokeWidth="5" />
         <motion.circle
           cx="32"
           cy="32"
@@ -106,10 +106,10 @@ function CircularRing({
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center pt-[1px]">
-        <span className="font-bebas text-[16px] leading-none" style={{ color }}>
+        <span className="font-sans text-[16px] leading-none" style={{ color }}>
           {daysLeft}
         </span>
-        <span className="mt-0.5 font-bebas text-[9px] leading-none text-[#999999]">D</span>
+        <span className="mt-0.5 font-sans text-[9px] leading-none text-[rgba(120,113,108,0.6)]">D</span>
       </div>
     </div>
   );
@@ -177,18 +177,18 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
       <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
         <div className="min-w-0">
           <div className="mb-5 flex items-center justify-between">
-            <button type="button" className="text-[#888888]">
+            <button type="button" className="text-[#78716C]">
               <ArrowLeftIcon className="h-4 w-4" />
             </button>
-            <p className="font-bebas text-[18px] tracking-[0.04em] text-[#0a0a0a]">{monthLabel}</p>
-            <button type="button" className="text-[#888888]">
+            <p className="font-sans text-[18px] tracking-[0.04em] text-[#1A1612]">{monthLabel}</p>
+            <button type="button" className="text-[#78716C]">
               <ArrowRightIcon className="h-4 w-4" />
             </button>
           </div>
 
           <div className="mb-2 grid grid-cols-7 gap-1">
             {dayHeaders.map((day, index) => (
-              <div key={`${day}-${index}`} className="text-center font-bebas text-[11px] tracking-[0.12em] text-[#999999]">
+              <div key={`${day}-${index}`} className="text-center font-sans text-[11px] tracking-[0.12em] text-[rgba(120,113,108,0.6)]">
                 {day}
               </div>
             ))}
@@ -209,17 +209,17 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
                   onClick={() => setSelectedDate(cell.dateKey)}
                   className={[
                     "relative flex h-[38px] items-center justify-center rounded-xl transition-colors",
-                    isSelected ? "bg-[#00b4a0] text-white" : "",
-                    !isSelected && isToday ? "bg-[#0a0a0a] text-white" : "",
-                    !isSelected && !isToday ? "text-[#333333] hover:bg-[#f7f6f3]" : "",
-                    !cell.inMonth ? "text-[#cccccc]" : ""
+                    isSelected ? "bg-[#B8543D] text-white" : "",
+                    !isSelected && isToday ? "bg-[#1A1612] text-white" : "",
+                    !isSelected && !isToday ? "text-[#1A1612] hover:bg-[#FAF8F5]" : "",
+                    !cell.inMonth ? "text-[rgba(120,113,108,0.6)]" : ""
                   ].join(" ")}
                 >
-                  <span className="font-syne text-[13px]">{cell.day}</span>
+                  <span className="font-sans text-[13px]">{cell.day}</span>
                   {hasMeeting || hasDeadline ? (
                     <span className="absolute bottom-[5px] flex items-center gap-1">
-                      {hasMeeting ? <span className="h-1 w-1 rounded-full bg-[#00b4a0]" /> : null}
-                      {hasDeadline ? <span className="h-1 w-1 rounded-[1px] bg-[#f59340]" /> : null}
+                      {hasMeeting ? <span className="h-1 w-1 rounded-full bg-[#B8543D]" /> : null}
+                      {hasDeadline ? <span className="h-1 w-1 rounded-[1px] bg-[#B8543D]" /> : null}
                     </span>
                   ) : null}
                 </button>
@@ -233,7 +233,7 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
             <ScheduleColumnHeader label="DEADLINES" />
 
             {displayedDeadlines.length === 0 ? (
-              <p className="font-syne text-[14px] text-[#888888]">Nothing scheduled.</p>
+              <p className="font-sans text-[14px] text-[#78716C]">Nothing scheduled.</p>
             ) : (
               <AnimatePresence mode="wait">
                 <motion.div
@@ -250,11 +250,11 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
                       initial="hidden"
                       animate="visible"
                       variants={itemVariants}
-                      className="flex items-center gap-5 border-b border-[#f5f5f2] py-5 last:border-0"
+                      className="flex items-center gap-5 border-b border-[#FAF8F5] py-5 last:border-0"
                     >
                       <div className="min-w-0 flex-1">
-                        <p className="mb-[3px] font-syne text-[11px] text-[#888888]">{deadline.project}</p>
-                        <p className="font-syne text-[16px] font-bold text-[#0a0a0a]">{deadline.task}</p>
+                        <p className="mb-[3px] font-sans text-[11px] text-[#78716C]">{deadline.project}</p>
+                        <p className="font-sans text-[16px] font-medium text-[#1A1612]">{deadline.task}</p>
                       </div>
 
                       <div className="flex-shrink-0">
@@ -271,13 +271,13 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
             )}
           </div>
 
-          <div className="hidden w-px flex-shrink-0 self-stretch bg-[linear-gradient(to_bottom,transparent,#e5e5e0_20%,#e5e5e0_80%,transparent)] lg:block" />
+          <div className="hidden w-px flex-shrink-0 self-stretch bg-[linear-gradient(to_bottom,transparent,rgba(26,22,18,0.08)_20%,rgba(26,22,18,0.08)_80%,transparent)] lg:block" />
 
           <div className="min-w-0">
             <ScheduleColumnHeader label="MEETINGS" />
 
             {selectedEvents.length === 0 ? (
-              <p className="font-syne text-[14px] text-[#888888]">Nothing scheduled.</p>
+              <p className="font-sans text-[14px] text-[#78716C]">Nothing scheduled.</p>
             ) : (
               <AnimatePresence mode="wait">
                 <motion.div
@@ -294,17 +294,17 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
                       initial="hidden"
                       animate="visible"
                       variants={itemVariants}
-                      className="mb-4 border-b border-[#f5f5f2] pb-4 last:mb-0 last:border-b-0 last:pb-0"
+                      className="mb-4 border-b border-[#FAF8F5] pb-4 last:mb-0 last:border-b-0 last:pb-0"
                     >
-                      <p className="mb-1.5 font-mono text-[14px] font-semibold text-[#0a0a0a]">{event.time}</p>
-                      <p className="font-syne text-[16px] font-bold text-[#0a0a0a]">{event.title}</p>
-                      <p className="mt-1 font-syne text-[12px] text-[#888888]">{event.project}</p>
+                      <p className="mb-1.5 font-mono text-[14px] font-medium text-[#1A1612]">{event.time}</p>
+                      <p className="font-sans text-[16px] font-medium text-[#1A1612]">{event.title}</p>
+                      <p className="mt-1 font-sans text-[12px] text-[#78716C]">{event.project}</p>
 
                       <div className="mt-2.5 flex flex-wrap gap-2">
-                        <span className="rounded-full border border-[#eeeeea] bg-[#f7f6f3] px-3 py-1.5 font-syne text-[11px] text-[#555555]">
+                        <span className="rounded-full border border-[rgba(26,22,18,0.08)] bg-[#FAF8F5] px-3 py-1.5 font-sans text-[11px] text-[#5A5450]">
                           {event.duration}
                         </span>
-                        <span className={`rounded-full border px-3 py-1.5 font-syne text-[11px] ${getTypePillClasses(event.type)}`}>
+                        <span className={`rounded-full border px-3 py-1.5 font-sans text-[11px] ${getTypePillClasses(event.type)}`}>
                           {event.type}
                         </span>
                       </div>

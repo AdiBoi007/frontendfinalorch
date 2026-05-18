@@ -29,11 +29,11 @@ const itemVariants = {
 
 function getMeetingDot(type: MeetingItem["type"]) {
   if (type === "standup") {
-    return "#00b4a0";
+    return "#B8543D";
   }
 
   if (type === "review") {
-    return "#f59340";
+    return "#B8543D";
   }
 
   return "#8b7fd4";
@@ -49,25 +49,25 @@ function getTodayLabel() {
 
 export function MeetingsCard({ meetings }: MeetingsCardProps) {
   return (
-    <Card label="TODAY" action={<span className="font-mono text-[12px] text-[#888888]">{getTodayLabel()}</span>}>
+    <Card label="TODAY" action={<span className="font-mono text-[12px] text-[#78716C]">{getTodayLabel()}</span>}>
       {meetings.length === 0 ? (
-        <p className="py-4 font-syne text-[14px] text-[#888888]">Nothing scheduled.</p>
+        <p className="py-4 font-sans text-[14px] text-[#78716C]">Nothing scheduled.</p>
       ) : (
         <motion.div initial="hidden" animate="visible" variants={listVariants}>
           {meetings.map((item) => (
             <motion.div
               key={item.id}
               variants={itemVariants}
-              className="flex items-center gap-4 border-b border-[#f0f0ec] py-[14px] last:border-b-0 last:pb-0 first:pt-0"
+              className="flex items-center gap-4 border-b border-[#FAF8F5] py-[14px] last:border-b-0 last:pb-0 first:pt-0"
             >
-              <p className="w-20 flex-shrink-0 font-mono text-[14px] font-medium text-[#0a0a0a]">{item.time}</p>
+              <p className="w-20 flex-shrink-0 font-mono text-[14px] font-medium text-[#1A1612]">{item.time}</p>
 
               <div className="min-w-0 flex-1">
-                <p className="font-syne text-[15px] font-semibold text-[#0a0a0a]">{item.title}</p>
-                <p className="mt-0.5 font-syne text-[12px] text-[#888888]">{item.project}</p>
+                <p className="font-sans text-[15px] font-medium text-[#1A1612]">{item.title}</p>
+                <p className="mt-0.5 font-sans text-[12px] text-[#78716C]">{item.project}</p>
               </div>
 
-              <span className="rounded-full border border-[#eeeeea] bg-[#f7f6f3] px-3 py-1 font-syne text-[12px] text-[#555555]">
+              <span className="rounded-full border border-[rgba(26,22,18,0.08)] bg-[#FAF8F5] px-3 py-1 font-sans text-[12px] text-[#5A5450]">
                 {item.duration}
               </span>
               <span className="h-2 w-2 flex-shrink-0 rounded-full" style={{ backgroundColor: getMeetingDot(item.type) }} />

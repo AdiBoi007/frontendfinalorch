@@ -694,8 +694,8 @@ function createCategoryNode({
     category: id as BrainNodeData["category"],
     icon,
     background: "#ffffff",
-    borderColor: "#e5e5e0",
-    textColor: "#888888",
+    borderColor: "rgba(26,22,18,0.08)",
+    textColor: "#78716C",
     accentColor,
     shadow: "0 4px 16px rgba(0,0,0,0.08)",
     tooltip,
@@ -740,7 +740,7 @@ function createSubNode({
     category,
     background,
     borderColor,
-    textColor: "#333333",
+    textColor: "#1A1612",
     accentColor,
     shadow: "0 4px 14px rgba(0,0,0,0.06)",
     tooltip,
@@ -782,11 +782,11 @@ function createProjectBrainData({
         x: 50,
         y: 50,
         size: 80,
-        background: "linear-gradient(135deg, #00b4a0, #0a8a80)",
+        background: "linear-gradient(135deg, #B8543D, #0a8a80)",
         borderColor: "#ffffff",
         textColor: "#ffffff",
-        accentColor: "#00b4a0",
-        shadow: "0 0 40px rgba(0,180,160,0.4), 0 8px 32px rgba(0,0,0,0.12)",
+        accentColor: "#B8543D",
+        shadow: "0 0 40px rgba(184,84,61,0.4), 0 8px 32px rgba(0,0,0,0.12)",
         tooltip: `${projectName} brain core`,
         countLabel: "5 active domains"
       },
@@ -796,7 +796,7 @@ function createProjectBrainData({
         x: 50,
         y: 22,
         icon: "file-text",
-        accentColor: "#00b4a0",
+        accentColor: "#B8543D",
         tooltip: `${projectName} docs`,
         countLabel: `${docsItems.length} linked docs`,
         detailItems: docsItems
@@ -818,7 +818,7 @@ function createProjectBrainData({
         x: 65,
         y: 68,
         icon: "users",
-        accentColor: "#f59340",
+        accentColor: "#B8543D",
         tooltip: `${projectName} team`,
         countLabel: `${teamItems.length} active members`,
         detailItems: teamItems
@@ -829,7 +829,7 @@ function createProjectBrainData({
         x: 35,
         y: 68,
         icon: "git-branch",
-        accentColor: "#e05555",
+        accentColor: "#9E3B2E",
         tooltip: `${projectName} changes`,
         countLabel: `${changeItems.length} open updates`,
         detailItems: changeItems
@@ -840,7 +840,7 @@ function createProjectBrainData({
         x: 28,
         y: 36,
         icon: "check-square",
-        accentColor: "#00b4a0",
+        accentColor: "#B8543D",
         tooltip: `${projectName} decisions`,
         countLabel: `${decisionItems.length} locked calls`,
         detailItems: decisionItems
@@ -854,7 +854,7 @@ function createProjectBrainData({
         y: 8,
         background: "#c8f0e8",
         borderColor: "#c8f0e8",
-        accentColor: "#00b4a0",
+        accentColor: "#B8543D",
         tooltip: docs[0].label,
         countLabel: "1 doc node"
       }),
@@ -867,7 +867,7 @@ function createProjectBrainData({
         y: 8,
         background: "#c8f0e8",
         borderColor: "#c8f0e8",
-        accentColor: "#00b4a0",
+        accentColor: "#B8543D",
         tooltip: docs[1].label,
         countLabel: "1 doc node"
       }),
@@ -880,7 +880,7 @@ function createProjectBrainData({
         y: 12,
         background: "#c8f0e8",
         borderColor: "#c8f0e8",
-        accentColor: "#00b4a0",
+        accentColor: "#B8543D",
         tooltip: docs[2].label,
         countLabel: "1 doc node"
       }),
@@ -932,7 +932,7 @@ function createProjectBrainData({
         y: 76,
         background: "#fceee4",
         borderColor: "#fceee4",
-        accentColor: "#f59340",
+        accentColor: "#B8543D",
         tooltip: team[0].label,
         countLabel: "1 team node"
       }),
@@ -945,7 +945,7 @@ function createProjectBrainData({
         y: 82,
         background: "#fceee4",
         borderColor: "#fceee4",
-        accentColor: "#f59340",
+        accentColor: "#B8543D",
         tooltip: team[1].label,
         countLabel: "1 team node"
       }),
@@ -958,7 +958,7 @@ function createProjectBrainData({
         y: 74,
         background: "#fceee4",
         borderColor: "#fceee4",
-        accentColor: "#f59340",
+        accentColor: "#B8543D",
         tooltip: team[2].label,
         countLabel: "1 team node"
       }),
@@ -997,7 +997,7 @@ function createProjectBrainData({
         y: 28,
         background: "#c8f0e8",
         borderColor: "#c8f0e8",
-        accentColor: "#00b4a0",
+        accentColor: "#B8543D",
         tooltip: decisions[0].label,
         countLabel: "1 decision node"
       }),
@@ -1010,7 +1010,7 @@ function createProjectBrainData({
         y: 22,
         background: "#c8f0e8",
         borderColor: "#c8f0e8",
-        accentColor: "#00b4a0",
+        accentColor: "#B8543D",
         tooltip: decisions[1].label,
         countLabel: "1 decision node"
       })
@@ -1038,8 +1038,8 @@ export const mockProjectBrains: Record<string, ProjectBrainData> = {
       { label: "PK", description: "Priya K drives dashboard and onboarding UI." }
     ],
     changes: [
-      { label: "Promo code", description: "Requested checkout discount support for launch week.", borderColor: "#e05555", accentColor: "#e05555" },
-      { label: "Dark mode", description: "Low-priority UI refresh queued after v1 lock.", borderColor: "#f59340", accentColor: "#f59340" }
+      { label: "Promo code", description: "Requested checkout discount support for launch week.", borderColor: "#9E3B2E", accentColor: "#9E3B2E" },
+      { label: "Dark mode", description: "Low-priority UI refresh queued after v1 lock.", borderColor: "#B8543D", accentColor: "#B8543D" }
     ],
     decisions: [
       { label: "OAuth removed", description: "OAuth is out of v1 to reduce auth complexity." },
@@ -1065,8 +1065,8 @@ export const mockProjectBrains: Record<string, ProjectBrainData> = {
       { label: "PK", description: "Priya K leading product flows and UI polish." }
     ],
     changes: [
-      { label: "HUD polish", description: "Late-stage UI cleanup before external testing.", borderColor: "#e05555", accentColor: "#e05555" },
-      { label: "Dark mode", description: "Experimental theme work parked behind release tasks.", borderColor: "#f59340", accentColor: "#f59340" }
+      { label: "HUD polish", description: "Late-stage UI cleanup before external testing.", borderColor: "#9E3B2E", accentColor: "#9E3B2E" },
+      { label: "Dark mode", description: "Experimental theme work parked behind release tasks.", borderColor: "#B8543D", accentColor: "#B8543D" }
     ],
     decisions: [
       { label: "PvP deferred", description: "Competitive mode moves to the post-launch roadmap." },
@@ -1092,8 +1092,8 @@ export const mockProjectBrains: Record<string, ProjectBrainData> = {
       { label: "AP", description: "Alex P supporting API testing and delivery QA." }
     ],
     changes: [
-      { label: "OAuth removed", description: "Scope trimmed to ship the core auth module.", borderColor: "#e05555", accentColor: "#e05555" },
-      { label: "Retry queues", description: "Resilience update for webhook delivery failures.", borderColor: "#f59340", accentColor: "#f59340" }
+      { label: "OAuth removed", description: "Scope trimmed to ship the core auth module.", borderColor: "#9E3B2E", accentColor: "#9E3B2E" },
+      { label: "Retry queues", description: "Resilience update for webhook delivery failures.", borderColor: "#B8543D", accentColor: "#B8543D" }
     ],
     decisions: [
       { label: "Spec frozen", description: "Gateway contract is frozen until partner review clears." },

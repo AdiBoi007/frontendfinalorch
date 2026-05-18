@@ -53,9 +53,9 @@ const typeStyles: Record<
 > = {
   flow: {
     bg: "#e8faf6",
-    border: "rgba(0,180,160,0.4)",
-    accent: "#00b4a0",
-    tagBg: "rgba(0,180,160,0.15)",
+    border: "rgba(184,84,61,0.4)",
+    accent: "#B8543D",
+    tagBg: "rgba(184,84,61,0.15)",
     tagText: "#00806f"
   },
   module: {
@@ -81,9 +81,9 @@ const typeStyles: Record<
   },
   unresolved: {
     bg: "#fef3e8",
-    border: "rgba(245,147,64,0.4)",
-    accent: "#f59340",
-    tagBg: "rgba(245,147,64,0.15)",
+    border: "rgba(184,84,61,0.4)",
+    accent: "#B8543D",
+    tagBg: "rgba(184,84,61,0.15)",
     tagText: "#c4650a"
   }
 };
@@ -97,24 +97,24 @@ const statusStyles: Record<
   }
 > = {
   critical: {
-    dot: "#e05555",
+    dot: "#9E3B2E",
     pillBg: "#ffe0e0",
-    pillText: "#e05555"
+    pillText: "#9E3B2E"
   },
   "at-risk": {
-    dot: "#f59340",
+    dot: "#B8543D",
     pillBg: "#ffefd6",
-    pillText: "#f59340"
+    pillText: "#B8543D"
   },
   stable: {
-    dot: "#00b4a0",
+    dot: "#B8543D",
     pillBg: "#e8faf6",
-    pillText: "#00b4a0"
+    pillText: "#B8543D"
   },
   unresolved: {
-    dot: "rgba(245,147,64,0.6)",
+    dot: "rgba(184,84,61,0.6)",
     pillBg: "#fff3e0",
-    pillText: "#f59340"
+    pillText: "#B8543D"
   }
 };
 
@@ -391,27 +391,27 @@ export function ProjectFlowchartPage() {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="text-[#888888] transition-colors hover:text-[#0a0a0a]"
+            className="text-[#78716C] transition-colors hover:text-[#1A1612]"
           >
             <ArrowLeftIcon className="h-4 w-4" />
           </button>
-          <span className="mx-4 h-4 w-px bg-[#e5e5e0]" />
-          <p className="truncate font-bebas text-[15px] text-[#0a0a0a]">{projectName.toUpperCase()}</p>
-          <span className="mx-2 font-syne text-[13px] text-[#cccccc]">/</span>
-          <p className="font-bebas text-[12px] tracking-[0.12em] text-[#00b4a0]">FLOWCHART</p>
+          <span className="mx-4 h-4 w-px bg-[rgba(26,22,18,0.08)]" />
+          <p className="truncate font-sans text-[15px] text-[#1A1612]">{projectName.toUpperCase()}</p>
+          <span className="mx-2 font-sans text-[13px] text-[rgba(120,113,108,0.6)]">/</span>
+          <p className="font-sans text-[12px] tracking-[0.12em] text-[#B8543D]">FLOWCHART</p>
         </div>
 
         <div className="ml-auto flex items-center gap-3">
           {([
-            ["FLOW", "#00b4a0"],
+            ["FLOW", "#B8543D"],
             ["MODULE", "#8b7fd4"],
             ["INTEGRATION", "#3b82f6"],
             ["APPROVAL", "#8b7fd4"],
-            ["UNRESOLVED", "#f59340"]
+            ["UNRESOLVED", "#B8543D"]
           ] as const).map(([label, color]) => (
             <div key={label} className="flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full" style={{ background: color }} />
-              <span className="font-bebas text-[10px] tracking-[0.1em] text-[#888888]">{label}</span>
+              <span className="font-sans text-[10px] tracking-[0.1em] text-[#78716C]">{label}</span>
             </div>
           ))}
         </div>
@@ -458,7 +458,7 @@ export function ProjectFlowchartPage() {
                     <path
                       d={`M ${startX} ${startY} C ${c1x} ${c1y} ${c2x} ${c2y} ${endX} ${endY}`}
                       fill="none"
-                      stroke={edge.style === "solid" ? "#00b4a0" : "#f59340"}
+                      stroke={edge.style === "solid" ? "#B8543D" : "#B8543D"}
                       strokeWidth={1.5}
                       strokeDasharray={edge.style === "dashed" ? "6 4" : undefined}
                       strokeLinecap="round"
@@ -468,7 +468,7 @@ export function ProjectFlowchartPage() {
                     <motion.path
                       d={`M ${startX} ${startY} C ${c1x} ${c1y} ${c2x} ${c2y} ${endX} ${endY}`}
                       fill="none"
-                      stroke={edge.style === "solid" ? "#00b4a0" : "#f59340"}
+                      stroke={edge.style === "solid" ? "#B8543D" : "#B8543D"}
                       strokeWidth={1.5}
                       strokeDasharray={1000}
                       strokeLinecap="round"
@@ -482,7 +482,7 @@ export function ProjectFlowchartPage() {
                         x={midpoint.x}
                         y={midpoint.y - 8}
                         textAnchor="middle"
-                        className="font-mono text-[10px] fill-[#999999]"
+                        className="font-mono text-[10px] fill-[rgba(120,113,108,0.6)]"
                         style={{ opacity: emphasized ? 1 : 0.92 }}
                       >
                         {edge.label}
@@ -541,10 +541,10 @@ export function ProjectFlowchartPage() {
                     }}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] text-[#888888]">{formatNodeId(node.id)}</span>
+                      <span className="font-mono text-[10px] text-[#78716C]">{formatNodeId(node.id)}</span>
                       {node.status === "critical" ? (
                         <motion.span
-                          className="ml-auto h-2 w-2 rounded-full bg-[#e05555]"
+                          className="ml-auto h-2 w-2 rounded-full bg-[#9E3B2E]"
                           animate={{ scale: [1, 1.18, 1], opacity: [1, 0.7, 1] }}
                           transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
                         />
@@ -553,21 +553,21 @@ export function ProjectFlowchartPage() {
                       )}
                     </div>
 
-                    <p className="mt-1.5 font-syne text-[15px] font-bold text-[#0a0a0a]">{node.label}</p>
+                    <p className="mt-1.5 font-sans text-[15px] font-medium text-[#1A1612]">{node.label}</p>
 
                     <div className="mt-[10px] flex flex-wrap gap-1.5">
                       <span
-                        className="rounded-md px-2 py-[3px] font-bebas text-[10px] tracking-[0.12em]"
+                        className="rounded-md px-2 py-[3px] font-sans text-[10px] tracking-[0.12em]"
                         style={{ background: typeStyle.tagBg, color: typeStyle.tagText }}
                       >
                         {getTypeLabel(node.type)}
                       </span>
                       {node.status === "critical" || node.status === "unresolved" ? (
                         <span
-                          className="rounded-md px-2 py-[3px] font-bebas text-[10px] tracking-[0.12em]"
+                          className="rounded-md px-2 py-[3px] font-sans text-[10px] tracking-[0.12em]"
                           style={{
-                            background: node.status === "critical" ? "rgba(224,85,85,0.12)" : "rgba(245,147,64,0.12)",
-                            color: node.status === "critical" ? "#c02020" : "#c4650a"
+                            background: node.status === "critical" ? "rgba(224,85,85,0.12)" : "rgba(184,84,61,0.12)",
+                            color: node.status === "critical" ? "#9E3B2E" : "#c4650a"
                           }}
                         >
                           {getStatusLabel(node.status)}
@@ -575,7 +575,7 @@ export function ProjectFlowchartPage() {
                       ) : null}
                     </div>
 
-                    <p className="mt-3 inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.16em] text-[#bbbbbb]">
+                    <p className="mt-3 inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">
                       <GripHorizontalIcon className="h-3 w-3" />
                       DRAG NODE
                     </p>
@@ -587,7 +587,7 @@ export function ProjectFlowchartPage() {
         ) : null}
 
         <div
-          className="absolute bottom-6 left-6 z-10 overflow-hidden rounded-2xl border border-[#e5e5e0] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+          className="absolute bottom-6 left-6 z-10 overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
           onMouseDown={(event) => event.stopPropagation()}
         >
           {[
@@ -600,8 +600,8 @@ export function ProjectFlowchartPage() {
               key={control.key}
               type="button"
               onClick={control.onClick}
-              className="flex h-10 w-10 items-center justify-center font-syne text-[18px] text-[#555555] transition-colors hover:bg-[#f5f5f2]"
-              style={{ borderBottom: index === array.length - 1 ? "none" : "1px solid #f0f0ec" }}
+              className="flex h-10 w-10 items-center justify-center font-sans text-[18px] text-[#5A5450] transition-colors hover:bg-[#FAF8F5]"
+              style={{ borderBottom: index === array.length - 1 ? "none" : "1px solid #FAF8F5" }}
             >
               {control.icon}
             </button>
@@ -609,7 +609,7 @@ export function ProjectFlowchartPage() {
         </div>
 
         <div
-          className="absolute bottom-6 z-10 overflow-hidden rounded-2xl border border-[#e5e5e0] bg-[rgba(255,255,255,0.9)] shadow-[0_4px_16px_rgba(0,0,0,0.06)]"
+          className="absolute bottom-6 z-10 overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-[rgba(255,255,255,0.9)] shadow-[0_4px_16px_rgba(0,0,0,0.06)]"
           style={{ width: miniMapWidth, height: miniMapHeight, right: selectedNode ? 384 : 24 }}
           onMouseDown={(event) => event.stopPropagation()}
         >
@@ -634,7 +634,7 @@ export function ProjectFlowchartPage() {
             })}
 
             <span
-              className="absolute rounded-[6px] border border-[rgba(0,180,160,0.5)] bg-[rgba(0,180,160,0.08)]"
+              className="absolute rounded-[6px] border border-[rgba(184,84,61,0.5)] bg-[rgba(184,84,61,0.08)]"
               style={{
                 left: (visibleViewport.x / worldWidth) * miniMapWidth,
                 top: (visibleViewport.y / worldHeight) * miniMapHeight,
@@ -664,20 +664,20 @@ export function ProjectFlowchartPage() {
                   >
                     {getNodeIcon(selectedNode.type)}
                   </div>
-                  <span className="font-mono text-[11px] text-[#888888]">{formatNodeId(selectedNode.id)}</span>
+                  <span className="font-mono text-[11px] text-[#78716C]">{formatNodeId(selectedNode.id)}</span>
                   <button
                     type="button"
                     onClick={() => setSelectedNodeId(null)}
-                    className="ml-auto flex h-7 w-7 items-center justify-center rounded-full bg-[#f5f5f2] text-[#888888] transition-colors hover:bg-[#e5e5e0]"
+                    className="ml-auto flex h-7 w-7 items-center justify-center rounded-full bg-[#FAF8F5] text-[#78716C] transition-colors hover:bg-[rgba(26,22,18,0.08)]"
                   >
                     <CloseIcon className="h-4 w-4" />
                   </button>
                 </div>
 
-                <p className="mt-3 font-bebas text-[22px] tracking-[0.04em] text-[#0a0a0a]">{selectedNode.label}</p>
+                <p className="mt-3 font-sans text-[22px] tracking-[0.04em] text-[#1A1612]">{selectedNode.label}</p>
 
                 <span
-                  className="mt-2 inline-flex rounded-full px-3 py-1 font-bebas text-[11px] tracking-[0.12em]"
+                  className="mt-2 inline-flex rounded-full px-3 py-1 font-sans text-[11px] tracking-[0.12em]"
                   style={{
                     background: statusStyles[selectedNode.status].pillBg,
                     color: statusStyles[selectedNode.status].pillText
@@ -686,37 +686,37 @@ export function ProjectFlowchartPage() {
                   {getStatusLabel(selectedNode.status)}
                 </span>
 
-                <div className="mb-5 mt-5 h-px bg-[#f0f0ec]" />
+                <div className="mb-5 mt-5 h-px bg-[#FAF8F5]" />
               </div>
 
               <div className="px-6">
-                <p className="mb-2 font-bebas text-[10px] tracking-[0.16em] text-[#999999]">OVERVIEW</p>
-                <p className="font-syne text-[14px] leading-7 text-[#333333]">{selectedNode.description}</p>
+                <p className="mb-2 font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">OVERVIEW</p>
+                <p className="font-sans text-[14px] leading-7 text-[#1A1612]">{selectedNode.description}</p>
               </div>
 
               <div className="mt-6 px-6">
-                <p className="mb-3 font-bebas text-[10px] tracking-[0.16em] text-[#999999]">SOURCE EVIDENCE</p>
+                <p className="mb-3 font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">SOURCE EVIDENCE</p>
                 {selectedNode.docRefs.map((docRef) => (
                   <button
                     key={docRef}
                     type="button"
-                    className="mb-2 flex items-center gap-2.5 text-left transition-colors hover:text-[#0a0a0a]"
+                    className="mb-2 flex items-center gap-2.5 text-left transition-colors hover:text-[#1A1612]"
                   >
-                    <span className="text-[#00b4a0]">
+                    <span className="text-[#B8543D]">
                       <FileTextIcon className="h-[14px] w-[14px]" />
                     </span>
-                    <span className="font-syne text-[12px] text-[#555555]">{docRef}</span>
+                    <span className="font-sans text-[12px] text-[#5A5450]">{docRef}</span>
                   </button>
                 ))}
               </div>
 
               <div className="mt-6 px-6">
-                <p className="mb-3 font-bebas text-[10px] tracking-[0.16em] text-[#999999]">CONNECTED TO</p>
+                <p className="mb-3 font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">CONNECTED TO</p>
                 {connections.map(({ edge, node }) => (
                   <div key={edge.id} className="mb-2 flex items-center gap-2.5">
                     <span className="h-2 w-2 rounded-full" style={{ background: typeStyles[node.type].accent }} />
-                    <span className="font-syne text-[12px] text-[#555555]">{node.label}</span>
-                    <span className="ml-auto font-mono text-[10px] text-[#bbbbbb]">{edge.label}</span>
+                    <span className="font-sans text-[12px] text-[#5A5450]">{node.label}</span>
+                    <span className="ml-auto font-mono text-[10px] text-[rgba(120,113,108,0.6)]">{edge.label}</span>
                   </div>
                 ))}
               </div>
@@ -724,7 +724,7 @@ export function ProjectFlowchartPage() {
               <div className="mt-auto p-6">
                 <button
                   type="button"
-                  className="w-full rounded-xl border-[1.5px] border-dashed border-[#d0d0cc] py-3 text-center font-syne text-[13px] text-[#888888] transition-colors hover:border-[#00b4a0] hover:bg-[rgba(0,180,160,0.04)] hover:text-[#00b4a0]"
+                  className="w-full rounded-xl border-[1.5px] border-dashed border-[rgba(26,22,18,0.20)] py-3 text-center font-sans text-[13px] text-[#78716C] transition-colors hover:border-[#B8543D] hover:bg-[rgba(184,84,61,0.04)] hover:text-[#B8543D]"
                 >
                   ASK SOCRATES ABOUT THIS
                 </button>

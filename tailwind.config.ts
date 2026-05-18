@@ -9,22 +9,23 @@ export default {
         bg1: "var(--bg-1)",
         bg2: "var(--bg-2)",
         border: "var(--border)",
-        teal: "var(--teal)",
-        tealDim: "var(--teal-dim)",
-        orange: "var(--orange)",
+        accent: "var(--rust)",
+        accentDim: "var(--rust-tint)",
+        teal: "var(--success-text)",
+        tealDim: "var(--success-bg)",
+        orange: "var(--rust)",
         purple: "var(--purple)",
-        red: "var(--red)",
-        mint: "var(--mint)",
-        lavender: "var(--lavender)",
-        peach: "var(--peach)",
+        red: "var(--danger-text)",
+        mint: "var(--success-bg)",
+        lavender: "var(--purple-bg)",
+        peach: "var(--warning-bg)",
         text1: "var(--text-1)",
         text2: "var(--text-2)",
         text3: "var(--text-3)"
       },
       fontFamily: {
-        bebas: ['"Bebas Neue"', "sans-serif"],
-        syne: ["Syne", "sans-serif"],
-        mono: ['"DM Mono"', "monospace"]
+        sans: ["Geist", "-apple-system", "system-ui", "sans-serif"],
+        mono: ['"Geist Mono"', "ui-monospace", '"SF Mono"', "Menlo", "monospace"]
       }
     }
   },

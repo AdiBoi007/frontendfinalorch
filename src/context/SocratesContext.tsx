@@ -120,12 +120,12 @@ function buildDependencyDiagram(projectName: string) {
   Changes -.-> Decisions([Decisions])
   DAG --> Changes
   
-  style Brief fill:#e8faf6,stroke:#00b4a0,color:#0a0a0a
-  style DAG fill:#e8faf6,stroke:#00b4a0,color:#0a0a0a
-  style Build fill:#eef4ff,stroke:#3b82f6,color:#0a0a0a
-  style Messages fill:#f4f2fc,stroke:#8b7fd4,color:#0a0a0a
-  style Changes fill:#fef3e8,stroke:#f59340,color:#0a0a0a
-  style Decisions fill:#eef4ff,stroke:#3b82f6,color:#0a0a0a`;
+  style Brief fill:#e8faf6,stroke:#B8543D,color:#1A1612
+  style DAG fill:#e8faf6,stroke:#B8543D,color:#1A1612
+  style Build fill:#eef4ff,stroke:#3b82f6,color:#1A1612
+  style Messages fill:#f4f2fc,stroke:#8b7fd4,color:#1A1612
+  style Changes fill:#fef3e8,stroke:#B8543D,color:#1A1612
+  style Decisions fill:#eef4ff,stroke:#3b82f6,color:#1A1612`;
 }
 
 function buildFlowchartDiagram(projectName: string) {
@@ -141,11 +141,11 @@ function buildFlowchartDiagram(projectName: string) {
   H -->|No| G
   I --> J([Delivered])
   
-  style A fill:#c8f0e8,stroke:#00b4a0,color:#0a0a0a
-  style J fill:#c8f0e8,stroke:#00b4a0,color:#0a0a0a
-  style B fill:#fceee4,stroke:#f59340,color:#0a0a0a
-  style E fill:#fceee4,stroke:#f59340,color:#0a0a0a
-  style H fill:#fceee4,stroke:#f59340,color:#0a0a0a`;
+  style A fill:#c8f0e8,stroke:#B8543D,color:#1A1612
+  style J fill:#c8f0e8,stroke:#B8543D,color:#1A1612
+  style B fill:#fceee4,stroke:#B8543D,color:#1A1612
+  style E fill:#fceee4,stroke:#B8543D,color:#1A1612
+  style H fill:#fceee4,stroke:#B8543D,color:#1A1612`;
 }
 
 function buildSequenceDiagram(projectName: string) {
@@ -186,9 +186,9 @@ function buildUseCaseDiagram(projectName: string) {
   Manager --> Approve
   Driver --> Assign
   
-  style Checkout fill:#c8f0e8,stroke:#00b4a0,color:#0a0a0a
-  style Approve fill:#fceee4,stroke:#f59340,color:#0a0a0a
-  style Assign fill:#eef4ff,stroke:#3b82f6,color:#0a0a0a`;
+  style Checkout fill:#c8f0e8,stroke:#B8543D,color:#1A1612
+  style Approve fill:#fceee4,stroke:#B8543D,color:#1A1612
+  style Assign fill:#eef4ff,stroke:#3b82f6,color:#1A1612`;
 }
 
 function pickTextResponse(pageContext: PageContext, content: string, projectName: string) {
@@ -427,8 +427,8 @@ export function SocratesProvider({ children }: { children: ReactNode }) {
             stats:
               kind === "dependency"
                 ? [
-                    { label: "CRITICAL", value: 4, color: "#e05555" },
-                    { label: "RISKY", value: 3, color: "#f59340" },
+                    { label: "CRITICAL", value: 4, color: "#9E3B2E" },
+                    { label: "RISKY", value: 3, color: "#B8543D" },
                     { label: "CHANGES", value: 2, color: "#8b7fd4" }
                   ]
                 : undefined

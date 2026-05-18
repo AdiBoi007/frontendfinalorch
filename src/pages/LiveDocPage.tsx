@@ -34,15 +34,15 @@ graph TD
   B -->|admin access| I[Admin Panel]
   I -->|approves| D
   
-  style A fill:#c8f0e8,stroke:#00b4a0,color:#0a0a0a
-  style F fill:#c8f0e8,stroke:#00b4a0,color:#0a0a0a
-  style G fill:#fceee4,stroke:#f59340,color:#0a0a0a
-  style B fill:#f0faf8,stroke:#00b4a0,color:#0a0a0a
-  style C fill:#f0faf8,stroke:#00b4a0,color:#0a0a0a
-  style D fill:#fff0f0,stroke:#e05555,color:#0a0a0a
-  style E fill:#f0faf8,stroke:#00b4a0,color:#0a0a0a
-  style H fill:#f0faf8,stroke:#00b4a0,color:#0a0a0a
-  style I fill:#e0dbf5,stroke:#8b7fd4,color:#0a0a0a
+  style A fill:#c8f0e8,stroke:#B8543D,color:#1A1612
+  style F fill:#c8f0e8,stroke:#B8543D,color:#1A1612
+  style G fill:#fceee4,stroke:#B8543D,color:#1A1612
+  style B fill:#f0faf8,stroke:#B8543D,color:#1A1612
+  style C fill:#f0faf8,stroke:#B8543D,color:#1A1612
+  style D fill:#fff0f0,stroke:#9E3B2E,color:#1A1612
+  style E fill:#f0faf8,stroke:#B8543D,color:#1A1612
+  style H fill:#f0faf8,stroke:#B8543D,color:#1A1612
+  style I fill:#e0dbf5,stroke:#8b7fd4,color:#1A1612
 `;
 
 const useCaseDiagram = `
@@ -79,9 +79,9 @@ graph LR
   Admin --> UC10
   Admin --> UC11
   
-  style UC2 fill:#c8f0e8,stroke:#00b4a0
+  style UC2 fill:#c8f0e8,stroke:#B8543D
   style UC10 fill:#e0dbf5,stroke:#8b7fd4
-  style UC11 fill:#fff0f0,stroke:#e05555
+  style UC11 fill:#fff0f0,stroke:#9E3B2E
 `;
 
 const flowchartDiagram = `
@@ -105,13 +105,13 @@ flowchart TD
   N --> O[Real-time Tracking Active]
   O --> P([Delivery Complete])
   
-  style A fill:#c8f0e8,stroke:#00b4a0
-  style P fill:#c8f0e8,stroke:#00b4a0
-  style B fill:#fceee4,stroke:#f59340
-  style E fill:#fceee4,stroke:#f59340
-  style H fill:#fceee4,stroke:#f59340
-  style L fill:#fceee4,stroke:#f59340
-  style M fill:#fff0f0,stroke:#e05555
+  style A fill:#c8f0e8,stroke:#B8543D
+  style P fill:#c8f0e8,stroke:#B8543D
+  style B fill:#fceee4,stroke:#B8543D
+  style E fill:#fceee4,stroke:#B8543D
+  style H fill:#fceee4,stroke:#B8543D
+  style L fill:#fceee4,stroke:#B8543D
+  style M fill:#fff0f0,stroke:#9E3B2E
 `;
 
 const sequenceDiagram = `
@@ -203,9 +203,9 @@ const diagramActions = [
     triggerLabel: "GENERATE SYSTEM DIAGRAM",
     subtitle: "Ask Socrates to render a system architecture diagram",
     chart: systemDiagram,
-    accent: "#00b4a0",
+    accent: "#B8543D",
     icon: GitBranchIcon,
-    hoverClass: "hover:border-[#00b4a0] hover:bg-[rgba(0,180,160,0.04)]"
+    hoverClass: "hover:border-[#B8543D] hover:bg-[rgba(184,84,61,0.04)]"
   },
   {
     key: "usecase" as const,
@@ -223,9 +223,9 @@ const diagramActions = [
     triggerLabel: "GENERATE FLOWCHART",
     subtitle: "Ask Socrates to render a process flowchart",
     chart: flowchartDiagram,
-    accent: "#f59340",
+    accent: "#B8543D",
     icon: GitMergeIcon,
-    hoverClass: "hover:border-[#f59340] hover:bg-[rgba(245,147,64,0.04)]"
+    hoverClass: "hover:border-[#B8543D] hover:bg-[rgba(184,84,61,0.04)]"
   },
   {
     key: "sequence" as const,
@@ -304,7 +304,7 @@ function MermaidDiagram({ chart, id }: { chart: string; id: string }) {
       } catch (error) {
         if (ref.current && !isCancelled) {
           ref.current.innerHTML =
-            '<div class="flex min-h-[200px] items-center justify-center font-mono text-[12px] text-[#888888]">Unable to render diagram.</div>';
+            '<div class="flex min-h-[200px] items-center justify-center font-mono text-[12px] text-[#78716C]">Unable to render diagram.</div>';
         }
 
         console.error("Mermaid render failed", error);
@@ -366,7 +366,7 @@ function renderHighlightedContent({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 4 }}
               transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute bottom-[calc(100%+8px)] left-1/2 z-50 w-max max-w-[320px] -translate-x-1/2 rounded-lg bg-[#0a0a0a] px-[10px] py-[6px] text-center font-syne text-[11px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
+              className="absolute bottom-[calc(100%+8px)] left-1/2 z-50 w-max max-w-[320px] -translate-x-1/2 rounded-lg bg-[#1A1612] px-[10px] py-[6px] text-center font-sans text-[11px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
             >
               SOURCE: {tooltipSource}
             </motion.span>
@@ -383,14 +383,14 @@ function DiagramLoadingCard() {
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mt-3 flex h-[200px] w-full items-center justify-center rounded-2xl border border-[#e8e8e4] px-6"
+      className="mt-3 flex h-[200px] w-full items-center justify-center rounded-2xl border border-[rgba(26,22,18,0.08)] px-6"
       style={{
-        background: "linear-gradient(90deg, #f5f4f0, #eeede8, #f5f4f0)",
+        background: "linear-gradient(90deg, #FAF8F5, #eeede8, #FAF8F5)",
         backgroundSize: "200% 100%",
         animation: "live-doc-diagram-shimmer 1.5s linear infinite"
       }}
     >
-      <span className="font-mono text-[12px] text-[#888888]">Generating diagram...</span>
+      <span className="font-mono text-[12px] text-[#78716C]">Generating diagram...</span>
     </motion.div>
   );
 }
@@ -420,24 +420,24 @@ function DiagramCard({
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-5 overflow-hidden rounded-2xl border border-[#e8e8e4] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
+      className="mb-5 overflow-hidden rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
     >
-      <div className="flex items-center justify-between border-b border-[#f0f0ec] px-5 py-[14px]">
+      <div className="flex items-center justify-between border-b border-[#FAF8F5] px-5 py-[14px]">
         <div className="flex items-center gap-2">
           <span style={{ color: accent }}>
             <Icon className="h-4 w-4" />
           </span>
-          <span className="font-bebas text-[12px] tracking-[0.12em] text-[#0a0a0a]">{label}</span>
+          <span className="font-sans text-[12px] tracking-[0.12em] text-[#1A1612]">{label}</span>
         </div>
 
         <div className="flex items-center">
-          <button type="button" onClick={onRegenerate} className="font-syne text-[11px] text-[#888888] transition-colors hover:text-[#00b4a0]">
+          <button type="button" onClick={onRegenerate} className="font-sans text-[11px] text-[#78716C] transition-colors hover:text-[#B8543D]">
             REGENERATE
           </button>
           <button
             type="button"
             onClick={() => onCopySvg(diagramKey)}
-            className="ml-2 rounded-lg border border-[#e8e8e4] px-2 py-[3px] font-mono text-[10px] text-[#888888]"
+            className="ml-2 rounded-lg border border-[rgba(26,22,18,0.08)] px-2 py-[3px] font-mono text-[10px] text-[#78716C]"
           >
             COPY SVG
           </button>
@@ -448,9 +448,9 @@ function DiagramCard({
         {mermaidReady ? <MermaidDiagram chart={chart} id={diagramKey} /> : <div className="min-h-[220px]" />}
       </div>
 
-      <div className="flex items-center justify-between bg-[#fafaf8] px-5 py-[10px]">
-        <span className="font-mono text-[9px] tracking-[0.14em] text-[#bbbbbb]">GENERATED FROM BRAIN + ACCEPTED CHANGES</span>
-        <span className="font-mono text-[9px] text-[#bbbbbb]">{timestamp}</span>
+      <div className="flex items-center justify-between bg-[#FAF8F5] px-5 py-[10px]">
+        <span className="font-mono text-[9px] tracking-[0.14em] text-[rgba(120,113,108,0.6)]">GENERATED FROM BRAIN + ACCEPTED CHANGES</span>
+        <span className="font-mono text-[9px] text-[rgba(120,113,108,0.6)]">{timestamp}</span>
       </div>
     </motion.div>
   );
@@ -469,11 +469,11 @@ function CommentCard({
     <motion.div
       ref={(el) => registerRef(comment.id, el)}
       variants={commentItemVariants}
-      animate={{ borderColor: active ? "#00b4a0" : "#e8e8e4" }}
+      animate={{ borderColor: active ? "#B8543D" : "rgba(26,22,18,0.08)" }}
       transition={{ duration: 0.2 }}
       className={[
         "rounded-2xl border bg-white p-4",
-        active ? "shadow-[0_0_0_3px_rgba(0,180,160,0.12)]" : ""
+        active ? "shadow-[0_0_0_3px_rgba(184,84,61,0.12)]" : ""
       ].join(" ")}
     >
       <div className="flex items-center gap-2">
@@ -481,19 +481,19 @@ function CommentCard({
           <Avatar seed={comment.authorName} size={32} name={comment.authorName} />
         </div>
 
-        <p className="min-w-0 flex-1 truncate font-syne text-[13px] font-semibold text-[#0a0a0a]">{comment.authorName}</p>
-        <p className="text-right font-mono text-[11px] text-[#888888]">
+        <p className="min-w-0 flex-1 truncate font-sans text-[13px] font-medium text-[#1A1612]">{comment.authorName}</p>
+        <p className="text-right font-mono text-[11px] text-[#78716C]">
           <span>{comment.time}</span>
           <br />
           <span>{comment.date}</span>
         </p>
       </div>
 
-      <p className="mt-[10px] font-syne text-[13px] leading-[1.6] text-[#444444]">{comment.content}</p>
+      <p className="mt-[10px] font-sans text-[13px] leading-[1.6] text-[#1A1612]">{comment.content}</p>
 
       <div className="mt-[10px]">
-        <p className="font-mono text-[10px] text-[#888888]">Source:</p>
-        <p className="mt-1 font-mono text-[10px] italic text-[#888888]">{comment.source}</p>
+        <p className="font-mono text-[10px] text-[#78716C]">Source:</p>
+        <p className="mt-1 font-mono text-[10px] italic text-[#78716C]">{comment.source}</p>
       </div>
     </motion.div>
   );
@@ -531,16 +531,16 @@ export function LiveDocPage() {
       },
       themeVariables: {
         primaryColor: "#c8f0e8",
-        primaryTextColor: "#0a0a0a",
-        primaryBorderColor: "#00b4a0",
-        lineColor: "#00b4a0",
+        primaryTextColor: "#1A1612",
+        primaryBorderColor: "#B8543D",
+        lineColor: "#B8543D",
         secondaryColor: "#e0dbf5",
         tertiaryColor: "#fceee4",
         background: "#ffffff",
         mainBkg: "#f0faf8",
-        nodeBorder: "#00b4a0",
-        clusterBkg: "#fafaf8",
-        titleColor: "#0a0a0a",
+        nodeBorder: "#B8543D",
+        clusterBkg: "#FAF8F5",
+        titleColor: "#1A1612",
         edgeLabelBackground: "#ffffff",
         fontFamily: "DM Mono, monospace",
         fontSize: "13px"
@@ -712,15 +712,15 @@ export function LiveDocPage() {
         }
       `}</style>
 
-      <div className="flex h-12 shrink-0 items-center border-b-[1.5px] border-[#e8e8e4] bg-bg px-6">
-        <h1 className="font-syne text-[15px] font-semibold text-[#0a0a0a]">{payload.projectName} — Product requirements</h1>
+      <div className="flex h-12 shrink-0 items-center border-b-[1.5px] border-[rgba(26,22,18,0.08)] bg-bg px-6">
+        <h1 className="font-sans text-[15px] font-medium text-[#1A1612]">{payload.projectName} — Product requirements</h1>
       </div>
 
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <div className="min-w-0 flex-1 overflow-y-auto bg-bg">
           <div className="px-14 py-12 pl-[140px]">
             <div className="mb-5 flex items-center justify-between gap-4">
-              <p className="font-mono text-[12px] text-[#888888]">
+              <p className="font-mono text-[12px] text-[#78716C]">
                 {payload.docType} · {payload.version} · {payload.status}
               </p>
 
@@ -731,7 +731,7 @@ export function LiveDocPage() {
                   setFocusedSectionId(null);
                   setTooltipSectionId(null);
                 }}
-                className="rounded-lg border border-[#e8e8e4] px-3 py-1.5 font-syne text-[12px] text-[#555555] transition-colors hover:bg-[#f5f4f0]"
+                className="rounded-lg border border-[rgba(26,22,18,0.08)] px-3 py-1.5 font-sans text-[12px] text-[#5A5450] transition-colors hover:bg-[#FAF8F5]"
               >
                 EDIT
               </button>
@@ -754,7 +754,7 @@ export function LiveDocPage() {
                     <motion.h2
                       key={section.id}
                       variants={sectionItemVariants}
-                      className="mb-6 font-syne text-[28px] font-bold leading-[1.2] text-[#0a0a0a]"
+                      className="mb-6 font-sans text-[28px] font-medium leading-[1.2] text-[#1A1612]"
                     >
                       {currentValue}
                     </motion.h2>
@@ -764,7 +764,7 @@ export function LiveDocPage() {
                 if (section.type === "section-heading") {
                   return (
                     <motion.div key={section.id} variants={sectionItemVariants} className="mb-3 mt-8">
-                      <p className="font-syne text-[11px] font-semibold uppercase tracking-[0.18em] text-[#888888]">
+                      <p className="font-sans text-[11px] font-medium uppercase tracking-[0.18em] text-[#78716C]">
                         {section.sectionLabel}
                       </p>
 
@@ -798,8 +798,8 @@ export function LiveDocPage() {
                                   className={[
                                     "w-full text-left transition-colors",
                                     status === "done"
-                                      ? "rounded-xl border border-[#e8e8e4] bg-white px-4 py-3"
-                                      : "rounded-xl border-[1.5px] border-dashed border-[#d0d0cc] px-5 py-4",
+                                      ? "rounded-xl border border-[rgba(26,22,18,0.08)] bg-white px-4 py-3"
+                                      : "rounded-xl border-[1.5px] border-dashed border-[rgba(26,22,18,0.20)] px-5 py-4",
                                     action.hoverClass
                                   ].join(" ")}
                                 >
@@ -808,10 +808,10 @@ export function LiveDocPage() {
                                       <Icon className="h-[18px] w-[18px]" />
                                     </span>
                                     <div>
-                                      <p className="font-syne text-[13px] text-[#555555]">
+                                      <p className="font-sans text-[13px] text-[#5A5450]">
                                         {status === "done" ? `REGENERATE ${action.label}` : action.triggerLabel}
                                       </p>
-                                      <p className="mt-1 font-mono text-[11px] text-[#888888]">{action.subtitle}</p>
+                                      <p className="mt-1 font-mono text-[11px] text-[#78716C]">{action.subtitle}</p>
                                     </div>
                                   </div>
                                 </motion.button>
@@ -834,7 +834,7 @@ export function LiveDocPage() {
                           value={currentValue}
                           onChange={(event) => handleSectionChange(section.id, event.target.value)}
                           onFocus={() => setFocusedSectionId(section.id)}
-                          className="w-full resize-y rounded-xl border border-[#e8e8e4] px-[14px] py-3 font-syne text-[15px] leading-[1.8] text-[#333333] outline-none transition-colors focus:border-[#00b4a0]"
+                          className="w-full resize-y rounded-xl border border-[rgba(26,22,18,0.08)] px-[14px] py-3 font-sans text-[15px] leading-[1.8] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
                           style={{ minHeight: 80 }}
                         />
 
@@ -850,7 +850,7 @@ export function LiveDocPage() {
                                 type="button"
                                 onMouseDown={(event) => event.preventDefault()}
                                 onClick={() => void handleSaveSection(section.id)}
-                                className="rounded-lg bg-[#00b4a0] px-[10px] py-1 font-bebas text-[11px] tracking-[0.08em] text-white"
+                                className="rounded-lg bg-[#B8543D] px-[10px] py-1 font-sans text-[11px] tracking-[0.08em] text-white"
                               >
                                 SAVE
                               </button>
@@ -881,20 +881,20 @@ export function LiveDocPage() {
                         }}
                         animate={
                           isActive
-                            ? { backgroundColor: ["rgba(0,180,160,0.12)", "rgba(0,180,160,0.06)"] }
+                            ? { backgroundColor: ["rgba(184,84,61,0.12)", "rgba(184,84,61,0.06)"] }
                             : { backgroundColor: "rgba(255,255,255,0)" }
                         }
                         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                         className={isClickable ? "cursor-pointer" : ""}
                         style={{
-                          borderLeft: isActive ? "3px solid #00b4a0" : "3px solid transparent",
+                          borderLeft: isActive ? "3px solid #B8543D" : "3px solid transparent",
                           paddingLeft: isActive ? 16 : 0,
                           paddingRight: 16,
                           borderRadius: isActive ? "0 8px 8px 0" : 0
                         }}
                       >
                         <div className="relative">
-                          <p className="font-syne text-[15px] leading-[1.8] text-[#444444]">
+                          <p className="font-sans text-[15px] leading-[1.8] text-[#1A1612]">
                             {section.type === "highlighted"
                               ? renderHighlightedContent({
                                   section,
@@ -916,7 +916,7 @@ export function LiveDocPage() {
                                 initial="hidden"
                                 animate="visible"
                                 exit="hidden"
-                                className="pointer-events-none absolute left-[-132px] top-1/2 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-[#00b4a0] px-[10px] py-1 font-syne text-[10px] font-semibold text-white"
+                                className="pointer-events-none absolute left-[-132px] top-1/2 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-[#B8543D] px-[10px] py-1 font-sans text-[10px] font-medium text-white"
                                 style={{ transform: "translateY(-50%)" }}
                               >
                                 VIEW SOURCE
@@ -934,8 +934,8 @@ export function LiveDocPage() {
           </div>
         </div>
 
-        <aside className="w-[340px] flex-shrink-0 overflow-y-auto border-l-[1.5px] border-[#e8e8e4] bg-[#f9f8f6] px-5 py-6">
-          <p className="mb-5 font-bebas text-[11px] tracking-[0.18em] text-[#999999]">COMMENTS</p>
+        <aside className="w-[340px] flex-shrink-0 overflow-y-auto border-l-[1.5px] border-[rgba(26,22,18,0.08)] bg-[#FAF8F5] px-5 py-6">
+          <p className="mb-5 font-sans text-[11px] tracking-[0.18em] text-[rgba(120,113,108,0.6)]">COMMENTS</p>
 
           <motion.div variants={commentListVariants} initial="hidden" animate="visible" className="space-y-3">
             {payload.comments.map((comment) => (

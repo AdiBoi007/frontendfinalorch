@@ -4,20 +4,22 @@ type BadgeProps = {
 
 function getTone(variant: BadgeProps["variant"]) {
   if (variant === "HEALTHY") {
-    return "bg-[#e8faf7] text-[#00b4a0]";
+    return "bg-[rgba(45,74,62,0.10)] text-[#2D4A3E]";
   }
 
   if (variant === "AT RISK") {
-    return "bg-[#fceee4] text-[#f59340]";
+    return "bg-[rgba(194,136,64,0.12)] text-[#8C5D1E]";
   }
 
-  return "bg-[#ffe8e8] text-[#e05555]";
+  return "bg-[rgba(158,59,46,0.10)] text-[#9E3B2E]";
 }
 
 export function Badge({ variant }: BadgeProps) {
+  const label = variant === "AT RISK" ? "At risk" : variant.toLowerCase();
+
   return (
-    <span className={`inline-flex rounded-full px-3 py-1 font-bebas text-[11px] tracking-[0.14em] ${getTone(variant)}`}>
-      {variant}
+    <span className={`inline-flex rounded-full px-3 py-1 font-sans text-[13px] font-medium leading-[1.45] ${getTone(variant)}`}>
+      {label}
     </span>
   );
 }

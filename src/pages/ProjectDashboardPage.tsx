@@ -153,8 +153,8 @@ const selectedMeetingItemVariants = {
 
 const roleBadgeStyles = {
   manager: { background: "#e0dbf5", color: "#8b7fd4", label: "MANAGER" },
-  dev: { background: "#c8f0e8", color: "#00b4a0", label: "DEV" },
-  client: { background: "#fceee4", color: "#f59340", label: "CLIENT" }
+  dev: { background: "#c8f0e8", color: "#B8543D", label: "DEV" },
+  client: { background: "#fceee4", color: "#B8543D", label: "CLIENT" }
 } as const;
 
 const miniCalendarDays = ["M", "T", "W", "T", "F", "S", "S"] as const;
@@ -183,12 +183,12 @@ const meetingsByDate: Record<number, typeof mockMeetings> = {
 };
 
 const serviceGradients: Record<string, string> = {
-  aws: "linear-gradient(135deg, #f59340, #e07020)",
+  aws: "linear-gradient(135deg, #B8543D, #e07020)",
   supabase: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
   stripe: "linear-gradient(135deg, #8b7fd4, #6b5dc4)",
-  firebase: "linear-gradient(135deg, #f59340, #e05555)",
-  vercel: "linear-gradient(135deg, #0a0a0a, #333333)",
-  sentry: "linear-gradient(135deg, #e05555, #c02020)"
+  firebase: "linear-gradient(135deg, #B8543D, #9E3B2E)",
+  vercel: "linear-gradient(135deg, #1A1612, #1A1612)",
+  sentry: "linear-gradient(135deg, #9E3B2E, #9E3B2E)"
 };
 
 const SERVICE_LOGOS: Record<string, string> = {
@@ -241,11 +241,11 @@ function SubscriptionLogo({ name }: { name: string }) {
 
   return (
     <div
-      className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-[#f5f5f2]"
+      className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-[#FAF8F5]"
       style={showFallback ? { backgroundImage: serviceGradients[subscriptionKey] } : undefined}
     >
       {showFallback ? (
-        <span className="font-bebas text-[14px] leading-none text-white">{getSubscriptionInitial(name)}</span>
+        <span className="font-sans text-[14px] leading-none text-white">{getSubscriptionInitial(name)}</span>
       ) : (
         <img
           src={logoUrl}
@@ -271,31 +271,31 @@ function formatRoleLabel(role: ProjectMember["role"]) {
 function getStatusTone(status: ProjectDetail["recentChanges"][number]["status"]) {
   if (status === "accepted") {
     return {
-      bar: "#00b4a0",
-      badgeClassName: "bg-[#e8faf7] text-[#00b4a0]"
+      bar: "#B8543D",
+      badgeClassName: "bg-[#e8faf7] text-[#B8543D]"
     };
   }
 
   return {
-    bar: "#f59340",
-    badgeClassName: "bg-[#fceee4] text-[#f59340]"
+    bar: "#B8543D",
+    badgeClassName: "bg-[#fceee4] text-[#B8543D]"
   };
 }
 
 function getMeetingTypeColor(type: (typeof mockMeetings)[number]["type"]) {
   if (type === "standup") {
-    return "#00b4a0";
+    return "#B8543D";
   }
 
   if (type === "review") {
-    return "#f59340";
+    return "#B8543D";
   }
 
   if (type === "client") {
     return "#8b7fd4";
   }
 
-  return "#bbbbbb";
+  return "rgba(120,113,108,0.6)";
 }
 
 type TeamAvatarProps = {
@@ -313,7 +313,7 @@ function TeamAvatar({ member, size = 36, openSlot = false }: TeamAvatarProps) {
         type="button"
         variants={avatarVariants}
         whileHover={{ scale: 1.15, zIndex: 10 }}
-        className="flex items-center justify-center rounded-full border-2 border-dashed border-[#d0d0cc] bg-transparent font-syne text-[18px] leading-none text-[#cccccc] transition-colors hover:border-[#00b4a0] hover:text-[#00b4a0]"
+        className="flex items-center justify-center rounded-full border-2 border-dashed border-[rgba(26,22,18,0.20)] bg-transparent font-sans text-[18px] leading-none text-[rgba(120,113,108,0.6)] transition-colors hover:border-[#B8543D] hover:text-[#B8543D]"
         style={{ width: size, height: size }}
       >
         <PlusIcon className="h-[18px] w-[18px]" />
@@ -340,7 +340,7 @@ function TeamAvatar({ member, size = 36, openSlot = false }: TeamAvatarProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.96 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-none absolute bottom-[110%] left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg bg-[#0a0a0a] px-2 py-1 font-syne text-[11px] text-white shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+            className="pointer-events-none absolute bottom-[110%] left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg bg-[#1A1612] px-2 py-1 font-sans text-[11px] text-white shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
           >
             {member.name}
           </motion.div>
@@ -400,8 +400,8 @@ function QuickLaunchCard({
         </span>
       </div>
 
-      <p className="mt-3 font-bebas text-[16px] tracking-[0.06em] text-[#0a0a0a]">{title}</p>
-      <p className="mt-1 font-syne text-[11px]" style={{ color: title === "REQUESTS" ? "#e05555" : "#888888" }}>
+      <p className="mt-3 font-sans text-[16px] tracking-[0.06em] text-[#1A1612]">{title}</p>
+      <p className="mt-1 font-sans text-[11px]" style={{ color: title === "REQUESTS" ? "#9E3B2E" : "#78716C" }}>
         {subtitle}
       </p>
     </motion.button>
@@ -454,8 +454,8 @@ export function ProjectDashboardPage() {
 
     return [
       { label: "MANAGERS", color: "#8b7fd4", width: `${managerPercent}%` },
-      { label: "DEVS", color: "#00b4a0", width: `${devPercent}%` },
-      { label: "CLIENTS", color: "#f59340", width: `${clientPercent}%` }
+      { label: "DEVS", color: "#B8543D", width: `${devPercent}%` },
+      { label: "CLIENTS", color: "#B8543D", width: `${clientPercent}%` }
     ];
   }, [members]);
 
@@ -496,7 +496,7 @@ export function ProjectDashboardPage() {
   if (!project) {
     return (
       <div className="h-full overflow-y-auto bg-bg px-10 pb-10 pl-8 pt-10">
-        <p className="font-syne text-[14px] text-[#888888]">Loading project…</p>
+        <p className="font-sans text-[14px] text-[#78716C]">Loading project…</p>
       </div>
     );
   }
@@ -510,10 +510,10 @@ export function ProjectDashboardPage() {
               <Badge variant={project.health} />
             </div>
 
-            <h1 className="font-bebas text-[52px] leading-none text-[#0a0a0a]">{project.name}</h1>
-            <p className="mt-2 max-w-[480px] font-syne text-[14px] leading-6 text-[#888888]">{project.description}</p>
+            <h1 className="font-sans text-[52px] leading-none text-[#1A1612]">{project.name}</h1>
+            <p className="mt-2 max-w-[480px] font-sans text-[14px] leading-6 text-[#78716C]">{project.description}</p>
 
-            <div className="mt-3 flex flex-wrap gap-5 font-mono text-[12px] text-[#888888]">
+            <div className="mt-3 flex flex-wrap gap-5 font-mono text-[12px] text-[#78716C]">
               <span>DEADLINE: {project.deadline}</span>
               <span>SPRINT: {project.sprint}</span>
               <span>PROGRESS: {project.progress}%</span>
@@ -524,7 +524,7 @@ export function ProjectDashboardPage() {
                 initial={{ width: 0 }}
                 animate={{ width: `${project.progress}%` }}
                 transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                className="h-full rounded-full bg-[#00b4a0]"
+                className="h-full rounded-full bg-[#B8543D]"
               />
             </div>
           </div>
@@ -533,8 +533,8 @@ export function ProjectDashboardPage() {
         <motion.section variants={sectionVariants} className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_400px]">
           <div className="solid-card px-7 py-6">
             <div className="flex items-center">
-              <p className="font-bebas text-[11px] tracking-[0.18em] text-[#999999]">TEAM</p>
-              <button type="button" className="ml-auto font-syne text-[11px] text-[#00b4a0]">
+              <p className="font-sans text-[11px] tracking-[0.18em] text-[rgba(120,113,108,0.6)]">TEAM</p>
+              <button type="button" className="ml-auto font-sans text-[11px] text-[#B8543D]">
                 MANAGE
               </button>
             </div>
@@ -544,14 +544,14 @@ export function ProjectDashboardPage() {
                 <AvatarStack members={members} />
               </div>
 
-              <div className="hidden h-8 w-px flex-shrink-0 bg-[#f0f0ec] min-[1700px]:block" />
+              <div className="hidden h-8 w-px flex-shrink-0 bg-[#FAF8F5] min-[1700px]:block" />
 
               <div className="flex-shrink-0">
-                <p className="font-bebas text-[28px] leading-none text-[#0a0a0a]">{members.length} MEMBERS</p>
-                <p className="mt-1 font-syne text-[11px] leading-none text-[#888888]">CURRENT TEAM SIZE</p>
+                <p className="font-sans text-[28px] leading-none text-[#1A1612]">{members.length} MEMBERS</p>
+                <p className="mt-1 font-sans text-[11px] leading-none text-[#78716C]">CURRENT TEAM SIZE</p>
               </div>
 
-              <div className="hidden h-8 w-px flex-shrink-0 bg-[#f0f0ec] min-[1700px]:block" />
+              <div className="hidden h-8 w-px flex-shrink-0 bg-[#FAF8F5] min-[1700px]:block" />
 
               <div className="flex-shrink-0">
                 <div className="flex h-1.5 w-[160px] overflow-hidden rounded-full">
@@ -564,21 +564,21 @@ export function ProjectDashboardPage() {
                   {teamBreakdown.map((segment) => (
                     <div key={segment.label} className="flex items-center gap-1.5">
                       <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: segment.color }} />
-                      <span className="font-syne text-[10px] leading-none text-[#888888]">{segment.label}</span>
+                      <span className="font-sans text-[10px] leading-none text-[#78716C]">{segment.label}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="hidden h-8 w-px flex-shrink-0 bg-[#f0f0ec] min-[1700px]:block" />
+              <div className="hidden h-8 w-px flex-shrink-0 bg-[#FAF8F5] min-[1700px]:block" />
 
               <div className="flex min-w-[320px] flex-1 items-stretch">
                 <div className="w-[140px] flex-shrink-0">
-                  <p className="mb-[6px] font-bebas text-[12px] tracking-[0.06em] text-[#0a0a0a]">APR 2026</p>
+                  <p className="mb-[6px] font-sans text-[12px] tracking-[0.06em] text-[#1A1612]">APR 2026</p>
 
                   <div className="mb-1 grid grid-cols-7 gap-x-[2px]">
                     {miniCalendarDays.map((day) => (
-                      <span key={day} className="w-[18px] text-center font-bebas text-[9px] tracking-[0.08em] text-[#bbbbbb]">
+                      <span key={day} className="w-[18px] text-center font-sans text-[9px] tracking-[0.08em] text-[rgba(120,113,108,0.6)]">
                         {day}
                       </span>
                     ))}
@@ -598,19 +598,19 @@ export function ProjectDashboardPage() {
                             className={[
                               "flex h-[18px] w-[18px] items-center justify-center rounded-md transition-colors",
                               isSelected
-                                ? "bg-[#00b4a0] font-bebas text-[10px] text-white"
+                                ? "bg-[#B8543D] font-sans text-[10px] text-white"
                                 : isToday
-                                  ? "bg-[#0a0a0a] font-bebas text-[10px] text-white"
+                                  ? "bg-[#1A1612] font-sans text-[10px] text-white"
                                   : item.inCurrentMonth
-                                    ? "cursor-pointer font-syne text-[10px] text-[#555555] hover:bg-[#f5f5f2]"
-                                    : "cursor-pointer font-syne text-[10px] text-[#dddddd] hover:bg-[#f5f5f2]"
+                                    ? "cursor-pointer font-sans text-[10px] text-[#5A5450] hover:bg-[#FAF8F5]"
+                                    : "cursor-pointer font-sans text-[10px] text-[#dddddd] hover:bg-[#FAF8F5]"
                             ].join(" ")}
                           >
                             {item.day}
                           </button>
                           <span
                             className="mt-[2px] h-[3px] w-[3px] rounded-full"
-                            style={{ backgroundColor: hasMeetings ? "#00b4a0" : "transparent" }}
+                            style={{ backgroundColor: hasMeetings ? "#B8543D" : "transparent" }}
                           />
                         </div>
                       );
@@ -618,10 +618,10 @@ export function ProjectDashboardPage() {
                   </div>
                 </div>
 
-                <div className="mx-4 w-px self-stretch bg-[#f0f0ec]" />
+                <div className="mx-4 w-px self-stretch bg-[#FAF8F5]" />
 
                 <div className="min-w-0 flex-1">
-                  <p className="mb-[10px] font-bebas text-[10px] tracking-[0.16em] text-[#999999]">
+                  <p className="mb-[10px] font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">
                     {selectedDate === 22 ? "TODAY" : `APR ${selectedDate}`}
                   </p>
 
@@ -630,26 +630,26 @@ export function ProjectDashboardPage() {
                       {todaysMeetings.length > 0 ? (
                         <>
                           {todaysMeetings.map((meeting) => (
-                            <motion.div key={meeting.id} variants={selectedMeetingItemVariants} className="flex items-center gap-2.5 rounded-xl bg-[#fafaf8] px-[10px] py-2">
+                            <motion.div key={meeting.id} variants={selectedMeetingItemVariants} className="flex items-center gap-2.5 rounded-xl bg-[#FAF8F5] px-[10px] py-2">
                               <div className="flex w-16 flex-shrink-0 items-center gap-2">
                                 <span className="h-2 w-2 flex-shrink-0 rounded-full" style={{ backgroundColor: getMeetingTypeColor(meeting.type) }} />
-                                <span className="font-mono text-[12px] font-semibold text-[#0a0a0a]">{meeting.time}</span>
+                                <span className="font-mono text-[12px] font-medium text-[#1A1612]">{meeting.time}</span>
                               </div>
-                              <p className="min-w-0 flex-1 line-clamp-1 font-syne text-[12px] font-semibold text-[#0a0a0a]">{meeting.title}</p>
-                              <span className="flex-shrink-0 rounded-full border border-[#e8e8e4] bg-white px-2 py-[3px] font-mono text-[10px] text-[#888888]">
+                              <p className="min-w-0 flex-1 line-clamp-1 font-sans text-[12px] font-medium text-[#1A1612]">{meeting.title}</p>
+                              <span className="flex-shrink-0 rounded-full border border-[rgba(26,22,18,0.08)] bg-white px-2 py-[3px] font-mono text-[10px] text-[#78716C]">
                                 {meeting.duration}
                               </span>
                             </motion.div>
                           ))}
 
                           {todaysMeetings.length === 1 ? (
-                            <motion.p variants={selectedMeetingItemVariants} className="pl-[10px] font-syne text-[11px] text-[#bbbbbb]">
+                            <motion.p variants={selectedMeetingItemVariants} className="pl-[10px] font-sans text-[11px] text-[rgba(120,113,108,0.6)]">
                               No other meetings today
                             </motion.p>
                           ) : null}
                         </>
                       ) : (
-                        <motion.p variants={selectedMeetingItemVariants} className="font-syne text-[11px] text-[#bbbbbb]">
+                        <motion.p variants={selectedMeetingItemVariants} className="font-sans text-[11px] text-[rgba(120,113,108,0.6)]">
                           No meetings today
                         </motion.p>
                       )}
@@ -662,8 +662,8 @@ export function ProjectDashboardPage() {
 
           <div className="solid-card p-6">
             <div className="flex items-center">
-              <p className="font-bebas text-[11px] tracking-[0.16em] text-[#999999]">RECENT CHANGES</p>
-              <button type="button" onClick={() => navigate(`/projects/${id}/requests`)} className="ml-auto font-syne text-[11px] text-[#00b4a0]">
+              <p className="font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">RECENT CHANGES</p>
+              <button type="button" onClick={() => navigate(`/projects/${id}/requests`)} className="ml-auto font-sans text-[11px] text-[#B8543D]">
                 <span className="inline-flex items-center gap-1">
                   VIEW ALL
                   <ArrowRightIcon className="h-[14px] w-[14px]" />
@@ -679,15 +679,15 @@ export function ProjectDashboardPage() {
                   <motion.div
                     key={change.id}
                     variants={listItemVariants}
-                    className={index === project.recentChanges.length - 1 ? "py-3" : "border-b border-[#f5f5f2] py-3"}
+                    className={index === project.recentChanges.length - 1 ? "py-3" : "border-b border-[#FAF8F5] py-3"}
                   >
                     <div className="flex items-start gap-3">
                       <span className="mt-0.5 h-10 w-[3px] rounded-full" style={{ backgroundColor: tone.bar }} />
                       <div className="min-w-0 flex-1">
-                        <p className="truncate font-syne text-[13px] font-semibold text-[#0a0a0a]">{change.title}</p>
-                        <p className="mt-1 font-mono text-[11px] text-[#888888]">{change.timeAgo}</p>
+                        <p className="truncate font-sans text-[13px] font-medium text-[#1A1612]">{change.title}</p>
+                        <p className="mt-1 font-mono text-[11px] text-[#78716C]">{change.timeAgo}</p>
                       </div>
-                      <span className={`rounded-full px-2 py-[3px] font-bebas text-[10px] tracking-[0.12em] ${tone.badgeClassName}`}>
+                      <span className={`rounded-full px-2 py-[3px] font-sans text-[10px] tracking-[0.12em] ${tone.badgeClassName}`}>
                         {change.status.toUpperCase()}
                       </span>
                     </div>
@@ -701,9 +701,9 @@ export function ProjectDashboardPage() {
         <motion.section variants={sectionVariants} className="mt-5">
           <div className="solid-card p-7">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-              <p className="font-bebas text-[11px] tracking-[0.16em] text-[#999999]">PROJECT SUBSCRIPTIONS</p>
+              <p className="font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">PROJECT SUBSCRIPTIONS</p>
               <div className="lg:ml-auto">
-                <span className="inline-flex rounded-full border border-[#e8e8e4] bg-[#f5f5f2] px-3.5 py-1.5 font-mono text-[13px] font-semibold text-[#0a0a0a]">
+                <span className="inline-flex rounded-full border border-[rgba(26,22,18,0.08)] bg-[#FAF8F5] px-3.5 py-1.5 font-mono text-[13px] font-medium text-[#1A1612]">
                   {formatCurrency(monthlySubscriptionTotal)}/mo
                 </span>
               </div>
@@ -721,24 +721,24 @@ export function ProjectDashboardPage() {
                     key={subscription.id}
                     variants={subscriptionCardVariants}
                     whileHover={{ y: -2 }}
-                    className="rounded-2xl border border-[#e8e8e4] bg-[#fafaf8] px-5 py-4 transition-colors hover:border-[#00b4a0] hover:bg-white"
+                    className="rounded-2xl border border-[rgba(26,22,18,0.08)] bg-[#FAF8F5] px-5 py-4 transition-colors hover:border-[#B8543D] hover:bg-white"
                   >
                     <div className="flex items-center gap-3">
                       <SubscriptionLogo name={subscription.name} />
 
-                      <p className="min-w-0 flex-1 truncate font-syne text-[13px] font-semibold text-[#0a0a0a]">{subscription.name}</p>
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#00b4a0]" />
+                      <p className="min-w-0 flex-1 truncate font-sans text-[13px] font-medium text-[#1A1612]">{subscription.name}</p>
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#B8543D]" />
                     </div>
 
                     <div className="mt-3 flex items-end gap-2">
-                      <span className="font-bebas text-[10px] tracking-[0.12em] text-[#999999]">{subscription.category}</span>
+                      <span className="font-sans text-[10px] tracking-[0.12em] text-[rgba(120,113,108,0.6)]">{subscription.category}</span>
                       <div className="ml-auto flex items-end gap-1">
                         {subscription.cost === 0 ? (
-                          <span className="font-bebas text-[14px] leading-none text-[#888888]">USAGE</span>
+                          <span className="font-sans text-[14px] leading-none text-[#78716C]">USAGE</span>
                         ) : (
-                          <span className="font-bebas text-[20px] leading-none text-[#0a0a0a]">{formatCurrency(subscription.cost)}</span>
+                          <span className="font-sans text-[20px] leading-none text-[#1A1612]">{formatCurrency(subscription.cost)}</span>
                         )}
-                        <span className="font-syne text-[10px] text-[#888888]">{subscription.billing === "monthly" ? "/mo" : "/txn"}</span>
+                        <span className="font-sans text-[10px] text-[#78716C]">{subscription.billing === "monthly" ? "/mo" : "/txn"}</span>
                       </div>
                     </div>
                   </motion.div>
@@ -749,7 +749,7 @@ export function ProjectDashboardPage() {
             <button
               type="button"
               onClick={() => setShowSubscriptionModal(true)}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-[1.5px] border-dashed border-[#d0d0cc] px-5 py-3.5 font-syne text-[13px] text-[#888888] transition-colors hover:border-[#00b4a0] hover:bg-[rgba(0,180,160,0.04)] hover:text-[#00b4a0]"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-[1.5px] border-dashed border-[rgba(26,22,18,0.20)] px-5 py-3.5 font-sans text-[13px] text-[#78716C] transition-colors hover:border-[#B8543D] hover:bg-[rgba(184,84,61,0.04)] hover:text-[#B8543D]"
             >
               <PlusIcon className="h-4 w-4" />
               <span>ADD SUBSCRIPTION</span>
@@ -761,7 +761,7 @@ export function ProjectDashboardPage() {
           <motion.div initial="hidden" animate="visible" variants={quickLaunchVariants} className="grid gap-4 xl:grid-cols-4">
             <QuickLaunchCard
               icon={<SparklesIcon className="h-6 w-6" />}
-              accent="#00b4a0"
+              accent="#B8543D"
               title="BRAIN"
               subtitle="Neural knowledge map"
               onClick={() => navigate(`/projects/${id}/brain`)}
@@ -775,14 +775,14 @@ export function ProjectDashboardPage() {
             />
             <QuickLaunchCard
               icon={<BookOpenIcon className="h-6 w-6" />}
-              accent="#f59340"
+              accent="#B8543D"
               title="LIVE DOC"
               subtitle="Living PRD/SRS"
               onClick={() => navigate(`/projects/${id}/live-doc`)}
             />
             <QuickLaunchCard
               icon={<MessageSquareIcon className="h-6 w-6" />}
-              accent="#e05555"
+              accent="#9E3B2E"
               title="REQUESTS"
               subtitle={`${requestCount} PENDING`}
               onClick={() => navigate(`/projects/${id}/requests`)}
@@ -806,46 +806,46 @@ export function ProjectDashboardPage() {
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="w-full max-w-[420px] rounded-[24px] bg-white p-8 shadow-[0_24px_80px_rgba(0,0,0,0.18)]"
             >
-              <p className="font-bebas text-[20px] tracking-[0.06em] text-[#0a0a0a]">ADD SUBSCRIPTION</p>
+              <p className="font-sans text-[20px] tracking-[0.06em] text-[#1A1612]">ADD SUBSCRIPTION</p>
 
               <div className="mt-5 space-y-4">
                 <label className="block">
-                  <span className="mb-1.5 block font-bebas text-[10px] tracking-[0.16em] text-[#999999]">NAME</span>
+                  <span className="mb-1.5 block font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">NAME</span>
                   <input
                     value={subscriptionName}
                     onChange={(event) => setSubscriptionName(event.target.value)}
-                    className="w-full rounded-xl border border-[#e5e5e0] px-3.5 py-2.5 font-syne text-[13px] text-[#333333] outline-none transition-colors focus:border-[#00b4a0]"
+                    className="w-full rounded-xl border border-[rgba(26,22,18,0.08)] px-3.5 py-2.5 font-sans text-[13px] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
                   />
                 </label>
 
                 <label className="block">
-                  <span className="mb-1.5 block font-bebas text-[10px] tracking-[0.16em] text-[#999999]">CATEGORY</span>
+                  <span className="mb-1.5 block font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">CATEGORY</span>
                   <input
                     value={subscriptionCategory}
                     onChange={(event) => setSubscriptionCategory(event.target.value)}
-                    className="w-full rounded-xl border border-[#e5e5e0] px-3.5 py-2.5 font-syne text-[13px] text-[#333333] outline-none transition-colors focus:border-[#00b4a0]"
+                    className="w-full rounded-xl border border-[rgba(26,22,18,0.08)] px-3.5 py-2.5 font-sans text-[13px] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
                   />
                 </label>
 
                 <label className="block">
-                  <span className="mb-1.5 block font-bebas text-[10px] tracking-[0.16em] text-[#999999]">COST / MO</span>
+                  <span className="mb-1.5 block font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">COST / MO</span>
                   <input
                     value={subscriptionCost}
                     onChange={(event) => setSubscriptionCost(event.target.value)}
                     inputMode="decimal"
-                    className="w-full rounded-xl border border-[#e5e5e0] px-3.5 py-2.5 font-syne text-[13px] text-[#333333] outline-none transition-colors focus:border-[#00b4a0]"
+                    className="w-full rounded-xl border border-[rgba(26,22,18,0.08)] px-3.5 py-2.5 font-sans text-[13px] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
                   />
                 </label>
               </div>
 
               <div className="mt-6 flex justify-end gap-3">
-                <button type="button" onClick={closeModal} className="px-4 py-2 font-syne text-[13px] text-[#888888]">
+                <button type="button" onClick={closeModal} className="px-4 py-2 font-sans text-[13px] text-[#78716C]">
                   CANCEL
                 </button>
                 <button
                   type="button"
                   onClick={handleAddSubscription}
-                  className="rounded-xl bg-[#0a0a0a] px-5 py-2.5 font-bebas text-[13px] tracking-[0.08em] text-white transition-colors hover:bg-[#00b4a0]"
+                  className="rounded-xl bg-[#1A1612] px-5 py-2.5 font-sans text-[13px] tracking-[0.08em] text-white transition-colors hover:bg-[#B8543D]"
                 >
                   ADD
                 </button>

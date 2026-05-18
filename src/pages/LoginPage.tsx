@@ -73,12 +73,12 @@ export function LoginPage() {
         className="solid-card w-full max-w-[480px] p-12"
       >
         <div className="text-center">
-          <h1 className="font-bebas text-[56px] leading-none text-[#0a0a0a]">ORCHESTRA</h1>
-          <p className="mt-2 font-syne text-[14px] text-[#888888]">Your product brain.</p>
+          <h1 className="font-sans text-[56px] leading-none text-[#1A1612]">ORCHESTRA</h1>
+          <p className="mt-2 font-sans text-[14px] text-[#78716C]">Your product brain.</p>
         </div>
 
         <div className="mt-12">
-          <p className="mb-4 font-bebas text-[11px] tracking-[3px] text-[#999999]">CONTINUE AS</p>
+          <p className="mb-4 font-sans text-[11px] tracking-[3px] text-[rgba(120,113,108,0.6)]">CONTINUE AS</p>
 
           <motion.div initial="hidden" animate="visible" variants={listVariants} className="space-y-2.5">
             {roleOptions.map((role) => (
@@ -89,11 +89,11 @@ export function LoginPage() {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleRoleSelect(role.key)}
-                className="group flex h-[56px] w-full items-center justify-between rounded-2xl border border-[#e5e5e0] bg-white px-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-colors duration-200 hover:border-teal"
+                className="group flex h-[56px] w-full items-center justify-between rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white px-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-colors duration-200 hover:border-teal"
               >
                 <span className="flex w-8 items-center justify-start text-teal">{iconByRole[role.icon]}</span>
-                <span className="font-bebas text-[18px] tracking-[0.06em] text-[#0a0a0a]">{role.label}</span>
-                <span className="flex w-8 justify-end text-[#cccccc] transition-colors duration-200 group-hover:text-teal">
+                <span className="font-sans text-[18px] tracking-[0.06em] text-[#1A1612]">{role.label}</span>
+                <span className="flex w-8 justify-end text-[rgba(120,113,108,0.6)] transition-colors duration-200 group-hover:text-teal">
                   <ArrowRightIcon className="h-[18px] w-[18px]" />
                 </span>
               </motion.button>
