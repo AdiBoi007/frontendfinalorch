@@ -21,9 +21,39 @@ import type {
 } from "./types";
 
 export const mockProjects: ProjectCardItem[] = [
-  { id: "1", name: "BloomFast MVP", progress: 34, health: "HEALTHY", color: "rgba(45,74,62,0.10)" },
-  { id: "2", name: "Elara Games", progress: 38, health: "AT RISK", color: "rgba(120,113,108,0.10)" },
-  { id: "3", name: "API Gateway", progress: 79, health: "Critical", color: "rgba(194,136,64,0.12)" }
+  {
+    id: "1",
+    name: "BloomFast MVP",
+    clientName: "BloomFast",
+    description: "On-demand flower delivery marketplace with buyer ordering, florist dashboard, and driver assignment.",
+    deadline: "Jun 2026",
+    sprint: "2 of 8",
+    progress: 34,
+    health: "HEALTHY",
+    color: "rgba(45,74,62,0.10)"
+  },
+  {
+    id: "2",
+    name: "Elara Games",
+    clientName: "Elara Studios",
+    description: "Mobile-first game platform with live events, player progression loops, and publisher integrations.",
+    deadline: "Aug 2026",
+    sprint: "4 of 6",
+    progress: 38,
+    health: "AT RISK",
+    color: "rgba(120,113,108,0.10)"
+  },
+  {
+    id: "3",
+    name: "API Gateway",
+    clientName: "Internal",
+    description: "Unified API gateway with JWT auth, rate limiting, webhook retries, and enterprise integrations.",
+    deadline: "May 2026",
+    sprint: "6 of 8",
+    progress: 79,
+    health: "Critical",
+    color: "rgba(194,136,64,0.12)"
+  }
 ];
 
 export const mockProjectDetail: ProjectDetail = {

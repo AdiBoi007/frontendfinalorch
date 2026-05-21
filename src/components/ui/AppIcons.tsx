@@ -17,6 +17,7 @@ import {
   TbFile,
   TbFileDescription,
   TbFileText,
+  TbFolders,
   TbGitBranch,
   TbGitPullRequest,
   TbGripHorizontal,
@@ -62,6 +63,7 @@ export const SparklesIcon = createIcon(TbBrain);
 export const SparklesNodeIcon = createIcon(TbSparkles);
 export const FileTextIcon = createIcon(TbFileText);
 export const FileDescriptionIcon = createIcon(TbFileDescription);
+export const FoldersIcon = createIcon(TbFolders);
 export const BookOpenIcon = createIcon(TbFileDescription);
 export const BooksIcon = createIcon(TbBooks);
 export const FileIcon = createIcon(TbFile);

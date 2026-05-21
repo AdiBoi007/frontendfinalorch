@@ -33,6 +33,10 @@ export interface CalendarDayData {
 export interface ProjectCardItem {
   id: string;
   name: string;
+  clientName: string;
+  description: string;
+  deadline: string;
+  sprint: string;
   progress: number;
   health: "HEALTHY" | "AT RISK" | "Critical";
   color: string;

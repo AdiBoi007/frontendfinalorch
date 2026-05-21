@@ -7,6 +7,7 @@ import {
   ArrowLeftIcon,
   BooksIcon,
   FileDescriptionIcon,
+  FoldersIcon,
   GitBranchIcon,
   Grid2x2Icon,
   LayoutDashboardIcon,
@@ -75,13 +76,13 @@ function NavItemButton({ item, expanded, onClick }: { item: Extract<NavItem, { k
       onClick={onClick}
       className={[
         "relative flex h-11 w-full items-center gap-[14px] px-[14px] text-left transition-colors",
-        item.active ? "bg-[rgba(184,84,61,0.08)]" : "hover:bg-[#FAF8F5]"
+        item.active ? "bg-[rgba(184,84,61,0.18)]" : "hover:bg-[rgba(255,255,255,0.06)]"
       ].join(" ")}
     >
       {item.active ? <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-[#B8543D]" /> : null}
 
-      <span className={item.active ? "text-[#B8543D]" : "text-[#78716C]"}>{item.icon}</span>
-      <motion.span animate={labelAnimation(expanded)} className="whitespace-nowrap font-sans text-[13px] text-[#1A1612]">
+      <span className={item.active ? "text-[#E8A090]" : "text-[rgba(250,248,245,0.45)]"}>{item.icon}</span>
+      <motion.span animate={labelAnimation(expanded)} className="whitespace-nowrap font-sans text-[13px] text-[#FAF8F5]">
         {item.label}
       </motion.span>
     </button>
@@ -110,39 +111,11 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
       active: pathname === "/dashboard"
     },
     {
-      key: "brain",
-      label: "BRAIN",
-      icon: <SparklesIcon />,
-      route: `/projects/${currentProjectId}/brain`,
-      active: /^\/projects\/[^/]+\/brain$/.test(pathname)
-    },
-    {
-      key: "flow",
-      label: "Flow",
-      icon: <GitBranchIcon />,
-      route: `/projects/${currentProjectId}/flow`,
-      active: /^\/projects\/[^/]+\/flow$/.test(pathname)
-    },
-    {
-      key: "memory",
-      label: "MEMORY",
-      icon: <BooksIcon />,
-      route: `/projects/${currentProjectId}/memory`,
-      active: /^\/projects\/[^/]+\/(?:memory|docs(?:\/.*)?)$/.test(pathname)
-    },
-    {
-      key: "live-doc",
-      label: "LIVE DOC",
-      icon: <FileDescriptionIcon />,
-      route: `/projects/${currentProjectId}/live-doc`,
-      active: /^\/projects\/[^/]+\/live-doc$/.test(pathname)
-    },
-    {
-      key: "requests",
-      label: "REQUESTS",
-      icon: <MessageSquareIcon />,
-      route: `/projects/${currentProjectId}/requests`,
-      active: /^\/projects\/[^/]+\/requests$/.test(pathname)
+      key: "projects",
+      label: "PROJECTS",
+      icon: <FoldersIcon />,
+      route: "/projects",
+      active: pathname === "/projects"
     },
     {
       key: "settings",
@@ -158,7 +131,7 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
       key: "back",
       label: "BACK",
       icon: <ArrowLeftIcon />,
-      route: "/dashboard",
+      route: "/projects",
       active: false
     },
     { key: "project-divider", kind: "divider" },
@@ -215,14 +188,14 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
       transition={navTransition}
       onHoverStart={() => onExpandedChange(true)}
       onHoverEnd={() => onExpandedChange(false)}
-      className="fixed left-0 top-0 z-50 flex h-screen flex-col overflow-hidden border-r border-[rgba(26,22,18,0.08)] bg-white"
+      className="fixed left-0 top-0 z-50 flex h-screen flex-col overflow-hidden border-r border-[rgba(255,255,255,0.08)] bg-[#1A1612]"
     >
       <div className="flex h-16 items-center px-[14px]">
         <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#B8543D]">
           <span className="font-sans text-[16px] leading-none text-white">O</span>
         </div>
 
-        <motion.span animate={labelAnimation(expanded)} className="ml-[10px] whitespace-nowrap font-sans text-[15px] text-[#1A1612]">
+        <motion.span animate={labelAnimation(expanded)} className="ml-[10px] whitespace-nowrap font-sans text-[15px] text-[#FAF8F5]">
           ORCHESTRA
         </motion.span>
       </div>
@@ -230,7 +203,7 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
       <div className="flex-1 pt-2">
         {items.map((item) => {
           if (item.kind === "divider") {
-            return <div key={item.key} className="mx-[22px] my-2 h-px bg-[rgba(26,22,18,0.08)]" />;
+            return <div key={item.key} className="mx-[22px] my-2 h-px bg-[rgba(255,255,255,0.1)]" />;
           }
 
           return <NavItemButton key={item.key} item={item} expanded={expanded} onClick={() => navigate(item.route)} />;
@@ -250,7 +223,7 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -4 }}
                 transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                className="ml-[10px] whitespace-nowrap font-sans text-[11px] text-[#78716C]"
+                className="ml-[10px] whitespace-nowrap font-sans text-[11px] text-[rgba(250,248,245,0.5)]"
               >
                 {viewer.label}
               </motion.span>

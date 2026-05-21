@@ -1,6 +1,5 @@
 import { Navigate, Outlet, Route, Routes, useParams } from "react-router-dom";
 import { AppShell } from "./components/shell/AppShell";
-import { SocratesPanel } from "./components/shell/SocratesPanel";
 import { LoginPage } from "./pages/LoginPage";
 import { LiveDocPage } from "./pages/LiveDocPage";
 import { DashboardPage } from "./pages/DashboardPage";
@@ -10,6 +9,7 @@ import { ProjectMemoryPage } from "./pages/ProjectDocsPage";
 import { ProjectDashboardPage } from "./pages/ProjectDashboardPage";
 import { ProjectFlowchartPage } from "./pages/ProjectFlowchartPage";
 import { ProjectRequestsPage } from "./pages/ProjectRequestsPage";
+import { ProjectsPage } from "./pages/ProjectsPage";
 import { SettingsPage } from "./pages/SettingsPage";
 
 function hasRole() {
@@ -28,17 +28,6 @@ function ProtectedRoute() {
   return <Outlet />;
 }
 
-function DashboardWithSocratesRoute() {
-  return (
-    <div className="flex h-screen overflow-hidden bg-bg">
-      <SocratesPanel />
-      <main className="min-w-0 flex-1 overflow-hidden bg-bg">
-        <DashboardPage />
-      </main>
-    </div>
-  );
-}
-
 function ProjectMemoryRedirect() {
   const { id = "1" } = useParams();
 
@@ -50,8 +39,15 @@ export default function App() {
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<DashboardWithSocratesRoute />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/dashboard" element={<AppShell />}>
+          <Route index element={<DashboardPage />} />
+        </Route>
+        <Route path="/projects" element={<AppShell />}>
+          <Route index element={<ProjectsPage />} />
+        </Route>
+        <Route path="/settings" element={<AppShell />}>
+          <Route index element={<SettingsPage />} />
+        </Route>
         <Route path="/projects/:id" element={<AppShell />}>
           <Route index element={<ProjectDashboardPage />} />
           <Route path="brain" element={<ProjectBrainPage />} />
