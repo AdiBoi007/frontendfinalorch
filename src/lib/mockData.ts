@@ -1241,34 +1241,34 @@ export const mockSocratesMessages: ChatMessage[] = [];
 // connected: false = not yet authorised; lastSyncedAt only present when connected: true.
 export const mockIntegrationStatuses: Record<string, IntegrationStatus[]> = {
   "1": [
-    { id: "i-slack",    name: "Slack",           category: "comms",          connected: false },
-    { id: "i-gmail",    name: "Gmail",            category: "comms",          connected: false },
-    { id: "i-whatsapp", name: "WhatsApp",         category: "comms",          connected: false },
-    { id: "i-gcal",     name: "Google Calendar",  category: "calendar",       connected: false },
-    { id: "i-stripe",   name: "Stripe",           category: "payments",       connected: false },
-    { id: "i-aws",      name: "AWS (EC2 + RDS)",  category: "infrastructure", connected: false },
-    { id: "i-supabase", name: "Supabase Pro",     category: "database",       connected: false },
-    { id: "i-firebase", name: "Firebase",         category: "notifications",  connected: false },
-    { id: "i-vercel",   name: "Vercel Pro",       category: "hosting",        connected: false },
-    { id: "i-sentry",   name: "Sentry",           category: "monitoring",     connected: false }
+    { id: "i-slack",    name: "Slack",           category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T10:00:00Z" },
+    { id: "i-gmail",    name: "Gmail",            category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T09:30:00Z" },
+    { id: "i-whatsapp", name: "WhatsApp",         category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-14T18:00:00Z" },
+    { id: "i-gcal",     name: "Google Calendar",  category: "calendar",       connected: false, accountConnected: false },
+    { id: "i-stripe",   name: "Stripe",           category: "payments",       connected: false, accountConnected: false },
+    { id: "i-aws",      name: "AWS (EC2 + RDS)",  category: "infrastructure", connected: false, accountConnected: false },
+    { id: "i-supabase", name: "Supabase Pro",     category: "database",       connected: false, accountConnected: false },
+    { id: "i-firebase", name: "Firebase",         category: "notifications",  connected: false, accountConnected: false },
+    { id: "i-vercel",   name: "Vercel Pro",       category: "hosting",        connected: false, accountConnected: false },
+    { id: "i-sentry",   name: "Sentry",           category: "monitoring",     connected: false, accountConnected: false }
   ],
   "2": [
-    { id: "i-slack",    name: "Slack",           category: "comms",         connected: false },
-    { id: "i-gmail",    name: "Gmail",            category: "comms",         connected: false },
-    { id: "i-whatsapp", name: "WhatsApp",         category: "comms",         connected: false },
-    { id: "i-gcal",     name: "Google Calendar",  category: "calendar",      connected: false },
-    { id: "i-stripe",   name: "Stripe",           category: "payments",      connected: false },
-    { id: "i-firebase", name: "Firebase",         category: "notifications", connected: false },
-    { id: "i-vercel",   name: "Vercel Pro",       category: "hosting",       connected: false },
-    { id: "i-sentry",   name: "Sentry",           category: "monitoring",    connected: false }
+    { id: "i-slack",    name: "Slack",           category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T10:00:00Z" },
+    { id: "i-gmail",    name: "Gmail",            category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T09:30:00Z" },
+    { id: "i-whatsapp", name: "WhatsApp",         category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-14T18:00:00Z" },
+    { id: "i-gcal",     name: "Google Calendar",  category: "calendar",       connected: false, accountConnected: false },
+    { id: "i-stripe",   name: "Stripe",           category: "payments",       connected: false, accountConnected: false },
+    { id: "i-firebase", name: "Firebase",         category: "notifications",  connected: false, accountConnected: false },
+    { id: "i-vercel",   name: "Vercel Pro",       category: "hosting",        connected: false, accountConnected: false },
+    { id: "i-sentry",   name: "Sentry",           category: "monitoring",     connected: false, accountConnected: false }
   ],
   "3": [
-    { id: "i-slack",    name: "Slack",           category: "comms",          connected: false },
-    { id: "i-gmail",    name: "Gmail",            category: "comms",          connected: false },
-    { id: "i-whatsapp", name: "WhatsApp",         category: "comms",          connected: false },
-    { id: "i-gcal",     name: "Google Calendar",  category: "calendar",       connected: false },
-    { id: "i-aws",      name: "AWS (EC2 + RDS)",  category: "infrastructure", connected: false },
-    { id: "i-supabase", name: "Supabase Pro",     category: "database",       connected: false },
-    { id: "i-sentry",   name: "Sentry",           category: "monitoring",     connected: false }
+    { id: "i-slack",    name: "Slack",           category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T10:00:00Z" },
+    { id: "i-gmail",    name: "Gmail",            category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T09:30:00Z" },
+    { id: "i-whatsapp", name: "WhatsApp",         category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-14T18:00:00Z" },
+    { id: "i-gcal",     name: "Google Calendar",  category: "calendar",       connected: false, accountConnected: false },
+    { id: "i-aws",      name: "AWS (EC2 + RDS)",  category: "infrastructure", connected: false, accountConnected: false },
+    { id: "i-supabase", name: "Supabase Pro",     category: "database",       connected: false, accountConnected: false },
+    { id: "i-sentry",   name: "Sentry",           category: "monitoring",     connected: false, accountConnected: false }
   ]
 };

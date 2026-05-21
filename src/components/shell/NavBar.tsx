@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,10 +15,7 @@ import {
   SparklesIcon
 } from "../ui/AppIcons";
 
-type NavBarProps = {
-  expanded: boolean;
-  onExpandedChange: (expanded: boolean) => void;
-};
+export const NAV_BAR_WIDTH = 148;
 
 type NavItem =
   | {
@@ -34,12 +30,6 @@ type NavItem =
       key: string;
       kind: "divider";
     };
-
-const navTransition = {
-  type: "spring",
-  stiffness: 300,
-  damping: 30
-} as const;
 
 const viewerByRole = {
   manager: { initials: "SC", label: "Manager", seed: "Sarah Chen" },
@@ -60,36 +50,26 @@ function getCurrentRole() {
   return "manager";
 }
 
-function labelAnimation(expanded: boolean) {
-  return {
-    opacity: expanded ? 1 : 0,
-    x: expanded ? 0 : -4,
-    transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const }
-  };
-}
-
-function NavItemButton({ item, expanded, onClick }: { item: Extract<NavItem, { kind?: "item" }>; expanded: boolean; onClick: () => void }) {
+function NavItemButton({ item, onClick }: { item: Extract<NavItem, { kind?: "item" }>; onClick: () => void }) {
   return (
     <button
       type="button"
       title={item.label}
       onClick={onClick}
       className={[
-        "relative flex h-11 w-full items-center gap-[14px] px-[14px] text-left transition-colors",
+        "relative flex h-9 w-full items-center gap-2 px-3 text-left transition-colors",
         item.active ? "bg-[rgba(184,84,61,0.18)]" : "hover:bg-[rgba(255,255,255,0.06)]"
       ].join(" ")}
     >
-      {item.active ? <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-[#B8543D]" /> : null}
+      {item.active ? <span className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-[#B8543D]" /> : null}
 
       <span className={item.active ? "text-[#E8A090]" : "text-[rgba(250,248,245,0.45)]"}>{item.icon}</span>
-      <motion.span animate={labelAnimation(expanded)} className="whitespace-nowrap font-sans text-[13px] text-[#FAF8F5]">
-        {item.label}
-      </motion.span>
+      <span className="truncate font-sans text-[12px] text-[#FAF8F5]">{item.label}</span>
     </button>
   );
 }
 
-export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
+export function NavBar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const role = getCurrentRole();
@@ -171,66 +151,48 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
       active: new RegExp(`^/projects/${currentProjectId}/live-doc$`).test(pathname)
     },
     {
-      key: "requests",
-      label: "REQUESTS",
+      key: "connectors",
+      label: "CONNECTORS",
       icon: <MessageSquareIcon />,
-      route: `/projects/${currentProjectId}/requests`,
-      active: new RegExp(`^/projects/${currentProjectId}/requests$`).test(pathname)
+      route: `/projects/${currentProjectId}/connectors`,
+      active: new RegExp(`^/projects/${currentProjectId}/connectors$`).test(pathname)
     }
   ];
 
   const items = isProjectRoute ? projectItems : generalItems;
 
   return (
-    <motion.aside
-      initial={false}
-      animate={{ width: expanded ? 200 : 56 }}
-      transition={navTransition}
-      onHoverStart={() => onExpandedChange(true)}
-      onHoverEnd={() => onExpandedChange(false)}
+    <aside
+      style={{ width: NAV_BAR_WIDTH }}
       className="fixed left-0 top-0 z-50 flex h-screen flex-col overflow-hidden border-r border-[rgba(255,255,255,0.08)] bg-[#1A1612]"
     >
-      <div className="flex h-16 items-center px-[14px]">
-        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#B8543D]">
-          <span className="font-sans text-[16px] leading-none text-white">O</span>
+      <div className="flex h-12 items-center gap-2 px-3">
+        <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#B8543D]">
+          <span className="font-sans text-[13px] leading-none text-white">O</span>
         </div>
 
-        <motion.span animate={labelAnimation(expanded)} className="ml-[10px] whitespace-nowrap font-sans text-[15px] text-[#FAF8F5]">
-          ORCHESTRA
-        </motion.span>
+        <span className="truncate font-sans text-[13px] text-[#FAF8F5]">ORCHESTRA</span>
       </div>
 
-      <div className="flex-1 pt-2">
+      <div className="flex-1 pt-1">
         {items.map((item) => {
           if (item.kind === "divider") {
-            return <div key={item.key} className="mx-[22px] my-2 h-px bg-[rgba(255,255,255,0.1)]" />;
+            return <div key={item.key} className="mx-3 my-1.5 h-px bg-[rgba(255,255,255,0.1)]" />;
           }
 
-          return <NavItemButton key={item.key} item={item} expanded={expanded} onClick={() => navigate(item.route)} />;
+          return <NavItemButton key={item.key} item={item} onClick={() => navigate(item.route)} />;
         })}
       </div>
 
-      <div className="mb-4 px-[14px]">
-        <div className="flex items-center">
+      <div className="mb-3 px-3">
+        <div className="flex min-w-0 items-center gap-2">
           <div className="flex-shrink-0">
-            <Avatar seed={viewer.seed} size={28} name={viewer.seed} role={viewer.label} />
+            <Avatar seed={viewer.seed} size={24} name={viewer.seed} role={viewer.label} />
           </div>
 
-          <AnimatePresence initial={false}>
-            {expanded ? (
-              <motion.span
-                initial={{ opacity: 0, x: -4 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -4 }}
-                transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                className="ml-[10px] whitespace-nowrap font-sans text-[11px] text-[rgba(250,248,245,0.5)]"
-              >
-                {viewer.label}
-              </motion.span>
-            ) : null}
-          </AnimatePresence>
+          <span className="truncate font-sans text-[11px] text-[rgba(250,248,245,0.5)]">{viewer.label}</span>
         </div>
       </div>
-    </motion.aside>
+    </aside>
   );
 }

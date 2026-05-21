@@ -272,5 +272,6 @@ export interface IntegrationStatus {
   name: string;
   category: IntegrationCategory;
   connected: boolean;
+  accountConnected?: boolean;
   lastSyncedAt?: string;
 }
