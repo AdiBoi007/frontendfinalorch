@@ -56,7 +56,7 @@ export default function Avatar({
         height={size}
         style={{
           borderRadius: "50%",
-          border: "2px solid white",
+          border: "none",
           boxShadow: "none",
           display: "block"
         }}

@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { ArrowLeftIcon, ArrowRightIcon } from "../ui/AppIcons";
-import type { CalendarDayData, DeadlineItem, MeetingItem } from "../../lib/types";
+import type { CalendarDayData, DeadlineItem } from "../../lib/types";
 
 type CalendarCardProps = {
   eventsByDate: Record<string, CalendarDayData>;
@@ -14,105 +14,23 @@ type CalendarCell = {
 };
 
 const dayHeaders = ["M", "T", "W", "T", "F", "S", "S"];
-const monthLabel = "APRIL 2026";
+const monthLabel = "April 2026";
 const defaultSelectedDate = "2026-04-21";
 
 const itemVariants = {
-  hidden: { opacity: 0, x: 8 },
+  hidden: { opacity: 0 },
   visible: (index: number) => ({
     opacity: 1,
-    x: 0,
     transition: {
-      duration: 0.25,
-      delay: index * 0.07,
+      duration: 0.2,
+      delay: index * 0.04,
       ease: [0.22, 1, 0.36, 1] as const
     }
   })
 };
 
-const ringCircumference = 169.6;
-
-function getDeadlineColor(status: DeadlineItem["status"]) {
-  if (status === "on-track") {
-    return "#B8543D";
-  }
-
-  if (status === "at-risk") {
-    return "#B8543D";
-  }
-
-  return "#9E3B2E";
-}
-
-function getTypePillClasses(type: MeetingItem["type"]) {
-  if (type === "standup") {
-    return "text-[#B8543D] border-[#B8543D]";
-  }
-
-  if (type === "review") {
-    return "text-[#B8543D] border-[#B8543D]";
-  }
-
-  if (type === "client") {
-    return "text-[#5A5450] border-[#5A5450]";
-  }
-
-  return "text-[#5A5450] border-[#5A5450]";
-}
-
-function getDeadlineValue(daysLeft: number) {
-  return Math.max(0, Math.min(((30 - daysLeft) / 30) * 100, 100));
-}
-
 function ScheduleColumnHeader({ label }: { label: string }) {
-  return (
-    <div className="mb-6">
-      <p className="font-sans text-[13px] tracking-[0.16em] text-[#1A1612]">{label}</p>
-      <span className="mt-2 block h-0.5 w-5 bg-[#B8543D]" />
-    </div>
-  );
-}
-
-function CircularRing({
-  value,
-  daysLeft,
-  status
-}: {
-  value: number;
-  daysLeft: number;
-  status: DeadlineItem["status"];
-}) {
-  const color = getDeadlineColor(status);
-  const strokeDashoffset = ringCircumference * (1 - value / 100);
-
-  return (
-    <div className="relative h-16 w-16">
-      <svg width="64" height="64" viewBox="0 0 64 64" className="block">
-        <circle cx="32" cy="32" r="27" fill="none" stroke="#FAF8F5" strokeWidth="5" />
-        <motion.circle
-          cx="32"
-          cy="32"
-          r="27"
-          fill="none"
-          stroke={color}
-          strokeWidth="5"
-          strokeLinecap="round"
-          strokeDasharray={ringCircumference}
-          initial={{ strokeDashoffset: ringCircumference }}
-          animate={{ strokeDashoffset }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          transform="rotate(-90 32 32)"
-        />
-      </svg>
-
-      <div className="absolute inset-0 flex flex-col items-center justify-center pt-[1px]">
-        <span className="font-sans text-[16px] leading-none" style={{ color }}>
-          {daysLeft}
-        </span>
-        <span className="mt-0.5 font-sans text-[9px] leading-none text-[rgba(120,113,108,0.6)]">D</span>
-      </div>
-    </div>
-  );
+  return <p className="section-label mb-6">{label}</p>;
 }
 
 function buildCalendarCells(): CalendarCell[] {
@@ -166,39 +84,32 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
   const displayedDeadlines = (selectedDeadlines.length > 0 ? selectedDeadlines : fallbackDeadlines).slice(0, 3);
 
   return (
-    <motion.section
-      whileHover={{
-        y: -3,
-        boxShadow: "none"
-      }}
-      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="solid-card p-8"
-    >
-      <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
+    <section className="border-t border-[rgba(26,22,18,0.06)] pt-10">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,200px)_minmax(0,1fr)]">
         <div className="min-w-0">
-          <div className="mb-5 flex items-center justify-between">
-            <button type="button" className="text-[#78716C]">
-              <ArrowLeftIcon className="h-4 w-4" />
+          <div className="mb-6 flex items-center justify-between">
+            <button type="button" className="text-[#78716C] transition-opacity hover:opacity-50" aria-label="Previous month">
+              <ArrowLeftIcon className="h-3.5 w-3.5" />
             </button>
-            <p className="font-sans text-[18px] tracking-[0.04em] text-[#1A1612]">{monthLabel}</p>
-            <button type="button" className="text-[#78716C]">
-              <ArrowRightIcon className="h-4 w-4" />
+            <p className="font-sans text-[13px] font-normal tracking-wide text-[#1A1612]">{monthLabel}</p>
+            <button type="button" className="text-[#78716C] transition-opacity hover:opacity-50" aria-label="Next month">
+              <ArrowRightIcon className="h-3.5 w-3.5" />
             </button>
           </div>
 
-          <div className="mb-2 grid grid-cols-7 gap-1">
+          <div className="mb-1 grid grid-cols-7">
             {dayHeaders.map((day, index) => (
-              <div key={`${day}-${index}`} className="text-center font-sans text-[11px] tracking-[0.12em] text-[rgba(120,113,108,0.6)]">
+              <div
+                key={`${day}-${index}`}
+                className="py-1 text-center font-sans text-[10px] text-[rgba(120,113,108,0.5)]"
+              >
                 {day}
               </div>
             ))}
           </div>
 
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7">
             {calendarCells.map((cell) => {
-              const dayData = eventsByDate[cell.dateKey];
-              const hasMeeting = (dayData?.meetings.length ?? 0) > 0;
-              const hasDeadline = (dayData?.deadlines.length ?? 0) > 0;
               const isToday = cell.dateKey === defaultSelectedDate;
               const isSelected = selectedDate === cell.dateKey;
 
@@ -208,40 +119,40 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
                   type="button"
                   onClick={() => setSelectedDate(cell.dateKey)}
                   className={[
-                    "relative flex h-[38px] items-center justify-center rounded-xl transition-colors",
-                    isSelected ? "bg-[#B8543D] text-white" : "",
-                    !isSelected && isToday ? "bg-[#1A1612] text-white" : "",
-                    !isSelected && !isToday ? "text-[#1A1612] hover:bg-[#FAF8F5]" : "",
-                    !cell.inMonth ? "text-[rgba(120,113,108,0.6)]" : ""
+                    "flex h-9 items-center justify-center font-sans text-[12px] transition-colors",
+                    isSelected ? "font-medium text-[#B8543D]" : "",
+                    !isSelected && isToday ? "font-medium text-[#1A1612]" : "",
+                    !isSelected && !isToday ? "text-[#1A1612] hover:text-[#78716C]" : "",
+                    !cell.inMonth ? "text-[rgba(120,113,108,0.35)]" : ""
                   ].join(" ")}
                 >
-                  <span className="font-sans text-[13px]">{cell.day}</span>
-                  {hasMeeting || hasDeadline ? (
-                    <span className="absolute bottom-[5px] flex items-center gap-1">
-                      {hasMeeting ? <span className="h-1 w-1 rounded-full bg-[#B8543D]" /> : null}
-                      {hasDeadline ? <span className="h-1 w-1 rounded-[1px] bg-[#B8543D]" /> : null}
+                  {isSelected ? (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full border border-[#B8543D]">
+                      {cell.day}
                     </span>
-                  ) : null}
+                  ) : (
+                    cell.day
+                  )}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)] lg:items-stretch">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
           <div className="min-w-0">
-            <ScheduleColumnHeader label="DEADLINES" />
+            <ScheduleColumnHeader label="Deadlines" />
 
             {displayedDeadlines.length === 0 ? (
-              <p className="font-sans text-[14px] text-[#78716C]">Nothing scheduled.</p>
+              <p className="font-sans text-[13px] text-[#78716C]">Nothing scheduled.</p>
             ) : (
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`${selectedDate}-deadlines-${displayedDeadlines.length}`}
-                  initial={{ opacity: 0, x: 8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
-                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
                 >
                   {displayedDeadlines.map((deadline, index) => (
                     <motion.div
@@ -250,20 +161,16 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
                       initial="hidden"
                       animate="visible"
                       variants={itemVariants}
-                      className="flex items-center gap-5 border-b border-[#FAF8F5] py-5 last:border-0"
+                      className="flex items-baseline justify-between gap-6 border-b border-[rgba(26,22,18,0.06)] py-5 last:border-0"
                     >
                       <div className="min-w-0 flex-1">
-                        <p className="mb-[3px] font-sans text-[11px] text-[#78716C]">{deadline.project}</p>
-                        <p className="font-sans text-[16px] font-medium text-[#1A1612]">{deadline.task}</p>
+                        <p className="font-sans text-[10px] text-[#78716C]">{deadline.project}</p>
+                        <p className="mt-1 font-sans text-[14px] font-normal text-[#1A1612]">{deadline.task}</p>
                       </div>
 
-                      <div className="flex-shrink-0">
-                        <CircularRing
-                          value={getDeadlineValue(deadline.daysLeft)}
-                          daysLeft={deadline.daysLeft}
-                          status={deadline.status}
-                        />
-                      </div>
+                      <span className="flex-shrink-0 font-mono text-[11px] tracking-wide text-[#78716C]">
+                        {deadline.daysLeft}d
+                      </span>
                     </motion.div>
                   ))}
                 </motion.div>
@@ -271,21 +178,19 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
             )}
           </div>
 
-          <div className="hidden w-px flex-shrink-0 self-stretch bg-white lg:block" />
-
-          <div className="min-w-0">
-            <ScheduleColumnHeader label="MEETINGS" />
+          <div className="min-w-0 lg:border-l lg:border-[rgba(26,22,18,0.06)] lg:pl-16">
+            <ScheduleColumnHeader label="Meetings" />
 
             {selectedEvents.length === 0 ? (
-              <p className="font-sans text-[14px] text-[#78716C]">Nothing scheduled.</p>
+              <p className="font-sans text-[13px] text-[#78716C]">Nothing scheduled.</p>
             ) : (
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`${selectedDate}-meetings-${selectedEvents.length}`}
-                  initial={{ opacity: 0, x: 8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
-                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
                 >
                   {selectedEvents.map((event, index) => (
                     <motion.div
@@ -294,19 +199,20 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
                       initial="hidden"
                       animate="visible"
                       variants={itemVariants}
-                      className="mb-4 border-b border-[#FAF8F5] pb-4 last:mb-0 last:border-b-0 last:pb-0"
+                      className="border-b border-[rgba(26,22,18,0.06)] py-5 last:border-0"
                     >
-                      <p className="mb-1.5 font-mono text-[14px] font-medium text-[#1A1612]">{event.time}</p>
-                      <p className="font-sans text-[16px] font-medium text-[#1A1612]">{event.title}</p>
-                      <p className="mt-1 font-sans text-[12px] text-[#78716C]">{event.project}</p>
-
-                      <div className="mt-2.5 flex flex-wrap gap-2">
-                        <span className="rounded-full border border-[rgba(26,22,18,0.08)] bg-[#FAF8F5] px-3 py-1.5 font-sans text-[11px] text-[#5A5450]">
-                          {event.duration}
-                        </span>
-                        <span className={`rounded-full border px-3 py-1.5 font-sans text-[11px] ${getTypePillClasses(event.type)}`}>
-                          {event.type}
-                        </span>
+                      <div className="flex items-baseline gap-4">
+                        <span className="w-16 flex-shrink-0 font-mono text-[11px] text-[#78716C]">{event.time}</span>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-sans text-[14px] font-normal text-[#1A1612]">{event.title}</p>
+                          <p className="mt-0.5 font-sans text-[11px] text-[#78716C]">
+                            {event.project}
+                            <span className="mx-2 text-[rgba(26,22,18,0.15)]">·</span>
+                            {event.duration}
+                            <span className="mx-2 text-[rgba(26,22,18,0.15)]">·</span>
+                            {event.type}
+                          </p>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
@@ -316,6 +222,6 @@ export function CalendarCard({ eventsByDate }: CalendarCardProps) {
           </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }

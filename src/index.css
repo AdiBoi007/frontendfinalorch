@@ -101,6 +101,26 @@ textarea::placeholder {
   box-shadow: none;
 }
 
+.minimal-card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.minimal-divider {
+  border-color: var(--border);
+}
+
+.section-label {
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: 0.2em;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
 .bg-white {
   background-color: var(--bg-1) !important;
 }

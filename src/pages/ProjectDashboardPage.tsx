@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Avatar from "../components/ui/Avatar";
 import { ArrowRightIcon, PlusIcon } from "../components/ui/AppIcons";
-import { Badge } from "../components/ui/Badge";
 import { BookOpenIcon, GitBranchIcon, MessageSquareIcon, SparklesIcon } from "../components/ui/AppIcons";
 import { getIntegrationStatuses, getLiveDoc, getProjectDetail, getProjectMembers } from "../lib/api";
 import { mockMeetings, mockRequests } from "../lib/mockData";
@@ -268,20 +267,6 @@ function formatRoleLabel(role: ProjectMember["role"]) {
   return roleBadgeStyles[role].label.charAt(0) + roleBadgeStyles[role].label.slice(1).toLowerCase();
 }
 
-function getStatusTone(status: ProjectDetail["recentChanges"][number]["status"]) {
-  if (status === "accepted") {
-    return {
-      bar: "#B8543D",
-      badgeClassName: "bg-[rgba(45,74,62,0.10)] text-[#B8543D]"
-    };
-  }
-
-  return {
-    bar: "#B8543D",
-    badgeClassName: "bg-[rgba(194,136,64,0.12)] text-[#B8543D]"
-  };
-}
-
 function getMeetingTypeColor(type: (typeof mockMeetings)[number]["type"]) {
   if (type === "standup") {
     return "#B8543D";
@@ -512,10 +497,6 @@ export function ProjectDashboardPage() {
       <motion.div initial="hidden" animate="visible" variants={pageVariants} className="h-full overflow-y-auto bg-bg px-10 pb-10 pl-8 pt-10">
         <motion.section variants={sectionVariants} className="mb-10">
           <div className="max-w-[640px]">
-            <div className="mb-2">
-              <Badge variant={project.health} />
-            </div>
-
             <h1 className="font-sans text-[52px] leading-none text-[#1A1612]">{project.name}</h1>
             <p className="mt-2 max-w-[480px] font-sans text-[14px] leading-6 text-[#78716C]">{project.description}</p>
 
@@ -692,28 +673,16 @@ export function ProjectDashboardPage() {
             </div>
 
             <motion.div initial="hidden" animate="visible" variants={listVariants} className="mt-2">
-              {project.recentChanges.map((change, index) => {
-                const tone = getStatusTone(change.status);
-
-                return (
-                  <motion.div
-                    key={change.id}
-                    variants={listItemVariants}
-                    className={index === project.recentChanges.length - 1 ? "py-3" : "border-b border-[#FAF8F5] py-3"}
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="mt-0.5 h-10 w-[3px] rounded-full" style={{ backgroundColor: tone.bar }} />
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate font-sans text-[13px] font-medium text-[#1A1612]">{change.title}</p>
-                        <p className="mt-1 font-mono text-[11px] text-[#78716C]">{change.timeAgo}</p>
-                      </div>
-                      <span className={`rounded-full px-2 py-[3px] font-sans text-[10px] tracking-[0.12em] ${tone.badgeClassName}`}>
-                        {change.status}
-                      </span>
-                    </div>
-                  </motion.div>
-                );
-              })}
+              {project.recentChanges.map((change, index) => (
+                <motion.div
+                  key={change.id}
+                  variants={listItemVariants}
+                  className={index === project.recentChanges.length - 1 ? "py-3" : "border-b border-[#FAF8F5] py-3"}
+                >
+                  <p className="truncate font-sans text-[13px] font-medium text-[#1A1612]">{change.title}</p>
+                  <p className="mt-1 font-mono text-[11px] text-[#78716C]">{change.timeAgo}</p>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
         </motion.section>

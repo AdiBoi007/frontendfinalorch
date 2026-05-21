@@ -4,9 +4,8 @@ import { TbBrandSlack, TbBrandWhatsapp, TbMail } from "react-icons/tb";
 import { CalendarCard } from "../components/dashboard/CalendarCard";
 import Avatar from "../components/ui/Avatar";
 import { PlusIcon } from "../components/ui/AppIcons";
-import { Badge } from "../components/ui/Badge";
 import { mockCalendarEvents, mockDeadlines, mockProjects, mockRequests } from "../lib/mockData";
-import type { DeadlineItem, RequestItem } from "../lib/types";
+import type { RequestItem } from "../lib/types";
 
 const pageVariants = {
   hidden: {},
@@ -27,12 +26,6 @@ const childVariants = {
       ease: [0.22, 1, 0.36, 1] as const
     }
   }
-};
-
-const deadlineStatusStyles: Record<DeadlineItem["status"], { dot: string; label: string; text: string }> = {
-  "on-track": { dot: "#2D4A3E", label: "On track", text: "text-[#2D4A3E]" },
-  "at-risk":  { dot: "#8C5D1E", label: "At risk",  text: "text-[#8C5D1E]" },
-  "critical": { dot: "#9E3B2E", label: "Critical", text: "text-[#9E3B2E]" }
 };
 
 const platformIcon: Record<RequestItem["platform"], React.ReactNode> = {
@@ -189,10 +182,7 @@ export function DashboardPage() {
               onClick={() => navigate(`/projects/${project.id}`)}
               className="group px-0 py-7 text-left transition-colors hover:bg-[rgba(26,22,18,0.02)] xl:px-8 xl:first:pl-0"
             >
-              <div className="flex items-baseline justify-between gap-4">
-                <p className="truncate font-sans text-[15px] font-normal text-[#1A1612]">{project.name}</p>
-                <Badge variant={project.health} />
-              </div>
+              <p className="truncate font-sans text-[15px] font-normal text-[#1A1612]">{project.name}</p>
 
               <div className="mt-5 h-px overflow-hidden bg-[rgba(26,22,18,0.06)]">
                 <div
@@ -212,22 +202,18 @@ export function DashboardPage() {
           <div>
             <p className="section-label mb-8">Upcoming deadlines</p>
             <div className="divide-y divide-[rgba(26,22,18,0.06)]">
-              {mockDeadlines.map((item) => {
-                const style = deadlineStatusStyles[item.status];
-                return (
-                  <div key={item.id} className="flex items-center gap-4 py-4">
-                    <span className="h-2 w-2 flex-shrink-0 rounded-full" style={{ backgroundColor: style.dot }} />
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-sans text-[13px] text-[#1A1612]">{item.task}</p>
-                      <p className="mt-0.5 font-mono text-[11px] text-[#78716C]">{item.project}</p>
-                    </div>
-                    <div className="flex-shrink-0 text-right">
-                      <p className="font-mono text-[12px] text-[#1A1612]">{item.dueDate}</p>
-                      <p className={`mt-0.5 font-mono text-[10px] ${style.text}`}>{item.daysLeft}d left</p>
-                    </div>
+              {mockDeadlines.map((item) => (
+                <div key={item.id} className="flex items-center gap-4 py-4">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-sans text-[13px] text-[#1A1612]">{item.task}</p>
+                    <p className="mt-0.5 font-mono text-[11px] text-[#78716C]">{item.project}</p>
                   </div>
-                );
-              })}
+                  <div className="flex-shrink-0 text-right">
+                    <p className="font-mono text-[12px] text-[#1A1612]">{item.dueDate}</p>
+                    <p className="mt-0.5 font-mono text-[10px] text-[#78716C]">{item.daysLeft}d left</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -246,18 +232,7 @@ export function DashboardPage() {
                     <p className="font-mono text-[11px] text-[#78716C]">{item.from}</p>
                     <p className="mt-0.5 line-clamp-1 font-sans text-[13px] text-[#1A1612]">{item.message}</p>
                   </div>
-                  <div className="flex flex-shrink-0 flex-col items-end gap-1.5">
-                    <span className="font-mono text-[10px] text-[#78716C]">{item.time}</span>
-                    <span
-                      className={`rounded-full px-2 py-0.5 font-mono text-[10px] tracking-[0.08em] ${
-                        item.status === "accepted"
-                          ? "bg-[rgba(45,74,62,0.10)] text-[#2D4A3E]"
-                          : "bg-[rgba(194,136,64,0.12)] text-[#8C5D1E]"
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                  </div>
+                  <span className="flex-shrink-0 font-mono text-[10px] text-[#78716C]">{item.time}</span>
                 </div>
               ))}
             </div>

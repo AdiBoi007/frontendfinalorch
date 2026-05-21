@@ -35,6 +35,10 @@ type CanvasSize = {
 const worldWidth = 1400;
 const worldHeight = 900;
 const nodeWidth = 200;
+const nodeHeight = 132;
+const layoutColumnGap = 100;
+const layoutRowGap = 48;
+const layoutPadding = 80;
 const edgeAnchorX = 100;
 const edgeAnchorY = 40;
 const detailPanelWidth = 360;
@@ -88,36 +92,6 @@ const typeStyles: Record<
   }
 };
 
-const statusStyles: Record<
-  FlowNode["status"],
-  {
-    dot: string;
-    pillBg: string;
-    pillText: string;
-  }
-> = {
-  critical: {
-    dot: "#9E3B2E",
-    pillBg: "rgba(158,59,46,0.10)",
-    pillText: "#9E3B2E"
-  },
-  "at-risk": {
-    dot: "#8C5D1E",
-    pillBg: "rgba(194,136,64,0.12)",
-    pillText: "#8C5D1E"
-  },
-  stable: {
-    dot: "#2D4A3E",
-    pillBg: "rgba(45,74,62,0.10)",
-    pillText: "#2D4A3E"
-  },
-  unresolved: {
-    dot: "#9E3B2E",
-    pillBg: "rgba(158,59,46,0.10)",
-    pillText: "#9E3B2E"
-  }
-};
-
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
@@ -135,12 +109,78 @@ function getTypeLabel(type: FlowNode["type"]) {
   return type.replace("-", " ");
 }
 
-function getStatusLabel(status: FlowNode["status"]) {
-  return status;
-}
+function computeFlowLayout(graph: FlowGraph): NodePositions {
+  const { nodes, edges } = graph;
+  const nodeIds = nodes.map((node) => node.id);
+  const inDegree = Object.fromEntries(nodeIds.map((id) => [id, 0]));
+  const outgoing = Object.fromEntries(nodeIds.map((id) => [id, [] as string[]]));
 
-function buildNodePositions(nodes: FlowNode[]): NodePositions {
-  return Object.fromEntries(nodes.map((node) => [node.id, { ...node.position }]));
+  edges.forEach((edge) => {
+    inDegree[edge.to] = (inDegree[edge.to] ?? 0) + 1;
+    outgoing[edge.from]?.push(edge.to);
+  });
+
+  const layerById: Record<string, number> = {};
+  const queue = nodeIds.filter((id) => (inDegree[id] ?? 0) === 0).sort();
+
+  if (queue.length === 0 && nodeIds.length > 0) {
+    queue.push(nodeIds[0]);
+  }
+
+  const visited = new Set<string>();
+
+  while (queue.length > 0) {
+    const id = queue.shift();
+    if (!id || visited.has(id)) {
+      continue;
+    }
+
+    visited.add(id);
+    const depth = layerById[id] ?? 0;
+
+    outgoing[id]?.forEach((childId) => {
+      layerById[childId] = Math.max(layerById[childId] ?? 0, depth + 1);
+      inDegree[childId] = (inDegree[childId] ?? 0) - 1;
+      if (inDegree[childId] === 0) {
+        queue.push(childId);
+      }
+    });
+  }
+
+  nodeIds.forEach((id) => {
+    if (!(id in layerById)) {
+      layerById[id] = 0;
+    }
+  });
+
+  const layers = new Map<number, string[]>();
+  nodeIds.forEach((id) => {
+    const layer = layerById[id];
+    const bucket = layers.get(layer) ?? [];
+    bucket.push(id);
+    layers.set(layer, bucket);
+  });
+
+  const sortedLayers = [...layers.keys()].sort((a, b) => a - b);
+  const maxNodesInLayer = Math.max(...sortedLayers.map((layer) => layers.get(layer)?.length ?? 0), 1);
+  const columnBlockHeight = maxNodesInLayer * nodeHeight + (maxNodesInLayer - 1) * layoutRowGap;
+  const positions: NodePositions = {};
+
+  sortedLayers.forEach((layer, layerIndex) => {
+    const layerNodes = (layers.get(layer) ?? []).sort();
+    const columnHeight = layerNodes.length * nodeHeight + (layerNodes.length - 1) * layoutRowGap;
+    const startY = layoutPadding + Math.max(0, (columnBlockHeight - columnHeight) / 2);
+    const columnX = layoutPadding + layerIndex * (nodeWidth + layoutColumnGap);
+
+    layerNodes.forEach((id, rowIndex) => {
+      positions[id] = {
+        x: columnX,
+        y: startY + rowIndex * (nodeHeight + layoutRowGap)
+      };
+    });
+  });
+
+  return positions;
 }
 
 function getFitViewport(canvasSize: CanvasSize) {
@@ -213,7 +253,7 @@ export function ProjectFlowchartPage() {
   const [pan, setPan] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [isPanning, setIsPanning] = useState(false);
-  const [dragLocked, setDragLocked] = useState(false);
+  const [dragLocked, setDragLocked] = useState(true);
 
   useEffect(() => {
     let isCancelled = false;
@@ -227,7 +267,7 @@ export function ProjectFlowchartPage() {
       const project = projects.find((item) => item.id === id) ?? projects[0];
       setProjectName(project?.name ?? "PROJECT");
       setGraph(flowGraph);
-      setNodePositions(buildNodePositions(flowGraph.nodes));
+      setNodePositions(computeFlowLayout(flowGraph));
       setSelectedNodeId(null);
       initializedViewportRef.current = false;
     };
@@ -384,6 +424,15 @@ export function ProjectFlowchartPage() {
     setZoom(viewport.zoom);
   };
 
+  const handleResetLayout = () => {
+    if (!graph) {
+      return;
+    }
+
+    setNodePositions(computeFlowLayout(graph));
+    handleFitView();
+  };
+
   return (
     <section className="relative h-full overflow-hidden bg-bg">
       <div className="absolute inset-x-0 top-0 z-20 flex h-[52px] items-center border-b border-[rgba(0,0,0,0.06)] bg-[rgba(248,248,245,0.9)] px-7">
@@ -496,7 +545,6 @@ export function ProjectFlowchartPage() {
             {graph.nodes.map((node, index) => {
               const position = nodePositions[node.id];
               const typeStyle = typeStyles[node.type];
-              const statusStyle = statusStyles[node.status];
 
               if (!position) {
                 return null;
@@ -540,44 +588,26 @@ export function ProjectFlowchartPage() {
                       cursor: dragLocked ? "pointer" : "grab"
                     }}
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] text-[#78716C]">{formatNodeId(node.id)}</span>
-                      {node.status === "critical" ? (
-                        <motion.span
-                          className="ml-auto h-2 w-2 rounded-full bg-[#9E3B2E]"
-                          animate={{ scale: [1, 1.18, 1], opacity: [1, 0.7, 1] }}
-                          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                      ) : (
-                        <span className="ml-auto h-2 w-2 rounded-full" style={{ background: statusStyle.dot }} />
-                      )}
-                    </div>
+                    <span className="font-mono text-[10px] text-[#78716C]">{formatNodeId(node.id)}</span>
 
                     <p className="mt-1.5 font-sans text-[15px] font-medium text-[#1A1612]">{node.label}</p>
 
-                    <div className="mt-[10px] flex flex-wrap gap-1.5">
-                      <span
-                        className="rounded-md px-2 py-[3px] font-sans text-[10px] tracking-[0.12em]"
-                        style={{ background: typeStyle.tagBg, color: typeStyle.tagText }}
-                      >
-                        {getTypeLabel(node.type)}
-                      </span>
-                      {node.status === "critical" || node.status === "unresolved" ? (
-                        <span
-                          className="rounded-md px-2 py-[3px] font-sans text-[10px] tracking-[0.12em]"
-                          style={{
-                            background: node.status === "critical" ? "rgba(224,85,85,0.12)" : "rgba(184,84,61,0.12)",
-                            color: node.status === "critical" ? "#9E3B2E" : "#c4650a"
-                          }}
-                        >
-                          {getStatusLabel(node.status)}
-                        </span>
-                      ) : null}
-                    </div>
+                    <span
+                      className="mt-[10px] inline-flex rounded-md px-2 py-[3px] font-sans text-[10px] tracking-[0.12em]"
+                      style={{ background: typeStyle.tagBg, color: typeStyle.tagText }}
+                    >
+                      {getTypeLabel(node.type)}
+                    </span>
 
                     <p className="mt-3 inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">
-                      <GripHorizontalIcon className="h-3 w-3" />
-                      DRAG NODE
+                      {dragLocked ? (
+                        "CLICK TO INSPECT"
+                      ) : (
+                        <>
+                          <GripHorizontalIcon className="h-3 w-3" />
+                          DRAG TO MOVE
+                        </>
+                      )}
                     </p>
                   </div>
                 </motion.div>
@@ -594,11 +624,23 @@ export function ProjectFlowchartPage() {
             { key: "zoom-in", icon: <ZoomInIcon className="h-[18px] w-[18px]" />, onClick: () => setZoom((current) => clamp(current + 0.2, 0.5, 2)) },
             { key: "zoom-out", icon: <ZoomOutIcon className="h-[18px] w-[18px]" />, onClick: () => setZoom((current) => clamp(current - 0.2, 0.5, 2)) },
             { key: "fit", icon: <MaximizeIcon className="h-[18px] w-[18px]" />, onClick: handleFitView },
-            { key: "lock", icon: dragLocked ? <LockIcon className="h-[18px] w-[18px]" /> : <LockOpenIcon className="h-[18px] w-[18px]" />, onClick: () => setDragLocked((current) => !current) }
+            {
+              key: "reset-layout",
+              icon: <Grid2x2Icon className="h-[18px] w-[18px]" />,
+              onClick: handleResetLayout,
+              title: "Reset layout"
+            },
+            {
+              key: "lock",
+              icon: dragLocked ? <LockIcon className="h-[18px] w-[18px]" /> : <LockOpenIcon className="h-[18px] w-[18px]" />,
+              onClick: () => setDragLocked((current) => !current),
+              title: dragLocked ? "Unlock node dragging" : "Lock node positions"
+            }
           ].map((control, index, array) => (
             <button
               key={control.key}
               type="button"
+              title={"title" in control ? control.title : undefined}
               onClick={control.onClick}
               className="flex h-10 w-10 items-center justify-center font-sans text-[18px] text-[#5A5450] transition-colors hover:bg-[#FAF8F5]"
               style={{ borderBottom: index === array.length - 1 ? "none" : "1px solid #FAF8F5" }}
@@ -677,13 +719,13 @@ export function ProjectFlowchartPage() {
                 <p className="mt-3 font-sans text-[22px] tracking-[0.04em] text-[#1A1612]">{selectedNode.label}</p>
 
                 <span
-                  className="mt-2 inline-flex rounded-full px-3 py-1 font-sans text-[11px] tracking-[0.12em]"
+                  className="mt-2 inline-flex rounded-md px-2 py-[3px] font-sans text-[10px] tracking-[0.12em]"
                   style={{
-                    background: statusStyles[selectedNode.status].pillBg,
-                    color: statusStyles[selectedNode.status].pillText
+                    background: typeStyles[selectedNode.type].tagBg,
+                    color: typeStyles[selectedNode.type].tagText
                   }}
                 >
-                  {getStatusLabel(selectedNode.status)}
+                  {getTypeLabel(selectedNode.type)}
                 </span>
 
                 <div className="mb-5 mt-5 h-px bg-[#FAF8F5]" />
