@@ -8,6 +8,7 @@ import type {
   Doc,
   DocViewerPayload,
   FlowGraph,
+  IntegrationStatus,
   LiveDocPayload,
   MeetingItem,
   ProjectBrainData,
@@ -1205,3 +1206,39 @@ export const mockSocratesReplies: SocratesReplyGroups = {
 };
 
 export const mockSocratesMessages: ChatMessage[] = [];
+
+// Integration connection status — one entry per external service per project.
+// connected: false = not yet authorised; lastSyncedAt only present when connected: true.
+export const mockIntegrationStatuses: Record<string, IntegrationStatus[]> = {
+  "1": [
+    { id: "i-slack",    name: "Slack",           category: "comms",          connected: false },
+    { id: "i-gmail",    name: "Gmail",            category: "comms",          connected: false },
+    { id: "i-whatsapp", name: "WhatsApp",         category: "comms",          connected: false },
+    { id: "i-gcal",     name: "Google Calendar",  category: "calendar",       connected: false },
+    { id: "i-stripe",   name: "Stripe",           category: "payments",       connected: false },
+    { id: "i-aws",      name: "AWS (EC2 + RDS)",  category: "infrastructure", connected: false },
+    { id: "i-supabase", name: "Supabase Pro",     category: "database",       connected: false },
+    { id: "i-firebase", name: "Firebase",         category: "notifications",  connected: false },
+    { id: "i-vercel",   name: "Vercel Pro",       category: "hosting",        connected: false },
+    { id: "i-sentry",   name: "Sentry",           category: "monitoring",     connected: false }
+  ],
+  "2": [
+    { id: "i-slack",    name: "Slack",           category: "comms",         connected: false },
+    { id: "i-gmail",    name: "Gmail",            category: "comms",         connected: false },
+    { id: "i-whatsapp", name: "WhatsApp",         category: "comms",         connected: false },
+    { id: "i-gcal",     name: "Google Calendar",  category: "calendar",      connected: false },
+    { id: "i-stripe",   name: "Stripe",           category: "payments",      connected: false },
+    { id: "i-firebase", name: "Firebase",         category: "notifications", connected: false },
+    { id: "i-vercel",   name: "Vercel Pro",       category: "hosting",       connected: false },
+    { id: "i-sentry",   name: "Sentry",           category: "monitoring",    connected: false }
+  ],
+  "3": [
+    { id: "i-slack",    name: "Slack",           category: "comms",          connected: false },
+    { id: "i-gmail",    name: "Gmail",            category: "comms",          connected: false },
+    { id: "i-whatsapp", name: "WhatsApp",         category: "comms",          connected: false },
+    { id: "i-gcal",     name: "Google Calendar",  category: "calendar",       connected: false },
+    { id: "i-aws",      name: "AWS (EC2 + RDS)",  category: "infrastructure", connected: false },
+    { id: "i-supabase", name: "Supabase Pro",     category: "database",       connected: false },
+    { id: "i-sentry",   name: "Sentry",           category: "monitoring",     connected: false }
+  ]
+};

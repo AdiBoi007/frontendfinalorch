@@ -5,6 +5,7 @@ import { useReducedMotion } from "../lib/useReducedMotion";
 import { useBrainStore } from "../state/brainStore";
 import { brainTokens } from "../tokens";
 import type { BrainNode } from "../brain.types";
+import { ConnectionArcs } from "./ConnectionArcs";
 import { ContinentLayer } from "./ContinentLayer";
 import { Pins } from "./Pins";
 
@@ -50,7 +51,7 @@ export function BrainSphere({ nodes }: { nodes: BrainNode[] }) {
     >
       <mesh frustumCulled={false}>
         <sphereGeometry args={[1.48, 64, 64]} />
-        <meshBasicMaterial color={brainTokens.sphereCore} />
+        <meshStandardMaterial color="#FFFFFF" roughness={0.35} metalness={0.04} envMapIntensity={0.4} />
       </mesh>
 
       <points geometry={dotGeometry} frustumCulled={false}>
@@ -64,6 +65,7 @@ export function BrainSphere({ nodes }: { nodes: BrainNode[] }) {
 
       <ContinentLayer nodes={nodes} />
       <Pins nodes={nodes} />
+      <ConnectionArcs nodes={nodes} />
     </group>
   );
 }

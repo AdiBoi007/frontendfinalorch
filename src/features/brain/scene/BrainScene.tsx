@@ -13,9 +13,9 @@ export function BrainScene({ children, onPointerMissed }: { children: ReactNode;
       onPointerMissed={onPointerMissed}
     >
       <color attach="background" args={[brainTokens.canvas]} />
-      <ambientLight intensity={0.8} color="#FAF8F5" />
-      <directionalLight position={[3, 4, 3]} intensity={0.6} color="#FFFFFF" />
-      <pointLight position={[-4, -2, -3]} intensity={0.2} color="#B8543D" />
+      <ambientLight intensity={1.0} color="#FAF8F5" />
+      <directionalLight position={[3, 4, 3]} intensity={1.1} color="#FFFFFF" />
+      <pointLight position={[-4, -2, -3]} intensity={0.35} color="#B8543D" />
       <Suspense fallback={null}>{children}</Suspense>
     </Canvas>
   );

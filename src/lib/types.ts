@@ -252,3 +252,21 @@ export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
 }
+
+export type IntegrationCategory =
+  | "comms"
+  | "calendar"
+  | "payments"
+  | "infrastructure"
+  | "database"
+  | "hosting"
+  | "monitoring"
+  | "notifications";
+
+export interface IntegrationStatus {
+  id: string;
+  name: string;
+  category: IntegrationCategory;
+  connected: boolean;
+  lastSyncedAt?: string;
+}

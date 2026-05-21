@@ -12,6 +12,14 @@ type PinProps = {
   node: BrainNode;
 };
 
+const URGENCY: Record<BrainNode["category"], { scale: number; pulseSpeed: number; pulseDepth: number }> = {
+  change: { scale: 1.22, pulseSpeed: 2.2, pulseDepth: 0.13 },
+  decision: { scale: 1.1, pulseSpeed: 1.4, pulseDepth: 0.09 },
+  doc: { scale: 1.0, pulseSpeed: 1.6, pulseDepth: 0.08 },
+  comms: { scale: 0.95, pulseSpeed: 1.2, pulseDepth: 0.07 },
+  team: { scale: 0.9, pulseSpeed: 1.0, pulseDepth: 0.06 }
+};
+
 function getCategoryLabel(category: BrainNode["category"]) {
   return category === "doc" ? "doc" : category;
 }
@@ -33,6 +41,8 @@ export function Pin({ node }: PinProps) {
   const hovered = hoveredNode?.id === node.id;
   const selected = selectedNode?.id === node.id;
   const color = brainTokens.pin[node.category];
+  const urgency = URGENCY[node.category];
+  const baseHaloOpacity = node.category === "change" ? 0.32 : 0.2;
   const baseOpacity = matchesFilter ? (selectedNode && !selected ? 0.2 : 1) : selectedNode ? 0.14 : 0.1;
 
   const surfacePosition = useMemo(() => sphericalToCartesian(node.position?.lat ?? 0, node.position?.lng ?? 0, 1.52), [node.position?.lat, node.position?.lng]);
@@ -43,7 +53,7 @@ export function Pin({ node }: PinProps) {
     if (!coreRef.current || !haloRef.current) {
       return;
     }
-    const pulse = node.featured && !reducedMotion ? 1 + Math.sin(clock.elapsedTime * 1.6) * 0.08 : 1;
+    const pulse = !reducedMotion ? 1 + Math.sin(clock.elapsedTime * urgency.pulseSpeed) * urgency.pulseDepth : 1;
     coreRef.current.scale.setScalar(selected ? 1.8 : hovered ? 1.6 : pulse);
     haloRef.current.scale.setScalar(hovered || selected ? 1.45 : 1);
   });
@@ -64,7 +74,7 @@ export function Pin({ node }: PinProps) {
 
       <mesh ref={haloRef}>
         <sphereGeometry args={[0.07, 16, 16]} />
-        <meshBasicMaterial color={color} transparent opacity={(hovered || selected ? 0.5 : 0.2) * baseOpacity} depthWrite={false} blending={THREE.AdditiveBlending} />
+        <meshBasicMaterial color={color} transparent opacity={(hovered || selected ? 0.5 : baseHaloOpacity) * baseOpacity} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
 
       <mesh
@@ -83,7 +93,7 @@ export function Pin({ node }: PinProps) {
           selectNode(node);
         }}
       >
-        <sphereGeometry args={[0.028, 16, 16]} />
+        <sphereGeometry args={[0.028 * urgency.scale, 16, 16]} />
         <meshBasicMaterial color={color} transparent opacity={baseOpacity} />
       </mesh>
 

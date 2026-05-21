@@ -6,9 +6,9 @@ import Avatar from "../components/ui/Avatar";
 import { ArrowRightIcon, PlusIcon } from "../components/ui/AppIcons";
 import { Badge } from "../components/ui/Badge";
 import { BookOpenIcon, GitBranchIcon, MessageSquareIcon, SparklesIcon } from "../components/ui/AppIcons";
-import { getProjectDetail, getProjectMembers } from "../lib/api";
+import { getIntegrationStatuses, getLiveDoc, getProjectDetail, getProjectMembers } from "../lib/api";
 import { mockMeetings, mockRequests } from "../lib/mockData";
-import type { ProjectDetail, ProjectMember, ProjectSubscription } from "../lib/types";
+import type { IntegrationStatus, LiveDocPayload, ProjectDetail, ProjectMember, ProjectSubscription } from "../lib/types";
 
 const pageVariants = {
   hidden: {},
@@ -415,6 +415,8 @@ export function ProjectDashboardPage() {
   const [project, setProject] = useState<ProjectDetail | null>(null);
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [subscriptions, setSubscriptions] = useState<ProjectSubscription[]>([]);
+  const [integrations, setIntegrations] = useState<IntegrationStatus[]>([]);
+  const [liveDoc, setLiveDoc] = useState<LiveDocPayload | null>(null);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [subscriptionName, setSubscriptionName] = useState("");
   const [subscriptionCategory, setSubscriptionCategory] = useState("");
@@ -424,14 +426,18 @@ export function ProjectDashboardPage() {
   useEffect(() => {
     let isMounted = true;
 
-    Promise.all([getProjectDetail(id), getProjectMembers(id)]).then(([detail, nextMembers]) => {
-      if (!isMounted) {
-        return;
-      }
-
+    Promise.all([
+      getProjectDetail(id),
+      getProjectMembers(id),
+      getIntegrationStatuses(id),
+      getLiveDoc(id)
+    ]).then(([detail, nextMembers, nextIntegrations, doc]) => {
+      if (!isMounted) return;
       setProject(detail);
       setMembers(nextMembers);
       setSubscriptions(detail.subscriptions);
+      setIntegrations(nextIntegrations);
+      setLiveDoc(doc);
     });
 
     return () => {
@@ -527,6 +533,24 @@ export function ProjectDashboardPage() {
                 className="h-full rounded-full bg-[#B8543D]"
               />
             </div>
+
+            {integrations.length > 0 && (
+              <div className="mt-5 flex flex-wrap gap-2">
+                {integrations.map((integration) => (
+                  <div
+                    key={integration.id}
+                    title={integration.connected ? `${integration.name} · connected` : `${integration.name} · not connected`}
+                    className="flex items-center gap-1.5 rounded-full border border-[rgba(26,22,18,0.08)] bg-white px-2.5 py-[5px]"
+                  >
+                    <span
+                      className="h-1.5 w-1.5 flex-shrink-0 rounded-full"
+                      style={{ backgroundColor: integration.connected ? "#2D4A3E" : "#9E3B2E" }}
+                    />
+                    <span className="font-mono text-[10px] text-[#78716C]">{integration.name}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </motion.section>
 
@@ -693,6 +717,62 @@ export function ProjectDashboardPage() {
             </motion.div>
           </div>
         </motion.section>
+
+        {liveDoc && (
+          <motion.section variants={sectionVariants} className="mt-5">
+            <div className="solid-card p-7">
+              <div className="flex items-center justify-between">
+                <p className="font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">REQUIREMENTS SNAPSHOT</p>
+                <button
+                  type="button"
+                  onClick={() => navigate(`/projects/${id}/live-doc`)}
+                  className="font-sans text-[11px] text-[#B8543D]"
+                >
+                  <span className="inline-flex items-center gap-1">Open live doc<ArrowRightIcon className="h-[14px] w-[14px]" /></span>
+                </button>
+              </div>
+
+              <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                {liveDoc.sections
+                  .filter((s) => s.type === "section-heading" && s.sectionLabel)
+                  .slice(0, 4)
+                  .map((heading) => {
+                    const bodySection = liveDoc.sections.find(
+                      (s, idx) =>
+                        idx > liveDoc.sections.indexOf(heading) &&
+                        (s.type === "body" || s.type === "highlighted") &&
+                        s.content
+                    );
+                    return (
+                      <div
+                        key={heading.anchorId}
+                        className="rounded-xl border border-[rgba(26,22,18,0.06)] bg-[#FAF8F5] px-4 py-4"
+                      >
+                        <p className="font-mono text-[10px] tracking-[0.16em] text-[#B8543D]">
+                          {heading.sectionLabel}
+                        </p>
+                        {bodySection && (
+                          <p className="mt-2 line-clamp-3 font-sans text-[12px] leading-[1.6] text-[#5A5450]">
+                            {bodySection.content}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
+
+              <div className="mt-4 flex items-center gap-3 rounded-xl bg-[rgba(184,84,61,0.04)] px-4 py-3">
+                <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#B8543D]" />
+                <span className="font-mono text-[11px] text-[#78716C]">
+                  {liveDoc.docType} · {liveDoc.version} · {liveDoc.status}
+                </span>
+                <span className="ml-auto font-mono text-[11px] text-[#78716C]">
+                  {liveDoc.comments.length} source annotations
+                </span>
+              </div>
+            </div>
+          </motion.section>
+        )}
 
         <motion.section variants={sectionVariants} className="mt-5">
           <div className="solid-card p-7">

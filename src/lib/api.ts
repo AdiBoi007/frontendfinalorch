@@ -9,6 +9,7 @@ import type {
   Doc,
   DocViewerPayload,
   FlowGraph,
+  IntegrationStatus,
   LiveDocPayload,
   ProjectDetail,
   ProjectMember,
@@ -102,4 +103,28 @@ export const saveLiveDocSection = async (projectId: string, sectionId: string, c
   void sectionId;
   void content;
   return { success: true };
+};
+
+// TODO: GET /v1/projects/:projectId/integrations
+// Returns connection status for every external service wired to this project.
+// connected: true  → OAuth / API key verified by backend
+// connected: false → not yet authorised; frontend should prompt user to connect
+export const getIntegrationStatuses = async (projectId: string): Promise<IntegrationStatus[]> => {
+  return mock.mockIntegrationStatuses[projectId] ?? [];
+};
+
+// TODO: POST /v1/projects/:projectId/brain/ask
+// Body: { nodeTitle: string; nodeContent: string; messages: { role: string; content: string }[] }
+// Response: { reply: string }
+export const askSocrates = async (
+  projectId: string,
+  nodeTitle: string,
+  nodeContent: string,
+  messages: { role: string; content: string }[]
+): Promise<string> => {
+  void projectId;
+  void nodeTitle;
+  void nodeContent;
+  void messages;
+  return "Socrates is not yet connected. Once the backend proxy is wired up, I will answer questions about this document using the full project context.";
 };

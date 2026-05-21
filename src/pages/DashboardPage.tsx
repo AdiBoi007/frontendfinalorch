@@ -1,31 +1,50 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { TbBrandSlack, TbBrandWhatsapp, TbMail } from "react-icons/tb";
 import { CalendarCard } from "../components/dashboard/CalendarCard";
 import Avatar from "../components/ui/Avatar";
-import { ArrowRightIcon, PlusIcon } from "../components/ui/AppIcons";
+import { PlusIcon } from "../components/ui/AppIcons";
 import { Badge } from "../components/ui/Badge";
-import { mockCalendarEvents, mockProjects } from "../lib/mockData";
-import type { ProjectCardItem } from "../lib/types";
+import { mockCalendarEvents, mockDeadlines, mockProjects, mockRequests } from "../lib/mockData";
+import type { DeadlineItem, RequestItem } from "../lib/types";
 
 const pageVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.1
+      staggerChildren: 0.06
     }
   }
 };
 
 const childVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.35,
+      duration: 0.3,
       ease: [0.22, 1, 0.36, 1] as const
     }
   }
+};
+
+const deadlineStatusStyles: Record<DeadlineItem["status"], { dot: string; label: string; text: string }> = {
+  "on-track": { dot: "#2D4A3E", label: "On track", text: "text-[#2D4A3E]" },
+  "at-risk":  { dot: "#8C5D1E", label: "At risk",  text: "text-[#8C5D1E]" },
+  "critical": { dot: "#9E3B2E", label: "Critical", text: "text-[#9E3B2E]" }
+};
+
+const platformIcon: Record<RequestItem["platform"], React.ReactNode> = {
+  slack:    <TbBrandSlack size={13} strokeWidth={1.6} />,
+  email:    <TbMail size={13} strokeWidth={1.6} />,
+  whatsapp: <TbBrandWhatsapp size={13} strokeWidth={1.6} />
+};
+
+const platformColor: Record<RequestItem["platform"], string> = {
+  slack:    "#8B7FD4",
+  email:    "#78716C",
+  whatsapp: "#2D4A3E"
 };
 
 type TeamRole = "manager" | "dev" | "client";
@@ -39,45 +58,24 @@ const teamMembers = [
   { initials: "LF", role: "client", name: "Lisa F" }
 ] as const satisfies ReadonlyArray<{ initials: string; role: TeamRole; name: string }>;
 
-const teamRoleStyles: Record<TeamRole, { background: string; color: string; label: string }> = {
-  manager: { background: "rgba(120,113,108,0.10)", color: "#5A5450", label: "Manager" },
-  dev: { background: "rgba(45,74,62,0.10)", color: "#B8543D", label: "Dev" },
-  client: { background: "rgba(194,136,64,0.12)", color: "#B8543D", label: "Client" }
+const teamRoleStyles: Record<TeamRole, { label: string }> = {
+  manager: { label: "Manager" },
+  dev: { label: "Dev" },
+  client: { label: "Client" }
 };
 
 const teamSplit = [
-  { label: "Managers 25%", color: "#5A5450", width: "25%" },
-  { label: "Devs 58%", color: "#B8543D", width: "58%" },
-  { label: "Clients 17%", color: "#B8543D", width: "17%" }
+  { label: "Managers", pct: "25%", color: "rgba(26,22,18,0.35)" },
+  { label: "Devs", pct: "58%", color: "rgba(26,22,18,0.55)" },
+  { label: "Clients", pct: "17%", color: "rgba(26,22,18,0.2)" }
 ] as const;
-
-const avatarListVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.05
-    }
-  }
-};
-
-const avatarItemVariants = {
-  hidden: { opacity: 0, scale: 0 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.28,
-      ease: [0.22, 1, 0.36, 1] as const
-    }
-  }
-};
 
 function getViewerName() {
   if (typeof window === "undefined") {
     return "Manager";
   }
 
-  return (window.localStorage.getItem("orchestra_role") ?? "manager");
+  return window.localStorage.getItem("orchestra_role") ?? "manager";
 }
 
 function getTodayLabel() {
@@ -89,100 +87,64 @@ function getTodayLabel() {
   }).format(new Date());
 }
 
-function getHealthColor(health: ProjectCardItem["health"]) {
-  if (health === "HEALTHY") {
-    return "#B8543D";
-  }
-
-  if (health === "AT RISK") {
-    return "#B8543D";
-  }
-
-  return "#9E3B2E";
-}
-
 function TeamHeadcountCard() {
   return (
-    <motion.section
-      whileHover={{
-        y: -3,
-        boxShadow: "none"
-      }}
-      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="solid-card px-8 py-7"
-    >
-      <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:gap-10">
-        <div className="min-w-0 xl:w-[280px]">
-          <p className="mb-3 font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">TEAM</p>
+    <section className="border-t border-[rgba(26,22,18,0.06)] pt-10">
+      <p className="section-label mb-8">Team</p>
 
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={avatarListVariants}
-            className="flex max-w-[280px] flex-wrap gap-2.5"
-          >
-            {teamMembers.map((member) => {
-              const style = teamRoleStyles[member.role];
+      <div className="flex flex-col gap-10 xl:flex-row xl:items-center xl:justify-between">
+        <div className="flex flex-wrap items-center gap-3">
+          {teamMembers.map((member) => {
+            const style = teamRoleStyles[member.role];
 
-              return (
-                <motion.div
-                  key={member.initials}
-                  variants={avatarItemVariants}
-                  whileHover={{ scale: 1.15, zIndex: 10 }}
-                  title={`${member.name} · ${style.label}`}
-                  className="relative"
-                >
-                  <Avatar seed={member.initials} name={member.name} role={style.label} />
-                </motion.div>
-              );
-            })}
+            return (
+              <div key={member.initials} title={`${member.name} · ${style.label}`}>
+                <Avatar seed={member.initials} name={member.name} role={style.label} size={36} />
+              </div>
+            );
+          })}
 
-            {Array.from({ length: 2 }).map((_, index) => (
-              <button
-                key={`open-slot-${index}`}
-                type="button"
-                className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-[rgba(26,22,18,0.20)] bg-transparent font-sans text-[18px] leading-none text-[rgba(120,113,108,0.6)] transition-colors hover:border-[#B8543D] hover:text-[#B8543D]"
-              >
-                <PlusIcon className="h-[18px] w-[18px]" />
-              </button>
-            ))}
-          </motion.div>
+          {Array.from({ length: 2 }).map((_, index) => (
+            <button
+              key={`open-slot-${index}`}
+              type="button"
+              aria-label="Add team member"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(26,22,18,0.1)] bg-transparent text-[rgba(120,113,108,0.5)] transition-colors hover:border-[rgba(26,22,18,0.2)] hover:text-[#1A1612]"
+            >
+              <PlusIcon className="h-3.5 w-3.5" />
+            </button>
+          ))}
         </div>
 
-        <div className="hidden w-px flex-shrink-0 self-stretch bg-white xl:block" />
-
-        <div className="flex min-w-0 flex-1 flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap gap-8">
+        <div className="flex flex-wrap items-end gap-12">
+          <div className="flex gap-10">
             <div>
-              <p className="font-sans text-[40px] leading-none text-[#1A1612]">6</p>
-              <p className="mt-1 font-sans text-[12px] text-[#78716C]">Active members</p>
+              <p className="font-sans text-[28px] font-light leading-none tracking-tight text-[#1A1612]">6</p>
+              <p className="mt-1.5 font-sans text-[11px] text-[#78716C]">Active members</p>
             </div>
-
             <div>
-              <p className="font-sans text-[40px] leading-none text-[#5A5450]">2</p>
-              <p className="mt-1 font-sans text-[12px] text-[#78716C]">Open roles</p>
+              <p className="font-sans text-[28px] font-light leading-none tracking-tight text-[#78716C]">2</p>
+              <p className="mt-1.5 font-sans text-[11px] text-[#78716C]">Open roles</p>
             </div>
           </div>
 
-          <div className="lg:ml-2">
-            <div className="flex h-2 w-[200px] overflow-hidden rounded-full">
+          <div className="min-w-[180px]">
+            <div className="flex h-px w-full overflow-hidden">
               {teamSplit.map((item) => (
-                <span key={item.label} style={{ width: item.width, backgroundColor: item.color }} />
+                <span key={item.label} style={{ width: item.pct, backgroundColor: item.color }} />
               ))}
             </div>
-
-            <div className="mt-2 flex flex-wrap gap-3">
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1">
               {teamSplit.map((item) => (
-                <div key={item.label} className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="font-sans text-[11px] text-[#78716C]">{item.label}</span>
-                </div>
+                <span key={item.label} className="font-sans text-[10px] text-[#78716C]">
+                  {item.label} {item.pct}
+                </span>
               ))}
             </div>
           </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }
 
@@ -195,89 +157,120 @@ export function DashboardPage() {
       initial="hidden"
       animate="visible"
       variants={pageVariants}
-      className="h-full overflow-y-auto bg-bg px-10 pb-10 pl-8 pt-10"
+      className="h-full overflow-y-auto bg-bg px-12 pb-16 pl-10 pt-12"
     >
-      <motion.section variants={childVariants} className="mb-10">
-        <motion.header className="flex items-start justify-between gap-6">
+      <motion.section variants={childVariants} className="mb-14">
+        <header className="flex items-end justify-between gap-8">
           <div>
-            <p className="font-sans text-[12px] tracking-[3px] text-[rgba(120,113,108,0.6)]">GOOD MORNING</p>
-            <h1 className="mt-2 font-sans text-[64px] leading-[0.95] text-[#1A1612]">{getViewerName()}</h1>
-            <p className="mt-1 font-sans text-[14px] text-[#78716C]">{getTodayLabel()}</p>
+            <p className="section-label">Good morning</p>
+            <h1 className="mt-3 font-sans text-[40px] font-light leading-[1.05] tracking-tight text-[#1A1612]">
+              {getViewerName()}
+            </h1>
+            <p className="mt-2 font-sans text-[13px] font-normal text-[#78716C]">{getTodayLabel()}</p>
           </div>
 
-          <motion.button
+          <button
             type="button"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
-            className="primary-button transition-colors hover:bg-teal"
+            className="border-b border-[#1A1612] bg-transparent px-0 py-1 font-sans text-[11px] tracking-[0.12em] text-[#1A1612] transition-opacity hover:opacity-60"
           >
-            NEW PROJECT
-          </motion.button>
-        </motion.header>
-
-        <div className="mt-7 border-b border-[rgba(26,22,18,0.08)]" />
+            New project
+          </button>
+        </header>
       </motion.section>
 
-      <motion.section variants={childVariants} className="mb-10">
-        <p className="mb-4 font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">YOUR PROJECTS</p>
+      <motion.section variants={childVariants} className="mb-14">
+        <p className="section-label mb-8">Your projects</p>
 
-        <div className="grid gap-4 xl:grid-cols-3">
-          {projects.map((project, index) => {
-            const color = getHealthColor(project.health);
+        <div className="grid gap-0 divide-y divide-[rgba(26,22,18,0.06)] border-t border-[rgba(26,22,18,0.06)] xl:grid-cols-3 xl:divide-x xl:divide-y-0">
+          {projects.map((project) => (
+            <button
+              key={project.id}
+              type="button"
+              onClick={() => navigate(`/projects/${project.id}`)}
+              className="group px-0 py-7 text-left transition-colors hover:bg-[rgba(26,22,18,0.02)] xl:px-8 xl:first:pl-0"
+            >
+              <div className="flex items-baseline justify-between gap-4">
+                <p className="truncate font-sans text-[15px] font-normal text-[#1A1612]">{project.name}</p>
+                <Badge variant={project.health} />
+              </div>
 
-            return (
-              <motion.button
-                key={project.id}
-                type="button"
-                onClick={() => navigate(`/projects/${project.id}`)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{
-                  y: -4,
-                  borderColor: "#B8543D",
-                  boxShadow: "none"
-                }}
-                className="rounded-[20px] border border-transparent bg-white px-7 py-6 text-left"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <span className="h-2.5 w-2.5 flex-shrink-0 rounded-full" style={{ backgroundColor: project.color }} />
-                    <p className="truncate font-sans text-[16px] font-medium text-[#1A1612]">{project.name}</p>
-                  </div>
-                  <div className="ml-auto flex-shrink-0">
-                    <Badge variant={project.health} />
-                  </div>
-                </div>
+              <div className="mt-5 h-px overflow-hidden bg-[rgba(26,22,18,0.06)]">
+                <div
+                  className="h-full bg-[#1A1612] transition-all duration-500 group-hover:bg-[#B8543D]"
+                  style={{ width: `${project.progress}%` }}
+                />
+              </div>
 
-                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#FAF8F5]">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${project.progress}%` }}
-                    transition={{ duration: 0.9, delay: 0.2 + index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                    className="h-full rounded-full"
-                    style={{ backgroundColor: color }}
-                  />
-                </div>
-
-                <div className="mt-4 flex items-center">
-                  <p className="font-mono text-[13px] text-[#78716C]">{project.progress}%</p>
-                  <span className="ml-auto text-[#B8543D]">
-                    <ArrowRightIcon className="h-[18px] w-[18px]" />
-                  </span>
-                </div>
-              </motion.button>
-            );
-          })}
+              <p className="mt-3 font-mono text-[11px] tracking-wide text-[#78716C]">{project.progress}%</p>
+            </button>
+          ))}
         </div>
       </motion.section>
 
-      <motion.div variants={childVariants} className="mb-10">
+      <motion.section variants={childVariants} className="mb-14">
+        <div className="grid gap-12 xl:grid-cols-2">
+          <div>
+            <p className="section-label mb-8">Upcoming deadlines</p>
+            <div className="divide-y divide-[rgba(26,22,18,0.06)]">
+              {mockDeadlines.map((item) => {
+                const style = deadlineStatusStyles[item.status];
+                return (
+                  <div key={item.id} className="flex items-center gap-4 py-4">
+                    <span className="h-2 w-2 flex-shrink-0 rounded-full" style={{ backgroundColor: style.dot }} />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-sans text-[13px] text-[#1A1612]">{item.task}</p>
+                      <p className="mt-0.5 font-mono text-[11px] text-[#78716C]">{item.project}</p>
+                    </div>
+                    <div className="flex-shrink-0 text-right">
+                      <p className="font-mono text-[12px] text-[#1A1612]">{item.dueDate}</p>
+                      <p className={`mt-0.5 font-mono text-[10px] ${style.text}`}>{item.daysLeft}d left</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <p className="section-label mb-8">Recent requests</p>
+            <div className="divide-y divide-[rgba(26,22,18,0.06)]">
+              {mockRequests.slice(0, 5).map((item) => (
+                <div key={item.id} className="flex items-start gap-3 py-4">
+                  <span
+                    className="mt-0.5 flex-shrink-0"
+                    style={{ color: platformColor[item.platform] }}
+                  >
+                    {platformIcon[item.platform]}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-[11px] text-[#78716C]">{item.from}</p>
+                    <p className="mt-0.5 line-clamp-1 font-sans text-[13px] text-[#1A1612]">{item.message}</p>
+                  </div>
+                  <div className="flex flex-shrink-0 flex-col items-end gap-1.5">
+                    <span className="font-mono text-[10px] text-[#78716C]">{item.time}</span>
+                    <span
+                      className={`rounded-full px-2 py-0.5 font-mono text-[10px] tracking-[0.08em] ${
+                        item.status === "accepted"
+                          ? "bg-[rgba(45,74,62,0.10)] text-[#2D4A3E]"
+                          : "bg-[rgba(194,136,64,0.12)] text-[#8C5D1E]"
+                      }`}
+                    >
+                      {item.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.div variants={childVariants} className="mb-14">
         <TeamHeadcountCard />
       </motion.div>
 
       <motion.section variants={childVariants}>
-        <p className="mb-4 font-sans text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">SCHEDULE</p>
+        <p className="section-label mb-8">Schedule</p>
         <CalendarCard eventsByDate={mockCalendarEvents} />
       </motion.section>
     </motion.div>

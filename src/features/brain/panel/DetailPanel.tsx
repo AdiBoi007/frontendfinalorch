@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { TbArrowUpRight, TbBookmark, TbFileText, TbSend, TbX } from "react-icons/tb";
+import { askSocrates } from "../../../lib/api";
 import type { BrainData, BrainNode } from "../brain.types";
 import { useReducedMotion } from "../lib/useReducedMotion";
 import { useBrainStore } from "../state/brainStore";
@@ -119,25 +120,14 @@ function SocratesTab({ node, data }: { node: BrainNode; data: BrainData }) {
     setLoading(true);
     addMessage(userMessage);
 
-    try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          system: `You are Socrates, the assistant for ${data.projectName}. The user is asking about a specific document called "${node.title}". Here is the document content: ${node.description}. Answer concisely in plain prose. No markdown. No bullet points unless asked.`,
-          messages: [...messages, userMessage].map((message) => ({ role: message.role, content: message.content }))
-        })
-      });
-      const payload = await response.json();
-      const reply = payload.content?.find((block: { type?: string; text?: string }) => block.type === "text")?.text ?? "I could not get a response for this document.";
-      addMessage({ role: "assistant", content: reply, timestamp: new Date().toISOString() });
-    } catch {
-      addMessage({ role: "assistant", content: "I could not reach Socrates from this environment. Try again once the API proxy is available.", timestamp: new Date().toISOString() });
-    } finally {
-      setLoading(false);
-    }
+    const reply = await askSocrates(
+      data.projectId,
+      node.title,
+      node.description,
+      [...messages, userMessage].map((message) => ({ role: message.role, content: message.content }))
+    );
+    addMessage({ role: "assistant", content: reply, timestamp: new Date().toISOString() });
+    setLoading(false);
   };
 
   return (
