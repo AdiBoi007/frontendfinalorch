@@ -704,38 +704,130 @@ export function LiveDocPage() {
   }
 
   return (
-    <section className="flex h-full flex-col overflow-hidden bg-bg">
+    <section className="flex h-full flex-col overflow-hidden bg-[#E8E6E1]">
       <style>{`
         @keyframes live-doc-diagram-shimmer {
           0% { background-position: 200% 0; }
           100% { background-position: -200% 0; }
         }
+
+        .live-doc-scroll {
+          flex: 1;
+          min-width: 0;
+          overflow: auto;
+        }
+
+        .live-doc-scroll-inner {
+          display: flex;
+          justify-content: center;
+          box-sizing: border-box;
+          min-height: 100%;
+          width: max(100%, 864px);
+          padding: 32px 24px;
+        }
+
+        .live-doc-page {
+          width: 816px;
+          min-width: 816px;
+          max-width: 816px;
+          flex: none;
+          min-height: 1056px;
+          background: #ffffff;
+          box-shadow:
+            0 1px 2px rgba(26, 22, 18, 0.06),
+            0 6px 20px rgba(26, 22, 18, 0.08),
+            0 20px 40px rgba(26, 22, 18, 0.05);
+        }
+
+        .live-doc-page-inner {
+          padding: 56px 72px 80px;
+          font-family: Arial, Helvetica, sans-serif;
+          color: #1a1612;
+        }
+
+        .live-doc-title {
+          margin: 0 0 20px;
+          font-size: 26px;
+          font-weight: 400;
+          line-height: 1.25;
+          color: #1a1612;
+        }
+
+        .live-doc-body {
+          margin: 0 0 16px;
+          font-size: 11pt;
+          line-height: 1.65;
+          color: #1a1612;
+        }
+
+        .live-doc-section-label {
+          margin: 28px 0 8px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #78716c;
+        }
+
+        .live-doc-field {
+          display: block;
+          width: 100%;
+          border: 0;
+          background: transparent;
+          color: inherit;
+          font: inherit;
+          line-height: inherit;
+          outline: none;
+          resize: vertical;
+          padding: 4px 0;
+          margin: 0 0 12px;
+          border-radius: 2px;
+        }
+
+        .live-doc-field:focus {
+          background: rgba(66, 133, 244, 0.06);
+          box-shadow: inset 0 -1px 0 rgba(66, 133, 244, 0.5);
+        }
+
+        .live-doc-highlight {
+          background: #fff59d;
+          border-radius: 1px;
+        }
+
+        .live-doc-paragraph {
+          position: relative;
+        }
       `}</style>
 
-      <div className="flex h-12 shrink-0 items-center border-b-[1.5px] border-[rgba(26,22,18,0.08)] bg-bg px-6">
-        <h1 className="font-sans text-[15px] font-medium text-[#1A1612]">{payload.projectName} · Product requirements</h1>
-      </div>
-
       <div className="flex min-h-0 flex-1 overflow-hidden">
-        <div className="min-w-0 flex-1 overflow-y-auto bg-bg">
-          <div className="px-14 py-12 pl-[140px]">
-            <div className="mb-5 flex items-center justify-between gap-4">
-              <p className="font-mono text-[12px] text-[#78716C]">
-                {payload.docType} · {payload.version} · {payload.status}
-              </p>
+        <div className="live-doc-scroll">
+          <div className="live-doc-scroll-inner">
+            <article className="live-doc-page overflow-visible">
+              <div className="live-doc-page-inner">
+                <div className="mb-8 flex items-center justify-between gap-4 border-b border-[rgba(26,22,18,0.08)] pb-4">
+                  <p className="font-mono text-[11px] text-[#78716C]">
+                    {payload.docType} · {payload.version} · {payload.status}
+                  </p>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setEditMode((current) => !current);
-                  setFocusedSectionId(null);
-                  setTooltipSectionId(null);
-                }}
-                className="rounded-lg border border-[rgba(26,22,18,0.08)] px-3 py-1.5 font-sans text-[12px] text-[#5A5450] transition-colors hover:bg-[#FAF8F5]"
-              >Edit</button>
-            </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditMode((current) => !current);
+                      setFocusedSectionId(null);
+                      setTooltipSectionId(null);
+                    }}
+                    className={[
+                      "rounded-md px-4 py-1.5 font-sans text-[12px] transition-colors",
+                      editMode
+                        ? "bg-[#1A1612] text-white"
+                        : "border border-[rgba(26,22,18,0.15)] bg-white text-[#5A5450] hover:border-[#B8543D] hover:text-[#B8543D]"
+                    ].join(" ")}
+                  >
+                    {editMode ? "Editing" : "Edit"}
+                  </button>
+                </div>
 
-            <motion.div variants={sectionListVariants} initial="hidden" animate="visible">
+                <motion.div variants={sectionListVariants} initial="hidden" animate="visible">
               {payload.sections.map((section) => {
                 const currentValue = sectionValue(section, drafts);
                 const isFocused = focusedSectionId === section.id;
@@ -748,23 +840,30 @@ export function LiveDocPage() {
                     : null;
 
                 if (section.type === "title") {
+                  if (editMode) {
+                    return (
+                      <motion.div key={section.id} variants={sectionItemVariants}>
+                        <input
+                          value={currentValue}
+                          onChange={(event) => handleSectionChange(section.id, event.target.value)}
+                          className="live-doc-field live-doc-title"
+                          aria-label="Document title"
+                        />
+                      </motion.div>
+                    );
+                  }
+
                   return (
-                    <motion.h2
-                      key={section.id}
-                      variants={sectionItemVariants}
-                      className="mb-6 font-sans text-[28px] font-medium leading-[1.2] text-[#1A1612]"
-                    >
+                    <motion.h1 key={section.id} variants={sectionItemVariants} className="live-doc-title">
                       {currentValue}
-                    </motion.h2>
+                    </motion.h1>
                   );
                 }
 
                 if (section.type === "section-heading") {
                   return (
-                    <motion.div key={section.id} variants={sectionItemVariants} className="mb-3 mt-8">
-                      <p className="font-sans text-[11px] font-medium uppercase tracking-[0.18em] text-[#78716C]">
-                        {section.sectionLabel}
-                      </p>
+                    <motion.div key={section.id} variants={sectionItemVariants}>
+                      <p className="live-doc-section-label">{section.sectionLabel}</p>
 
                       {section.anchorId === "diagrams" ? (
                         <div className="mt-3 space-y-3">
@@ -832,8 +931,8 @@ export function LiveDocPage() {
                           value={currentValue}
                           onChange={(event) => handleSectionChange(section.id, event.target.value)}
                           onFocus={() => setFocusedSectionId(section.id)}
-                          className="w-full resize-y rounded-xl border border-[rgba(26,22,18,0.08)] px-[14px] py-3 font-sans text-[15px] leading-[1.8] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
-                          style={{ minHeight: 80 }}
+                          rows={Math.max(3, Math.ceil(currentValue.length / 80))}
+                          className="live-doc-field live-doc-body"
                         />
 
                         <AnimatePresence>
@@ -877,20 +976,20 @@ export function LiveDocPage() {
                         }}
                         animate={
                           isActive
-                            ? { backgroundColor: ["rgba(184,84,61,0.12)", "rgba(184,84,61,0.06)"] }
+                            ? { backgroundColor: ["rgba(255,249,157,0.5)", "rgba(255,249,157,0.25)"] }
                             : { backgroundColor: "rgba(255,255,255,0)" }
                         }
                         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                        className={isClickable ? "cursor-pointer" : ""}
+                        className={["live-doc-paragraph rounded-sm py-0.5", isClickable ? "cursor-pointer" : ""].join(" ")}
                         style={{
-                          borderLeft: isActive ? "3px solid #B8543D" : "3px solid transparent",
-                          paddingLeft: isActive ? 16 : 0,
-                          paddingRight: 16,
-                          borderRadius: isActive ? "0 8px 8px 0" : 0
+                          marginLeft: isActive ? -8 : 0,
+                          marginRight: isActive ? -8 : 0,
+                          paddingLeft: isActive ? 8 : 0,
+                          paddingRight: isActive ? 8 : 0
                         }}
                       >
                         <div className="relative">
-                          <p className="font-sans text-[15px] leading-[1.8] text-[#1A1612]">
+                          <p className="live-doc-body">
                             {section.type === "highlighted"
                               ? renderHighlightedContent({
                                   section,
@@ -912,8 +1011,7 @@ export function LiveDocPage() {
                                 initial="hidden"
                                 animate="visible"
                                 exit="hidden"
-                                className="pointer-events-none absolute left-[-132px] top-1/2 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-[#B8543D] px-[10px] py-1 font-sans text-[10px] font-medium text-white"
-                                style={{ transform: "translateY(-50%)" }}
+                                className="pointer-events-none absolute right-full top-1/2 z-10 mr-3 inline-flex -translate-y-1/2 items-center gap-1 whitespace-nowrap rounded-full bg-[#1A1612] px-2.5 py-1 font-sans text-[10px] font-medium text-white shadow-sm"
                               >
                                 VIEW SOURCE
                                 <ArrowRightIcon className="h-3 w-3" />
@@ -926,11 +1024,13 @@ export function LiveDocPage() {
                   </motion.div>
                 );
               })}
-            </motion.div>
+                </motion.div>
+              </div>
+            </article>
           </div>
         </div>
 
-        <aside className="w-[340px] flex-shrink-0 overflow-y-auto border-l-[1.5px] border-[rgba(26,22,18,0.08)] bg-[#FAF8F5] px-5 py-6">
+        <aside className="w-[340px] flex-shrink-0 overflow-y-auto border-l border-[rgba(26,22,18,0.1)] bg-[#F0EEEA] px-5 py-6">
           <p className="mb-5 font-sans text-[11px] tracking-[0.18em] text-[rgba(120,113,108,0.6)]">COMMENTS</p>
 
           <motion.div variants={commentListVariants} initial="hidden" animate="visible" className="space-y-3">

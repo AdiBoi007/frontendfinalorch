@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
 import { Outlet, useLocation } from "react-router-dom";
-import { NavBar } from "./NavBar";
+import { NAV_BAR_WIDTH, NavBar } from "./NavBar";
 import { SocratesPanel } from "./SocratesPanel";
 
 const navTransition = {
@@ -14,23 +14,15 @@ const navTransition = {
 const SOCRATES_WIDTH = 300;
 
 export function AppShell() {
-  const [navExpanded, setNavExpanded] = useState(false);
   const [socratesOpen, setSocratesOpen] = useState(true);
   const location = useLocation();
   const isBrainRoute = location.pathname.includes("/brain");
-  const navWidth = navExpanded ? 200 : 56;
   const socratesWidth = isBrainRoute ? 0 : socratesOpen ? SOCRATES_WIDTH : 0;
 
   return (
     <div className="flex h-screen overflow-hidden bg-bg">
-      <NavBar expanded={navExpanded} onExpandedChange={setNavExpanded} />
-      <motion.div
-        aria-hidden="true"
-        initial={false}
-        animate={{ width: navWidth }}
-        transition={navTransition}
-        className="h-screen flex-shrink-0"
-      />
+      <NavBar />
+      <div aria-hidden="true" style={{ width: NAV_BAR_WIDTH }} className="h-screen flex-shrink-0" />
       {!isBrainRoute ? (
         <>
           <motion.div
@@ -45,7 +37,7 @@ export function AppShell() {
           <motion.button
             type="button"
             initial={false}
-            animate={{ left: navWidth + socratesWidth }}
+            animate={{ left: NAV_BAR_WIDTH + socratesWidth }}
             transition={navTransition}
             onClick={() => setSocratesOpen((open) => !open)}
             className="fixed top-1/2 z-[60] flex h-9 w-5 -translate-y-1/2 items-center justify-center rounded-r-md border border-l-0 border-[rgba(26,22,18,0.08)] bg-white text-[#78716C] shadow-[2px_0_8px_rgba(26,22,18,0.06)] transition-colors hover:border-[#B8543D] hover:text-[#B8543D]"

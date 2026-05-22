@@ -9,6 +9,7 @@ import { ProjectMemoryPage } from "./pages/ProjectDocsPage";
 import { ProjectDashboardPage } from "./pages/ProjectDashboardPage";
 import { ProjectFlowchartPage } from "./pages/ProjectFlowchartPage";
 import { ProjectConnectorsPage } from "./pages/ProjectConnectorsPage";
+import { ProjectRequestsPage } from "./pages/ProjectRequestsPage";
 import { ProjectsPage } from "./pages/ProjectsPage";
 import { SettingsPage } from "./pages/SettingsPage";
 
@@ -57,6 +58,7 @@ export default function App() {
           <Route path="docs" element={<ProjectMemoryRedirect />} />
           <Route path="docs/:docId/view" element={<LiveDocViewerPage />} />
           <Route path="connectors" element={<ProjectConnectorsPage />} />
+          <Route path="requests" element={<ProjectRequestsPage />} />
         </Route>
       </Route>
     </Routes>

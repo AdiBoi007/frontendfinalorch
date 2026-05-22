@@ -56,10 +56,18 @@ function platformBadge(platform: AnchorProvenance["linkedMessages"][number]["pla
 
 function renderHeadingLevel(level: number | undefined) {
   if (level === 1) {
-    return "font-sans text-[32px] leading-none text-[#1A1612] mt-10 mb-4";
+    return "doc-h1";
   }
 
-  return "font-sans text-[22px] leading-none text-[#1A1612] mt-8 mb-3";
+  return "doc-h2";
+}
+
+function countWords(sections: DocSection[], drafts: SectionDrafts) {
+  return sections
+    .reduce((total, section) => `${total} ${sectionValue(section, drafts)}`, "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
 }
 
 function applyDrafts(viewer: DocViewerPayload, drafts: SectionDrafts): DocViewerPayload {
@@ -93,7 +101,7 @@ export function LiveDocViewerPage() {
   const [selectedAnchor, setSelectedAnchor] = useState<string | null>(null);
   const [provenance, setProvenance] = useState<AnchorProvenance | null>(null);
   const [isLoadingProvenance, setIsLoadingProvenance] = useState(false);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(true);
   const [drafts, setDrafts] = useState<SectionDrafts>({});
 
   useEffect(() => {
@@ -110,7 +118,7 @@ export function LiveDocViewerPage() {
       setViewer(payload);
       setSelectedAnchor(null);
       setProvenance(null);
-      setEditMode(false);
+      setEditMode(true);
       setDrafts({});
     };
 
@@ -167,63 +175,62 @@ export function LiveDocViewerPage() {
     setEditMode(false);
   };
 
+  const wordCount = viewer ? countWords(viewer.sections, drafts) : 0;
+  const hasUnsavedDrafts = Object.keys(drafts).length > 0;
+
   const renderSection = (section: DocSection) => {
     const currentValue = sectionValue(section, drafts);
     const isCited = citedAnchorIds.includes(section.anchorId);
     const isSelected = selectedAnchor === section.anchorId;
     const isChanged = section.hasChange;
+    const changedClass = isChanged || isCited ? "doc-block--tracked" : "";
 
     if (section.type === "heading") {
+      const Tag = section.level === 1 ? "h1" : "h2";
+
       if (editMode) {
         return (
-          <input
-            value={currentValue}
-            onChange={(event) => handleSectionChange(section.id, event.target.value)}
-            className="w-full rounded-xl border border-[rgba(26,22,18,0.08)] bg-white px-4 py-3 font-sans text-[15px] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
-          />
+          <Tag className={renderHeadingLevel(section.level)}>
+            <input
+              value={currentValue}
+              onChange={(event) => handleSectionChange(section.id, event.target.value)}
+              className={`doc-field doc-field--heading ${changedClass}`}
+              aria-label={section.level === 1 ? "Document title" : "Section heading"}
+            />
+          </Tag>
         );
       }
 
-      return <h2 className={renderHeadingLevel(section.level)}>{currentValue}</h2>;
+      return <Tag className={renderHeadingLevel(section.level)}>{currentValue}</Tag>;
     }
 
     if (section.type === "paragraph") {
       const interactive = !editMode && isChanged;
-      const baseBorder = isCited ? "#B8543D" : "#B8543D";
-      const baseBackground = isCited ? "rgba(184,84,61,0.04)" : "rgba(184,84,61,0.04)";
-      const hoverBackground = isCited ? "rgba(184,84,61,0.08)" : "rgba(184,84,61,0.08)";
-      const highlightStyle =
-        isChanged || isCited
-          ? {
-              borderLeft: `3px solid ${baseBorder}`,
-              background: baseBackground,
-              borderRadius: "0 8px 8px 0",
-              paddingLeft: "16px"
-            }
-          : undefined;
 
       if (editMode) {
         return (
-          <textarea
-            value={currentValue}
-            onChange={(event) => handleSectionChange(section.id, event.target.value)}
-            className="w-full resize-y rounded-xl border border-[rgba(26,22,18,0.08)] bg-white px-4 py-3 font-sans text-[14px] leading-[1.8] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
-            style={{ minHeight: 80 }}
-          />
+          <div className={`doc-paragraph-wrap ${changedClass}`}>
+            <textarea
+              value={currentValue}
+              onChange={(event) => handleSectionChange(section.id, event.target.value)}
+              rows={Math.max(3, Math.ceil(currentValue.length / 72))}
+              className="doc-field doc-field--body"
+              aria-label="Paragraph"
+            />
+          </div>
         );
       }
 
       return (
         <motion.div
-          initial={isCited ? { backgroundColor: "rgba(184,84,61,0)" } : false}
-          animate={isCited ? { backgroundColor: ["rgba(184,84,61,0)", "rgba(184,84,61,0.15)", "rgba(184,84,61,0.04)"] } : undefined}
+          initial={isCited ? { backgroundColor: "rgba(255,249,196,0)" } : false}
+          animate={isCited ? { backgroundColor: ["rgba(255,249,196,0)", "rgba(255,249,196,0.85)", "rgba(255,249,196,0.35)"] } : undefined}
           transition={isCited ? { duration: 1.2, times: [0, 0.45, 1] } : undefined}
           className={[
-            "relative mb-5 transition-colors",
-            isChanged ? "doc-section--changed" : "",
-            interactive ? "cursor-pointer" : ""
+            "doc-paragraph-wrap",
+            changedClass,
+            interactive ? "doc-block--interactive cursor-pointer" : ""
           ].join(" ")}
-          style={highlightStyle}
           onClick={() => {
             if (!interactive) {
               return;
@@ -231,35 +238,30 @@ export function LiveDocViewerPage() {
 
             setSelectedAnchor(section.anchorId);
           }}
-          onMouseEnter={(event) => {
-            if (!interactive) {
-              return;
-            }
-
-            event.currentTarget.style.background = hoverBackground;
-          }}
-          onMouseLeave={(event) => {
-            if (!interactive) {
-              return;
-            }
-
-            event.currentTarget.style.background = baseBackground;
-          }}
         >
-          {isChanged ? (
-            <span className="absolute right-0 top-0 rounded-full bg-[rgba(184,84,61,0.1)] px-2 py-[2px] font-sans text-[9px] tracking-[0.18em] text-[#B8543D]">Changed</span>
-          ) : null}
-
-          <p className="font-sans text-[15px] leading-[1.8] text-[#1A1612]">{currentValue}</p>
-
-          {isSelected ? <span className="absolute inset-0 rounded-r-lg ring-1 ring-[rgba(184,84,61,0.15)]" /> : null}
+          <p className="doc-body-text">{currentValue}</p>
+          {isSelected ? <span className="doc-selection-ring" aria-hidden /> : null}
         </motion.div>
       );
     }
 
     if (section.type === "list") {
+      if (editMode) {
+        return (
+          <div className={`doc-list-wrap ${changedClass}`}>
+            <textarea
+              value={currentValue}
+              onChange={(event) => handleSectionChange(section.id, event.target.value)}
+              rows={Math.max(3, currentValue.split("\n").length + 1)}
+              className="doc-field doc-field--list"
+              aria-label="List items, one per line"
+            />
+          </div>
+        );
+      }
+
       return (
-        <ul className="mb-5 list-disc pl-5 font-sans text-[15px] leading-[1.8] text-[#1A1612]">
+        <ul className={`doc-list ${changedClass}`}>
           {currentValue.split("\n").map((item) => (
             <li key={item}>{item}</li>
           ))}
@@ -267,38 +269,174 @@ export function LiveDocViewerPage() {
       );
     }
 
-    return (
-      <pre className="mb-5 overflow-x-auto rounded-2xl bg-[#FAF8F5] p-4 font-mono text-[13px] leading-6 text-[#1A1612]">{currentValue}</pre>
-    );
+    if (editMode) {
+      return (
+        <textarea
+          value={currentValue}
+          onChange={(event) => handleSectionChange(section.id, event.target.value)}
+          rows={6}
+          className="doc-field doc-field--code"
+          aria-label="Code block"
+        />
+      );
+    }
+
+    return <pre className={`doc-code ${changedClass}`}>{currentValue}</pre>;
   };
 
   return (
-    <section className="doc-viewer-root relative h-full overflow-hidden bg-bg">
+    <section className="doc-viewer-root relative flex h-full flex-col overflow-hidden bg-[#D8D4CC]">
       <style>{`
+        .doc-page {
+          width: 816px;
+          min-width: 816px;
+          max-width: 816px;
+          flex: none;
+          min-height: 1056px;
+          background: #ffffff;
+          box-shadow:
+            0 1px 2px rgba(26, 22, 18, 0.06),
+            0 8px 24px rgba(26, 22, 18, 0.08),
+            0 24px 48px rgba(26, 22, 18, 0.06);
+        }
+
+        .doc-page-inner {
+          padding: 72px 84px 96px;
+          font-family: Georgia, "Times New Roman", Times, serif;
+          color: #1a1612;
+        }
+
+        .doc-h1 {
+          margin: 0 0 8px;
+          font-size: 28px;
+          font-weight: 700;
+          line-height: 1.2;
+          letter-spacing: -0.02em;
+        }
+
+        .doc-h2 {
+          margin: 28px 0 10px;
+          font-size: 18px;
+          font-weight: 700;
+          line-height: 1.3;
+        }
+
+        .doc-body-text,
+        .doc-list {
+          margin: 0 0 14px;
+          font-size: 12pt;
+          line-height: 1.65;
+          text-align: justify;
+        }
+
+        .doc-list {
+          padding-left: 1.25rem;
+        }
+
+        .doc-paragraph-wrap {
+          position: relative;
+          margin-bottom: 2px;
+        }
+
+        .doc-block--tracked {
+          background: rgba(255, 249, 196, 0.45);
+          border-radius: 2px;
+        }
+
+        .doc-block--interactive:hover {
+          background: rgba(255, 249, 196, 0.7);
+        }
+
+        .doc-selection-ring {
+          position: absolute;
+          inset: -2px -4px;
+          border: 1px solid rgba(184, 84, 61, 0.35);
+          border-radius: 2px;
+          pointer-events: none;
+        }
+
+        .doc-field {
+          display: block;
+          width: 100%;
+          border: 0;
+          background: transparent;
+          color: inherit;
+          font: inherit;
+          line-height: inherit;
+          letter-spacing: inherit;
+          outline: none;
+          resize: vertical;
+          padding: 2px 0;
+          margin: 0;
+        }
+
+        .doc-field:focus {
+          background: rgba(184, 84, 61, 0.04);
+          box-shadow: inset 0 -1px 0 rgba(184, 84, 61, 0.45);
+        }
+
+        .doc-field--heading {
+          font-weight: 700;
+        }
+
+        .doc-field--body {
+          min-height: 4.5em;
+          text-align: justify;
+        }
+
+        .doc-field--list {
+          min-height: 3em;
+          font-family: Georgia, "Times New Roman", Times, serif;
+        }
+
+        .doc-field--code,
+        .doc-code {
+          font-family: "Geist Mono", ui-monospace, monospace;
+          font-size: 10pt;
+          line-height: 1.5;
+        }
+
+        .doc-code {
+          margin: 0 0 14px;
+          padding: 12px 14px;
+          background: #f5f4f1;
+          border: 1px solid rgba(26, 22, 18, 0.08);
+          border-radius: 2px;
+          overflow-x: auto;
+        }
+
+        .doc-ruler {
+          height: 22px;
+          border-bottom: 1px solid rgba(26, 22, 18, 0.08);
+          background: linear-gradient(90deg, #faf9f7 0%, #faf9f7 84px, #fff 84px, #fff calc(100% - 84px), #faf9f7 calc(100% - 84px));
+        }
+
         @media print {
           .doc-viewer-topbar,
-          .doc-viewer-provenance {
+          .doc-viewer-toolbar,
+          .doc-viewer-provenance,
+          .doc-status-bar {
             display: none !important;
           }
 
-          .doc-viewer-root,
-          .doc-viewer-document,
-          .doc-viewer-content {
+          .doc-viewer-root {
             background: white !important;
           }
 
-          .doc-viewer-document {
-            padding-top: 0 !important;
+          .doc-page {
+            box-shadow: none !important;
+            width: 100% !important;
+            min-height: auto !important;
           }
 
-          .doc-section--changed {
+          .doc-block--tracked {
             background: transparent !important;
           }
         }
       `}</style>
 
-      <div className="doc-viewer-topbar absolute inset-x-0 top-0 z-10 flex h-[52px] items-center gap-4 border-b border-[rgba(0,0,0,0.06)] bg-[rgba(247,246,243,0.95)] px-8">
-        <div className="flex min-w-0 items-center gap-4">
+      <div className="doc-viewer-topbar z-20 flex h-[48px] flex-shrink-0 items-center gap-4 border-b border-[rgba(26,22,18,0.1)] bg-[#F3F1EC] px-4">
+        <div className="flex min-w-0 items-center gap-3">
           <button
             type="button"
             onClick={() => navigate(-1)}
@@ -306,84 +444,117 @@ export function LiveDocViewerPage() {
           >
             <ArrowLeftIcon className="h-4 w-4" />
           </button>
-          <span className="h-4 w-px bg-[rgba(26,22,18,0.08)]" />
-          <p className="truncate font-sans text-[15px] text-[#1A1612]">{projectName}</p>
-          <span className="font-sans text-[13px] text-[rgba(120,113,108,0.6)]">/</span>
-          <p className="truncate font-sans text-[13px] tracking-[0.08em] text-[#B8543D]">{viewer?.title ?? "DOCUMENT"}</p>
+          <span className="h-4 w-px bg-[rgba(26,22,18,0.12)]" />
+          <p className="truncate font-sans text-[13px] text-[#1A1612]">{projectName}</p>
+          <span className="font-sans text-[12px] text-[rgba(120,113,108,0.55)]">/</span>
+          <p className="truncate font-sans text-[13px] text-[#1A1612]">{viewer?.title ?? "Document"}</p>
         </div>
 
-        <div className="ml-auto flex items-center gap-3">
-          <span className="rounded-full border border-[rgba(26,22,18,0.08)] bg-[#FAF8F5] px-[10px] py-1 font-mono text-[11px] text-[#78716C]">
-            {viewer?.version ?? "v0.0"}
-          </span>
-
+        <div className="ml-auto flex items-center gap-2">
+          {hasUnsavedDrafts ? (
+            <span className="font-sans text-[11px] text-[#B8543D]">Unsaved changes</span>
+          ) : null}
+          <span className="font-mono text-[11px] text-[#78716C]">{viewer?.version ?? "v0.0"}</span>
           <motion.button
             type="button"
-            whileHover={{ borderColor: "#B8543D", color: "#B8543D" }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setEditMode((current) => !current)}
-            className="rounded-xl border border-[rgba(26,22,18,0.08)] px-[14px] py-[6px] font-sans text-[12px] text-[#5A5450]"
-          >Edit</motion.button>
-
+            className={[
+              "rounded-md px-3 py-1.5 font-sans text-[12px] transition-colors",
+              editMode ? "bg-white text-[#1A1612] shadow-sm" : "text-[#5A5450] hover:bg-white/60"
+            ].join(" ")}
+          >
+            {editMode ? "Editing" : "View"}
+          </motion.button>
           {editMode ? (
             <motion.button
               type="button"
-              whileHover={{ backgroundColor: "#B8543D" }}
               whileTap={{ scale: 0.98 }}
               onClick={handleSave}
-              className="rounded-xl bg-[#B8543D] px-[14px] py-[6px] font-sans text-[12px] tracking-[0.08em] text-white"
-            >Save</motion.button>
+              className="rounded-md bg-[#B8543D] px-3 py-1.5 font-sans text-[12px] text-white"
+            >
+              Save
+            </motion.button>
           ) : null}
-
-          <motion.button
+          <button
             type="button"
-            whileHover={{ backgroundColor: "#B8543D" }}
-            whileTap={{ scale: 0.98 }}
             onClick={() => window.print()}
-            className="rounded-xl bg-[#1A1612] px-[14px] py-[6px] font-sans text-[12px] tracking-[0.08em] text-white"
-          >Export PDF</motion.button>
+            className="rounded-md border border-[rgba(26,22,18,0.12)] bg-white px-3 py-1.5 font-sans text-[12px] text-[#5A5450] hover:border-[#B8543D] hover:text-[#B8543D]"
+          >
+            Export PDF
+          </button>
         </div>
       </div>
 
-      <div className={["flex h-full pt-[52px]", selectedAnchor ? "pr-[360px]" : ""].join(" ")}>
-        <div className="doc-viewer-document flex-1 overflow-y-auto">
-          <div className="doc-viewer-content mx-auto max-w-[720px] px-12 pb-20 pt-[72px]">
-            <div className="mb-10">
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[rgba(45,74,62,0.10)] text-[#B8543D]">
-                  <FileTextIcon className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h1 className="font-sans text-[28px] leading-none text-[#1A1612]">{viewer?.title ?? "Loading Document"}</h1>
-                    <span className="font-mono text-[12px] text-[#78716C]">{viewer?.version}</span>
-                  </div>
-                  <p className="mt-2 font-sans text-[12px] text-[#78716C]">
-                    Uploaded by {viewer?.uploadedBy ?? "Unknown"} · {viewer?.uploadedAt ?? "Unknown"}
+      {editMode ? (
+        <div className="doc-viewer-toolbar z-10 flex h-9 flex-shrink-0 items-center gap-1 border-b border-[rgba(26,22,18,0.08)] bg-white px-4 font-sans text-[12px] text-[#78716C]">
+          <span className="mr-3 border-r border-[rgba(26,22,18,0.08)] pr-3 font-medium text-[#1A1612]">Body</span>
+          <button type="button" className="rounded px-2 py-0.5 font-semibold text-[#1A1612] hover:bg-[#F3F1EC]">
+            B
+          </button>
+          <button type="button" className="rounded px-2 py-0.5 italic hover:bg-[#F3F1EC]">
+            I
+          </button>
+          <button type="button" className="rounded px-2 py-0.5 underline hover:bg-[#F3F1EC]">
+            U
+          </button>
+          <span className="mx-2 text-[rgba(26,22,18,0.15)]">|</span>
+          <span>12 pt</span>
+          <span className="mx-2 text-[rgba(26,22,18,0.15)]">|</span>
+          <span>1.65 line spacing</span>
+        </div>
+      ) : null}
+
+      <div className={["flex min-h-0 flex-1", selectedAnchor ? "pr-[360px]" : ""].join(" ")}>
+        <div className="doc-viewer-document flex-1 min-w-0 overflow-auto py-10">
+          <div className="flex min-h-min justify-center px-6" style={{ width: "max(100%, 864px)", margin: "0 auto", boxSizing: "border-box" }}>
+            <article className="doc-page shrink-0 grow-0" style={{ width: 816, minWidth: 816, maxWidth: 816 }}>
+              <div className="doc-ruler" aria-hidden />
+              <div className="doc-page-inner">
+                <header className="mb-8 border-b border-[rgba(26,22,18,0.12)] pb-6 text-center">
+                  <p className="mb-3 font-sans text-[10px] tracking-[0.2em] text-[#78716C]">
+                    {viewer?.version ?? "DRAFT"} · {viewer?.uploadedAt ?? "—"}
                   </p>
-                </div>
-              </div>
-            </div>
+                  {!editMode ? (
+                    <>
+                      <h1 className="doc-h1 text-center">{viewer?.title ?? "Loading document…"}</h1>
+                      <p className="mt-3 font-sans text-[11px] text-[#78716C]">
+                        {viewer?.uploadedBy ?? "Unknown"} · Page 1 of {viewer?.totalPages ?? 1}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="font-sans text-[11px] text-[#78716C]">
+                      {viewer?.uploadedBy ?? "Unknown"} · Page 1 of {viewer?.totalPages ?? 1}
+                    </p>
+                  )}
+                </header>
 
-            <div className="mb-8 flex items-center gap-2 font-sans text-[12px] text-[#78716C]">
-              <span>Sections with</span>
-              <span className="h-2 w-2 rounded-full bg-[#B8543D]" />
-              <span>have accepted changes. Click any section to see source evidence.</span>
-            </div>
+                {!editMode ? (
+                  <p className="mb-6 font-sans text-[11px] leading-relaxed text-[#78716C]">
+                    Highlighted passages include accepted changes. Click a highlighted paragraph to open source evidence.
+                  </p>
+                ) : null}
 
-            <div className="mb-10 h-px bg-[rgba(26,22,18,0.08)]" />
-
-            <motion.div initial="hidden" animate="visible" variants={sectionStagger}>
-              {viewer?.sections.map((section) => (
-                <motion.div
-                  key={section.id}
-                  variants={sectionItem}
-                  className={section.hasChange ? "doc-section--changed" : undefined}
-                >
-                  {renderSection(section)}
+                <motion.div initial="hidden" animate="visible" variants={sectionStagger} className="doc-body">
+                  {viewer?.sections.map((section) => (
+                    <motion.div key={section.id} variants={sectionItem}>
+                      {renderSection(section)}
+                    </motion.div>
+                  ))}
                 </motion.div>
-              ))}
-            </motion.div>
+
+                <footer className="doc-status-bar mt-16 flex items-center justify-between border-t border-[rgba(26,22,18,0.1)] pt-4 font-sans text-[10px] text-[#78716C]">
+                  <span>
+                    Page 1 of {viewer?.totalPages ?? 1}
+                  </span>
+                  <span>{wordCount.toLocaleString()} words</span>
+                  <span className="flex items-center gap-1.5">
+                    <FileTextIcon className="h-3 w-3" />
+                    {editMode ? "Editing" : "Viewing"}
+                  </span>
+                </footer>
+              </div>
+            </article>
           </div>
         </div>
       </div>
@@ -395,7 +566,10 @@ export function LiveDocViewerPage() {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 360, opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="doc-viewer-provenance fixed bottom-0 right-0 top-0 z-30 w-[360px] overflow-y-auto border-l border-[rgba(0,0,0,0.08)] bg-[rgba(255,255,255,0.98)] p-6-[20px]"
+            className={[
+              "doc-viewer-provenance fixed bottom-0 right-0 z-30 w-[360px] overflow-y-auto border-l border-[rgba(0,0,0,0.08)] bg-[rgba(255,255,255,0.98)] px-6 py-5",
+              editMode ? "top-[84px]" : "top-[48px]"
+            ].join(" ")}
           >
             <div className="mb-5 flex items-center">
               <p className="font-sans text-[13px] tracking-[0.12em] text-[#1A1612]">SOURCE EVIDENCE</p>
