@@ -6,6 +6,8 @@ import * as mock from "./mockData";
 import type {
   AnchorProvenance,
   ChatMessage,
+  CodebaseOverviewPayload,
+  ContinuityProfile,
   Doc,
   DocViewerPayload,
   FlowGraph,
@@ -102,4 +104,22 @@ export const saveLiveDocSection = async (projectId: string, sectionId: string, c
   void sectionId;
   void content;
   return { success: true };
+};
+
+// TODO: GET /v1/projects/:projectId/codebase/overview
+export const getCodebaseOverview = async (projectId: string): Promise<CodebaseOverviewPayload> => {
+  void projectId;
+  return mock.mockCodebaseOverview;
+};
+
+// TODO: GET /v1/projects/:projectId/continuity/profiles
+export const getContinuityProfiles = async (projectId: string): Promise<ContinuityProfile[]> => {
+  void projectId;
+  return mock.mockContinuityProfiles;
+};
+
+// TODO: GET /v1/projects/:projectId/continuity/profiles/:personId
+export const getContinuityProfile = async (projectId: string, personId: string): Promise<ContinuityProfile | null> => {
+  void projectId;
+  return mock.mockContinuityProfiles.find((profile) => profile.id === personId) ?? null;
 };

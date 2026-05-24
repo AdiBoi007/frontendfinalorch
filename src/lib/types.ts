@@ -248,6 +248,96 @@ export interface LiveDocContradictionDiff {
   reason: string;
 }
 
+export interface CodebaseRepo {
+  id: string;
+  name: string;
+  purpose: string;
+  language: string;
+  size: string;
+  lastActive: string;
+  owners: string[];
+  ownerIds: string[];
+  detail: string;
+  paths: string[];
+  decisions: string[];
+}
+
+export interface CodebaseOwner {
+  id: string;
+  name: string;
+  role: string;
+  area: string;
+  owns: string[];
+  busFactor: "shared" | "thin" | "single";
+  profileHref: string;
+}
+
+export interface CodebaseDecision {
+  id: string;
+  title: string;
+  status: "accepted" | "contested";
+  reference: string;
+  summary: string;
+  traceHref: string;
+}
+
+export interface CodebaseQuestion {
+  id: string;
+  title: string;
+  source: string;
+  impact: string;
+  ownerId: string;
+  traceHref: string;
+}
+
+export interface CodebaseOverviewPayload {
+  repos: CodebaseRepo[];
+  owners: CodebaseOwner[];
+  decisions: CodebaseDecision[];
+  questions: CodebaseQuestion[];
+}
+
+export interface ContinuityCapturedRationale {
+  id: string;
+  system: string;
+  rationale: string;
+  source: string;
+  traceHref: string;
+  status: "captured";
+}
+
+export interface ContinuityGap {
+  id: string;
+  system: string;
+  coverage: "none" | "thin";
+  filePaths: string[];
+  ownership: string;
+  askPrompt: string;
+}
+
+export interface ContinuityScopeItem {
+  id: string;
+  system: string;
+  repo: string;
+  filePaths: string[];
+  ownership: string;
+}
+
+export interface ContinuityProfile {
+  id: string;
+  name: string;
+  role: string;
+  area: string;
+  lastActive: string;
+  systemsAtRisk: number;
+  gapsCount: number;
+  plannedLastDay: string;
+  successor: string;
+  capturedRationale: ContinuityCapturedRationale[];
+  gaps: ContinuityGap[];
+  scope: ContinuityScopeItem[];
+}
+
 export type BrainCategoryId = "docs" | "comms" | "team" | "changes" | "decisions";
 
 export type BrainNodeKind = "core" | "category" | "sub";

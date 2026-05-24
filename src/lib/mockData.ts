@@ -4,6 +4,8 @@ import type {
   BrainNodeData,
   CalendarDayData,
   ChatMessage,
+  CodebaseOverviewPayload,
+  ContinuityProfile,
   DeadlineItem,
   Doc,
   DocViewerPayload,
@@ -62,6 +64,387 @@ export const mockProjectDetail: ProjectDetail = {
   docsCount: 8,
   docsReady: 6
 };
+
+export const mockCodebaseOverview: CodebaseOverviewPayload = {
+  repos: [
+    {
+      id: "api",
+      name: "northstar/api",
+      purpose: "Billing, entitlement, tenant-session, and usage-ingestion API.",
+      language: "TypeScript",
+      size: "184k loc",
+      lastActive: "May 23 · PR #418",
+      owners: ["Sarah Kim", "Maya Patel"],
+      ownerIds: ["sarah-kim", "maya-patel"],
+      detail: "Owns BillingPort, immutable UsageEvent ingestion, ledger projections, invoice preview read models, and EntitlementSnapshot publication.",
+      paths: ["services/billing/**", "services/entitlements/**", "prisma/schema.prisma"],
+      decisions: ["dec-billingport", "dec-retry-cap"]
+    },
+    {
+      id: "web",
+      name: "northstar/web",
+      purpose: "Dashboard, billing console, entitlement states, and support trace UI.",
+      language: "React",
+      size: "96k loc",
+      lastActive: "May 22 · tailwind.config.ts",
+      owners: ["Nina Ford", "Sarah Kim"],
+      ownerIds: ["nina-ford", "sarah-kim"],
+      detail: "Renders billing summary, invoice preview, blocked-action affordances, trace lookup, and the captured Northstar design system tokens.",
+      paths: ["app/billing/**", "app/usage-events/**", "tailwind.config.ts"],
+      decisions: ["dec-preview"]
+    },
+    {
+      id: "infra",
+      name: "northstar/infra",
+      purpose: "Terraform, deploy pipelines, worker queues, and beta feature flags.",
+      language: "HCL + YAML",
+      size: "28k loc",
+      lastActive: "May 21 · rollout plan",
+      owners: ["Maya Patel"],
+      ownerIds: ["maya-patel"],
+      detail: "Controls billing_ledger_v2, invoice_preview_v2, entitlement_snapshot_reads, webhook retry queues, and rollback order.",
+      paths: ["terraform/workers/**", ".github/workflows/deploy.yml", "flags/billing-beta.yml"],
+      decisions: ["dec-postgres"]
+    },
+    {
+      id: "mobile",
+      name: "northstar/mobile",
+      purpose: "React Native beta companion for plan state and usage alerts.",
+      language: "React Native",
+      size: "41k loc",
+      lastActive: "May 18 · beta shell",
+      owners: ["Jon Bell"],
+      ownerIds: ["jon-bell"],
+      detail: "Consumes EntitlementSnapshot and usage alert APIs, but does not initiate invoice preview or Stripe flows.",
+      paths: ["src/screens/BillingStatus.tsx", "src/lib/sessionClaims.ts"],
+      decisions: ["dec-entitlement-snapshot"]
+    }
+  ],
+  owners: [
+    {
+      id: "sarah-kim",
+      name: "Sarah Kim",
+      role: "Staff Engineer",
+      area: "Identity/Billing",
+      owns: ["BillingPort", "UsageEvent ledger", "tenant session claims"],
+      busFactor: "thin",
+      profileHref: "/memory/person/sarah-kim"
+    },
+    {
+      id: "maya-patel",
+      name: "Maya Patel",
+      role: "Platform Engineer",
+      area: "Workers/Infra",
+      owns: ["webhook retry queues", "rollout flags", "ledger replay jobs"],
+      busFactor: "single",
+      profileHref: "/memory/person/maya-patel"
+    },
+    {
+      id: "nina-ford",
+      name: "Nina Ford",
+      role: "Product Engineer",
+      area: "Billing UI",
+      owns: ["invoice preview UI", "blocked-action states", "design tokens"],
+      busFactor: "shared",
+      profileHref: "/memory/person/nina-ford"
+    },
+    {
+      id: "jon-bell",
+      name: "Jon Bell",
+      role: "Mobile Engineer",
+      area: "Mobile beta",
+      owns: ["mobile plan state", "session claims client", "usage alert shell"],
+      busFactor: "thin",
+      profileHref: "/memory/person/jon-bell"
+    }
+  ],
+  decisions: [
+    {
+      id: "dec-billingport",
+      title: "Stripe isolated behind BillingPort",
+      status: "accepted",
+      reference: "PR #418",
+      summary: "No route, React loader, invoice preview job, or entitlement check may call Stripe directly.",
+      traceHref: "/live-doc#sec-backend-contracts"
+    },
+    {
+      id: "dec-postgres",
+      title: "Defer Postgres billing migration",
+      status: "accepted",
+      reference: "#eng-billing · May 21",
+      summary: "Keep the beta ledger on the current schema until replay fixtures and before/after invoice diffs are green.",
+      traceHref: "/live-doc#sec-deployment-rollout"
+    },
+    {
+      id: "dec-retry-cap",
+      title: "Retry cap at 6 attempts",
+      status: "accepted",
+      reference: "PR #407",
+      summary: "Webhook retries use 1m, 5m, 20m, 2h, 12h, then DLQ; ingestion never waits on retry exhaustion.",
+      traceHref: "/live-doc#sec-error-handling-retries"
+    },
+    {
+      id: "dec-preview",
+      title: "Allow invoice preview to call Stripe during beta",
+      status: "contested",
+      reference: "Slack diff · May 23",
+      summary: "Contradicts PR #418; under review and must not silently overwrite the accepted BillingPort boundary.",
+      traceHref: "/live-doc#sec-backend-contracts"
+    }
+  ],
+  questions: [
+    {
+      id: "q-preview-stripe",
+      title: "Should invoice preview ever call Stripe during beta?",
+      source: "Slack #eng-billing · Sarah Kim",
+      impact: "Contradicts the accepted BillingPort boundary and could leak adapter state into product truth.",
+      ownerId: "sarah-kim",
+      traceHref: "/live-doc#sec-backend-contracts"
+    },
+    {
+      id: "q-replay-bypass",
+      title: "Who can approve usage replay bypass tokens?",
+      source: "Release plan · northstar/billing-beta",
+      impact: "Replay bypass is allowed only through signed internal queue tokens; approval owner is thinly documented.",
+      ownerId: "maya-patel",
+      traceHref: "/live-doc#sec-rate-limiting"
+    },
+    {
+      id: "q-mobile-entitlements",
+      title: "Does mobile need stale entitlement copy before beta?",
+      source: "GitHub issue #431",
+      impact: "Mobile reads EntitlementSnapshot but has no recorded UX decision for stale snapshot states.",
+      ownerId: "jon-bell",
+      traceHref: "/live-doc#sec-payments-entitlements"
+    }
+  ]
+};
+
+export const mockContinuityProfiles: ContinuityProfile[] = [
+  {
+    id: "sarah-kim",
+    name: "Sarah Kim",
+    role: "Staff Engineer",
+    area: "Identity/Billing",
+    lastActive: "May 23 · PR #418 review",
+    systemsAtRisk: 3,
+    gapsCount: 2,
+    plannedLastDay: "Jun 14, 2026",
+    successor: "Maya Patel",
+    capturedRationale: [
+      {
+        id: "cap-sarah-tenant",
+        system: "Tenant-scoped session claims",
+        rationale:
+          "Tenant lookup must precede session hydration because billing signs scoped job tokens against tenant-specific keys; trusting tenant IDs from request bodies would let a denied tenant boundary leak plan state.",
+        source: "Slack #eng-billing · Sarah Kim · May 21",
+        traceHref: "/live-doc#sec-auth-tenancy",
+        status: "captured"
+      },
+      {
+        id: "cap-sarah-billingport",
+        system: "BillingPort boundary",
+        rationale:
+          "Stripe IDs are adapter references only; product truth becomes ledger_snapshot_id after reconciliation so invoice preview, entitlement checks, and UI loaders cannot couple to Stripe subscription state.",
+        source: "GitHub PR #418 · northstar/api",
+        traceHref: "/live-doc#sec-backend-contracts",
+        status: "captured"
+      },
+      {
+        id: "cap-sarah-immutability",
+        system: "UsageEvent immutability",
+        rationale:
+          "Corrections append reversal events rather than mutate accepted usage rows so support can trace a disputed line item from event_id to ledger entry to invoice_preview_id.",
+        source: "northstar/api · prisma/schema.prisma review",
+        traceHref: "/live-doc#sec-data-model",
+        status: "captured"
+      }
+    ],
+    gaps: [
+      {
+        id: "gap-sarah-impersonation",
+        system: "Admin impersonation audit semantics",
+        coverage: "thin",
+        filePaths: ["services/auth/impersonation.ts", "services/audit/audit-log.ts"],
+        ownership: "29 commits · sole reviewer on last 6 changes",
+        askPrompt: "No complete recorded why for reason_code taxonomy — ask Sarah before departure."
+      },
+      {
+        id: "gap-sarah-reconciliation",
+        system: "Reconciliation mismatch triage",
+        coverage: "none",
+        filePaths: ["services/billing/reconciliation-worker.ts", "services/billing/review-exception.ts"],
+        ownership: "37 commits · sole author",
+        askPrompt: "No recorded why for manual review thresholds — ask Sarah before departure."
+      }
+    ],
+    scope: [
+      {
+        id: "scope-sarah-api",
+        system: "Billing API",
+        repo: "northstar/api",
+        filePaths: ["services/billing/**", "services/entitlements/**"],
+        ownership: "68 commits · primary reviewer"
+      },
+      {
+        id: "scope-sarah-auth",
+        system: "Identity boundary",
+        repo: "northstar/api",
+        filePaths: ["services/auth/session-claims.ts", "services/auth/tenant-boundary.ts"],
+        ownership: "41 commits · primary author"
+      }
+    ]
+  },
+  {
+    id: "maya-patel",
+    name: "Maya Patel",
+    role: "Platform Engineer",
+    area: "Workers/Infra",
+    lastActive: "May 22 · webhook queue deploy",
+    systemsAtRisk: 2,
+    gapsCount: 1,
+    plannedLastDay: "Jun 21, 2026",
+    successor: "Jon Bell",
+    capturedRationale: [
+      {
+        id: "cap-maya-retry",
+        system: "Webhook retry caps",
+        rationale:
+          "Retries stop after the sixth attempt because dead-letter visibility is safer than silent queue growth; ingestion and ledger workers must stay available even if Stripe webhooks degrade.",
+        source: "PR #407 · northstar/infra",
+        traceHref: "/live-doc#sec-error-handling-retries",
+        status: "captured"
+      },
+      {
+        id: "cap-maya-rollout",
+        system: "Billing rollout flags",
+        rationale:
+          "Rollback disables entitlement_snapshot_reads before invoice_preview_v2 so product gates stop reading new state while accepted UsageEvent rows remain intact for replay.",
+        source: "Release plan · Notion northstar/billing-beta",
+        traceHref: "/live-doc#sec-deployment-rollout",
+        status: "captured"
+      }
+    ],
+    gaps: [
+      {
+        id: "gap-maya-replay-token",
+        system: "Usage replay bypass approval",
+        coverage: "thin",
+        filePaths: ["workers/replay/queue-token.ts", "flags/billing-beta.yml"],
+        ownership: "22 commits · only deploy owner",
+        askPrompt: "Approval path for signed replay bypass tokens is thin — capture Maya's rule before handoff."
+      }
+    ],
+    scope: [
+      {
+        id: "scope-maya-infra",
+        system: "Worker infrastructure",
+        repo: "northstar/infra",
+        filePaths: ["terraform/workers/**", ".github/workflows/deploy.yml"],
+        ownership: "54 commits · sole release owner"
+      }
+    ]
+  },
+  {
+    id: "nina-ford",
+    name: "Nina Ford",
+    role: "Product Engineer",
+    area: "Billing UI",
+    lastActive: "May 22 · invoice preview states",
+    systemsAtRisk: 1,
+    gapsCount: 1,
+    plannedLastDay: "Jun 28, 2026",
+    successor: "Sarah Kim",
+    capturedRationale: [
+      {
+        id: "cap-nina-design",
+        system: "Northstar design tokens",
+        rationale:
+          "Billing UI uses Inter and the cooler Northstar palette so generated agent work stays visually distinct from Orchestra's warm editorial chrome.",
+        source: "northstar/web · tailwind.config.ts + Figma comment",
+        traceHref: "/live-doc#sec-design-system",
+        status: "captured"
+      },
+      {
+        id: "cap-nina-blocked",
+        system: "Blocked action states",
+        rationale:
+          "Blocked actions are plan limits, not errors; the UI must link each blocked state to entitlement_snapshot_id so support can trace the exact gate.",
+        source: "GitHub issue #431 · northstar/web",
+        traceHref: "/live-doc#sec-payments-entitlements",
+        status: "captured"
+      }
+    ],
+    gaps: [
+      {
+        id: "gap-nina-stale-copy",
+        system: "Stale invoice preview copy",
+        coverage: "thin",
+        filePaths: ["app/billing/InvoicePreview.tsx", "app/billing/PreviewFreshness.tsx"],
+        ownership: "18 commits · primary author",
+        askPrompt: "No final recorded wording for stale preview states — ask Nina before beta copy freeze."
+      }
+    ],
+    scope: [
+      {
+        id: "scope-nina-web",
+        system: "Billing console",
+        repo: "northstar/web",
+        filePaths: ["app/billing/**", "app/usage-events/**"],
+        ownership: "46 commits · primary UI owner"
+      }
+    ]
+  },
+  {
+    id: "jon-bell",
+    name: "Jon Bell",
+    role: "Mobile Engineer",
+    area: "Mobile beta",
+    lastActive: "May 18 · beta shell",
+    systemsAtRisk: 2,
+    gapsCount: 2,
+    plannedLastDay: "Jul 5, 2026",
+    successor: "Nina Ford",
+    capturedRationale: [
+      {
+        id: "cap-jon-session",
+        system: "Mobile session claims",
+        rationale:
+          "Mobile reads account_id, workspace_id, actor_id, and role from the app-shell session context and never lets local workspace selection override signed claims.",
+        source: "northstar/mobile · src/lib/sessionClaims.ts review",
+        traceHref: "/live-doc#sec-auth-tenancy",
+        status: "captured"
+      }
+    ],
+    gaps: [
+      {
+        id: "gap-jon-stale-entitlements",
+        system: "Stale entitlement mobile state",
+        coverage: "none",
+        filePaths: ["src/screens/BillingStatus.tsx", "src/components/PlanLimitBanner.tsx"],
+        ownership: "24 commits · sole author",
+        askPrompt: "No recorded why for mobile stale entitlement copy — ask Jon before the beta handoff."
+      },
+      {
+        id: "gap-jon-alert-routing",
+        system: "Usage alert routing",
+        coverage: "thin",
+        filePaths: ["src/screens/UsageAlerts.tsx", "src/lib/pushRouting.ts"],
+        ownership: "16 commits · primary author",
+        askPrompt: "Thin rationale on which alerts should wake users — generate Jon's ask-list now."
+      }
+    ],
+    scope: [
+      {
+        id: "scope-jon-mobile",
+        system: "Mobile beta app",
+        repo: "northstar/mobile",
+        filePaths: ["src/screens/**", "src/lib/sessionClaims.ts"],
+        ownership: "39 commits · effective owner"
+      }
+    ]
+  }
+];
 
 export const mockDocs: Doc[] = [
   {

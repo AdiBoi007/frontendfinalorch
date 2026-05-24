@@ -11,6 +11,8 @@ import { ProjectDashboardPage } from "./pages/ProjectDashboardPage";
 import { ProjectFlowchartPage } from "./pages/ProjectFlowchartPage";
 import { ProjectRequestsPage } from "./pages/ProjectRequestsPage";
 import { SettingsPage } from "./pages/SettingsPage";
+import { CodebaseOverviewPage } from "./pages/CodebaseOverviewPage";
+import { ContinuityProfilePage } from "./pages/ContinuityProfilePage";
 
 function hasRole() {
   if (typeof window === "undefined") {
@@ -52,13 +54,17 @@ export default function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardWithSocratesRoute />} />
+        <Route path="/overview" element={<Navigate to="/projects/1/overview" replace />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/projects/:id" element={<AppShell />}>
           <Route index element={<ProjectDashboardPage />} />
+          <Route path="overview" element={<CodebaseOverviewPage />} />
+          <Route path="overview/repos/:repoId" element={<CodebaseOverviewPage />} />
           <Route path="brain" element={<ProjectBrainPage />} />
           <Route path="flow" element={<ProjectFlowchartPage />} />
           <Route path="live-doc" element={<LiveDocPage />} />
           <Route path="memory" element={<ProjectMemoryPage />} />
+          <Route path="memory/person/:personId" element={<ContinuityProfilePage />} />
           <Route path="docs" element={<ProjectMemoryRedirect />} />
           <Route path="docs/:docId/view" element={<LiveDocViewerPage />} />
           <Route path="requests" element={<ProjectRequestsPage />} />

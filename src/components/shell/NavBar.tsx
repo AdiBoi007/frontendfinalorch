@@ -5,13 +5,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Avatar from "../ui/Avatar";
 import {
   BooksIcon,
+  CodeIcon,
   FileDescriptionIcon,
   GitBranchIcon,
   Grid2x2Icon,
   LayoutDashboardIcon,
   MessageSquareIcon,
   SettingsIcon,
-  SparklesIcon
+  SparklesIcon,
+  UsersIcon
 } from "../ui/AppIcons";
 
 type NavBarProps = {
@@ -154,11 +156,25 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
 
   const projectItems: NavItem[] = [
     {
-      key: "overview",
-      label: "OVERVIEW",
+      key: "dashboard",
+      label: "DASHBOARD",
       icon: <LayoutDashboardIcon />,
       route: `/projects/${currentProjectId}`,
       active: new RegExp(`^/projects/${currentProjectId}$`).test(pathname)
+    },
+    {
+      key: "codebase",
+      label: "CODEBASE",
+      icon: <CodeIcon />,
+      route: `/projects/${currentProjectId}/overview`,
+      active: new RegExp(`^/projects/${currentProjectId}/overview(?:/.*)?$`).test(pathname)
+    },
+    {
+      key: "continuity",
+      label: "CONTINUITY",
+      icon: <UsersIcon />,
+      route: `/projects/${currentProjectId}/memory/person/sarah-kim`,
+      active: new RegExp(`^/projects/${currentProjectId}/memory/person(?:/.*)?$`).test(pathname)
     },
     {
       key: "brain",
