@@ -22,7 +22,7 @@ function hasRole() {
 
 function ProtectedRoute() {
   if (!hasRole()) {
-    return <Navigate to="/" replace />;
+    window.localStorage.setItem("orchestra_role", "manager");
   }
 
   return <Outlet />;
@@ -48,7 +48,8 @@ function ProjectMemoryRedirect() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<Navigate to="/projects/1/requests" replace />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardWithSocratesRoute />} />
         <Route path="/settings" element={<SettingsPage />} />

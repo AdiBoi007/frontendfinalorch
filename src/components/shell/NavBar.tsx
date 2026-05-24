@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Avatar from "../ui/Avatar";
 import {
-  ArrowLeftIcon,
   BooksIcon,
   FileDescriptionIcon,
   GitBranchIcon,
@@ -154,14 +153,6 @@ export function NavBar({ expanded, onExpandedChange }: NavBarProps) {
   ];
 
   const projectItems: NavItem[] = [
-    {
-      key: "back",
-      label: "BACK",
-      icon: <ArrowLeftIcon />,
-      route: "/dashboard",
-      active: false
-    },
-    { key: "project-divider", kind: "divider" },
     {
       key: "overview",
       label: "OVERVIEW",

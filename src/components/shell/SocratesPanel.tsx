@@ -21,7 +21,7 @@ const rotatingSuggestionPools = {
     "Which areas are still unresolved?",
     "What changed most recently?",
     "Show me the critical dependencies",
-    "What is blocking delivery?",
+    "What is blocking billing?",
     "Summarize the current system state"
   ],
   flowchart: [
@@ -41,12 +41,11 @@ const rotatingSuggestionPools = {
     "What was decided most recently?"
   ],
   "live-doc": [
-    "Summarize this document",
-    "What changed since v1?",
-    "Generate a system diagram",
-    "Show unresolved sections",
-    "Which changes came from the client?",
-    "What needs another review?"
+    "Agent context",
+    "Backend",
+    "Frontend",
+    "Payments relevant",
+    "Diagram"
   ],
   requests: [
     "Which requests are blocking?",
@@ -57,7 +56,7 @@ const rotatingSuggestionPools = {
     "What should I review first?"
   ],
   "project-overview": [
-    "How is BloomFast tracking?",
+    "How is Northstar tracking?",
     "Who is overloaded?",
     "What's the next critical deadline?",
     "What should we ship next?",
@@ -106,6 +105,30 @@ function MermaidDiagram({ chart, id, height }: { chart: string; id: string; heig
       ref.current.innerHTML = "";
 
       try {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: "base",
+          securityLevel: "loose",
+          flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true,
+            nodeSpacing: 56,
+            rankSpacing: 68,
+            padding: 16
+          },
+          themeVariables: {
+            primaryColor: "#E9EFEC",
+            primaryTextColor: "#1A1612",
+            primaryBorderColor: "#B8543D",
+            lineColor: "#B8543D",
+            secondaryColor: "#EFEEEC",
+            tertiaryColor: "#F3E8D9",
+            background: "#ffffff",
+            fontFamily: "Geist Mono, ui-monospace, SF Mono, Menlo, monospace",
+            fontSize: "13px"
+          }
+        });
+
         const { svg, bindFunctions } = await mermaid.render(renderIdRef.current, chart);
 
         if (!ref.current || cancelled) {
@@ -256,6 +279,43 @@ function MessageRow({
   );
 }
 
+const liveDocExportSuggestions = ["Agent context", "Backend", "Frontend", "Payments relevant", "Diagram"] as const;
+
+const suggestionContainerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.05
+    }
+  }
+} as const;
+
+const suggestionChipVariants = {
+  hidden: { opacity: 0, y: 8 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.25,
+      ease: [0.22, 1, 0.36, 1] as const
+    }
+  }
+} as const;
+
+function exportIdFromSuggestion(value: string) {
+  const normalized = value.toLowerCase();
+
+  if (normalized === "agent context") {
+    return "agent";
+  }
+
+  if (normalized === "payments relevant") {
+    return "payments";
+  }
+
+  return normalized;
+}
+
 function SuggestionChips({ onSelect }: { onSelect: (value: string) => void }) {
   const { pageContext, suggestions, isStreaming, messages } = useSocrates();
   const [visibleStart, setVisibleStart] = useState(0);
@@ -292,33 +352,48 @@ function SuggestionChips({ onSelect }: { onSelect: (value: string) => void }) {
   }, [messages.length, suggestionPool]);
 
   const visibleSuggestions = useMemo(() => {
+    if (pageContext === "live-doc") {
+      return [liveDocExportSuggestions[visibleStart % liveDocExportSuggestions.length]];
+    }
+
     if (suggestionPool.length === 0) {
       return [];
     }
 
     return [suggestionPool[visibleStart % suggestionPool.length]];
-  }, [suggestionPool, visibleStart]);
+  }, [pageContext, suggestionPool, visibleStart]);
+
+  const handleSuggestionClick = (suggestion: string) => {
+    if (pageContext === "live-doc") {
+      window.dispatchEvent(
+        new CustomEvent("live-doc-export", {
+          detail: { id: exportIdFromSuggestion(suggestion) }
+        })
+      );
+      return;
+    }
+
+    onSelect(suggestion);
+  };
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={`${pageContext}-${visibleStart}`}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial="hidden"
+        animate="show"
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.18 }}
+        variants={suggestionContainerVariants}
         className="flex flex-wrap gap-2"
       >
-        {visibleSuggestions.map((suggestion, index) => (
+        {visibleSuggestions.map((suggestion) => (
           <motion.button
             key={suggestion}
             type="button"
-            onClick={() => onSelect(suggestion)}
+            onClick={() => handleSuggestionClick(suggestion)}
             disabled={isStreaming}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 8 }}
-            transition={{ duration: 0.2, delay: index * 0.05 }}
+            variants={suggestionChipVariants}
+            exit={{ opacity: 0, y: 8 }}
             className="rounded-full border border-[rgba(26,22,18,0.08)] bg-white px-3 py-2 font-sans text-[11px] text-[#5A5450] transition-colors hover:border-[#B8543D] hover:text-[#1A1612] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {suggestion}
@@ -364,6 +439,26 @@ function SocratesPanelContent() {
     const trimmed = query.trim();
 
     if (!trimmed || isStreaming) {
+      return;
+    }
+
+    if (pageContext === "live-doc" && trimmed.toLowerCase().includes("diagram")) {
+      window.dispatchEvent(
+        new CustomEvent("live-doc-export", {
+          detail: { id: "diagram" }
+        })
+      );
+      setQuery("");
+      return;
+    }
+
+    if (pageContext === "live-doc" && (trimmed.toLowerCase().includes("add") || trimmed.toLowerCase().includes("edit") || trimmed.toLowerCase().includes("write"))) {
+      window.dispatchEvent(
+        new CustomEvent("live-doc-socrates-write", {
+          detail: { prompt: trimmed }
+        })
+      );
+      setQuery("");
       return;
     }
 

@@ -61,7 +61,7 @@ export function LoginPage() {
 
   const handleRoleSelect = (role: RoleOption["key"]) => {
     localStorage.setItem("orchestra_role", role);
-    navigate("/dashboard");
+    navigate("/projects/1/requests");
   };
 
   return (

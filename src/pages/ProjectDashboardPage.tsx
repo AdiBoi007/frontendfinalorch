@@ -174,12 +174,12 @@ const miniCalendarMonthGrid = Array.from({ length: 35 }, (_, index) => {
 
 const meetingsByDate: Record<number, typeof mockMeetings> = {
   21: [
-    { id: "1", title: "BloomFast Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "BloomFast" },
+    { id: "1", title: "Northstar Cloud Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "Northstar Cloud" },
     { id: "2", title: "API Gateway Review", time: "11:30 AM", duration: "45 min", type: "review", project: "API Gateway" }
   ],
-  22: [{ id: "1", title: "BloomFast Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "BloomFast" }],
+  22: [{ id: "1", title: "Northstar Cloud Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "Northstar Cloud" }],
   24: [{ id: "3", title: "Elara Design Review", time: "3:00 PM", duration: "30 min", type: "review", project: "Elara Games" }],
-  26: [{ id: "4", title: "Sprint Planning", time: "10:00 AM", duration: "60 min", type: "meeting", project: "BloomFast" }]
+  26: [{ id: "4", title: "Sprint Planning", time: "10:00 AM", duration: "60 min", type: "meeting", project: "Northstar Cloud" }]
 };
 
 const serviceGradients: Record<string, string> = {

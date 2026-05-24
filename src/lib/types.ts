@@ -168,6 +168,8 @@ export interface LiveDocSection {
     end: number;
   };
   sourceIds: string[];
+  exportTags?: string[];
+  stalePolicy?: string;
 }
 
 export interface LiveDocComment {
@@ -188,6 +190,62 @@ export interface LiveDocPayload {
   status: "DRAFT" | "REVIEW" | "ACCEPTED";
   sections: LiveDocSection[];
   comments: LiveDocComment[];
+  exports: LiveDocExport[];
+  designSystem: LiveDocDesignSystem;
+  updateEvent: LiveDocUpdateEvent;
+  contradictionDiff: LiveDocContradictionDiff;
+}
+
+export interface LiveDocDesignSystem {
+  sourceSectionId: string;
+  sourceIds: string[];
+  palette: {
+    label: "Canvas" | "Surface" | "Text" | "Muted" | "Accent";
+    token: string;
+    hex: string;
+  }[];
+  font: {
+    family: string;
+    monoFamily: string;
+    sample: string;
+    meta: string;
+  };
+  tokens: {
+    label: string;
+    value: string;
+  }[];
+}
+
+export interface LiveDocExport {
+  id: "agent" | "backend" | "frontend" | "payments" | "diagram";
+  label: string;
+  extension: string;
+  lens: string;
+  updatedAt: string;
+  regeneratedByEventIds: string[];
+  copy: string;
+  preview: string;
+}
+
+export interface LiveDocUpdateEvent {
+  id: string;
+  label: string;
+  source: string;
+  timestamp: string;
+  targetSectionId: string;
+  previousText: string;
+  nextText: string;
+  regeneratedExportIds: string[];
+}
+
+export interface LiveDocContradictionDiff {
+  id: string;
+  source: string;
+  timestamp: string;
+  decisionSectionId: string;
+  existingDecision: string;
+  incomingClaim: string;
+  reason: string;
 }
 
 export type BrainCategoryId = "docs" | "comms" | "team" | "changes" | "decisions";

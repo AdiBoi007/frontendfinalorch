@@ -45,13 +45,13 @@ const PAGE_SUGGESTIONS: Record<PageContext, string[]> = {
   brain: ["Explain the core product flows", "Which areas are still unresolved?", "What changed most recently?"],
   flowchart: ["What are the critical paths?", "Which nodes have the most risk?", "Generate a dependency map"],
   memory: ["Find all decisions about auth", "What did the client say about payments?", "Show changes from last week"],
-  "live-doc": ["Summarize this document", "What changed since v1?", "Generate a system diagram"],
+  "live-doc": ["Export agent context", "Show payments context", "Generate a system diagram"],
   requests: ["Which requests are blocking?", "Summarize pending changes", "What needs approval today?"],
-  "project-overview": ["How is BloomFast tracking?", "Who is overloaded?", "What's the next critical deadline?"]
+  "project-overview": ["How is Northstar tracking?", "Who is overloaded?", "What's the next critical deadline?"]
 };
 
 const PROJECT_NAMES: Record<string, string> = {
-  "1": "BloomFast",
+  "1": "Northstar Cloud",
   "2": "Elara Games",
   "3": "API Gateway"
 };
@@ -109,7 +109,7 @@ function getProjectName(projectId: string | null) {
     return "Portfolio";
   }
 
-  return PROJECT_NAMES[projectId] ?? "BloomFast";
+  return PROJECT_NAMES[projectId] ?? "Northstar Cloud";
 }
 
 function buildDependencyDiagram(projectName: string) {
@@ -133,8 +133,8 @@ function buildFlowchartDiagram(projectName: string) {
   A([${projectName} Order Placed]) --> B{Payment OK?}
   B -->|Yes| C[Create Order]
   B -->|No| D[/Notify Buyer/]
-  C --> E{Driver Available?}
-  E -->|Yes| F[Assign Driver]
+  C --> E{Billing Worker Available?}
+  E -->|Yes| F[Assign Billing Worker]
   E -->|No| G[Queue Order]
   F --> H{Manager Approval?}
   H -->|Yes| I[Dispatch]
@@ -154,13 +154,13 @@ function buildSequenceDiagram(projectName: string) {
   actor Buyer
   participant API as API Gateway
   participant Orders as Order Service
-  participant Driver as Driver Assignment
+  participant Billing Worker as Billing Worker Assignment
   participant Ops as Admin Panel
   
   Buyer->>API: Create ${projectName} order
   API->>Orders: Validate payload
-  Orders->>Driver: Request availability
-  Driver-->>Orders: Driver candidate found
+  Orders->>Billing Worker: Request availability
+  Billing Worker-->>Orders: Billing Worker candidate found
   Orders->>Ops: Request manager approval
   Ops-->>Orders: Approved
   Orders-->>Buyer: Dispatch confirmed`;
@@ -170,21 +170,21 @@ function buildUseCaseDiagram(projectName: string) {
   return `graph LR
   Buyer([Buyer])
   Manager([Manager])
-  Driver([Driver])
+  Billing Worker([Billing Worker])
   
   subgraph ${projectName}
     Search[Browse & Search]
     Checkout[Checkout]
-    Assign[Assign Driver]
+    Assign[Assign Billing Worker]
     Approve[Approve Dispatch]
-    Track[Track Delivery]
+    Track[Track Billing]
   end
   
   Buyer --> Search
   Buyer --> Checkout
   Buyer --> Track
   Manager --> Approve
-  Driver --> Assign
+  Billing Worker --> Assign
   
   style Checkout fill:#E9EFEC,stroke:#B8543D,color:#1A1612
   style Approve fill:#F3E8D9,stroke:#B8543D,color:#1A1612
@@ -194,39 +194,39 @@ function buildUseCaseDiagram(projectName: string) {
 function pickTextResponse(pageContext: PageContext, content: string, projectName: string) {
   const responses: Record<PageContext, string[]> = {
     dashboard: [
-      `You have **3 deadlines this week**: Payment Integration (3 days), Auth Module Handoff (5 days), and Dashboard v2 Delivery (11 days). ${projectName === "Portfolio" ? "BloomFast" : projectName} has the most urgent items.`,
-      `**2 pending requests** need your attention: Jack from BloomFast wants a promo code system, and Elena from Elara Games is requesting dark mode support.`,
-      `You have **3 meetings today**: BloomFast Standup at 9:00 AM, API Gateway Review at 11:30 AM, and Client Sync · Elara at 2:00 PM.`
+      `You have **3 deadlines this week**: BillingPort verification (3 days), Tenant Boundary Handoff (5 days), and Dashboard v2 Billing (11 days). ${projectName === "Portfolio" ? "Northstar Cloud" : projectName} has the most urgent items.`,
+      `**2 pending requests** need your attention: Sarah from Northstar wants billing export review, and Elena from Elara Games is requesting dark mode support.`,
+      `You have **3 meetings today**: Northstar Billing Review at 9:00 AM, API Gateway Review at 11:30 AM, and Client Sync · Elara at 2:00 PM.`
     ],
     brain: [
-      `${projectName} has **8 documents** indexed. The core flows are: Buyer Ordering → Florist Dashboard → Driver Assignment. Two nodes are still unresolved: Subscription Model and Third-party Driver API.`,
-      `**Recent changes**: Manager approval requirement was added to Driver Assignment, OAuth was removed from auth scope, and Pro subscription was deferred to v2.`,
-      `**Unresolved areas**: The Third-party Driver API provider has not been confirmed. The Subscription Model pricing is still under discussion between the client and your team.`
+      `${projectName} has **8 sources** indexed. The core flows are: SDK emit → ingestion → ledger → invoice preview. Two nodes need review: replay dashboard and webhook retries.`,
+      `**Recent changes**: PR #418 isolated Stripe behind BillingPort, entitlement checks moved behind ledger reconciliation, and stale CSV-only invoice notes were dropped.`,
+      `**Unresolved areas**: Usage replay dashboard owner and webhook retry alert thresholds still need confirmation before the May 29 release gate.`
     ],
     flowchart: [
-      `The critical path runs through **Buyer Ordering Flow → Driver Assignment → Admin Panel**. Driver Assignment is the highest-risk node because it depends on the unconfirmed Third-party Driver API.`,
-      `**3 nodes are at risk**: Driver Assignment, Subscription Model, and Third-party Driver API.`,
-      `The most connected node is **Order Service**. It depends on Payment, Driver Assignment, Florist Dashboard, and Notifications.`
+      `The critical path runs through **SDK emit → Ingestion → Ledger → Invoice Preview**. Ledger reconciliation is highest risk because it gates entitlement unlock.`,
+      `**3 nodes are at risk**: Usage replay, webhook retry dashboard, and invoice preview verification.`,
+      `The most connected node is **Ledger**. It feeds invoice preview, entitlements, audit export, and beta readiness.`
     ],
     memory: [
-      `Found **4 documents** mentioning authentication. The key decision was OAuth removal. Current truth: email/password only for v1.`,
-      `The client mentioned payments in **3 messages**. Stripe is confirmed, payouts must never block dispatch, and the revenue share is 70/30.`,
-      `**Last week's changes**: OAuth removed, manager approval added to driver flow, and Pro subscription deferred. All 3 are accepted and reflected in the Live Doc.`
+      `Found **4 sources** mentioning tenancy. Current truth: row-level tenant boundary checks run before entitlement checks.`,
+      `Payments context has **3 load-bearing decisions**: Stripe behind BillingPort, ledger reconciliation gates entitlements, and invoice preview reads ledger state only.`,
+      `**Last week's changes**: PR #418 merged BillingPort, direct-Stripe preview was superseded, and stale CSV-only review notes were removed from exports.`
     ],
     "live-doc": [
-      `This document has **6 sections** with accepted changes marked. The most recently changed section is Authentication.`,
-      `**Since v1**: Manager approval was added to Driver Assignment, OAuth was removed from auth, and Pro subscription moved to v2.`,
-      `The system diagram shows **8 components** with 7 connections. The highest-risk connection is Driver Assignment → Third-party Driver API.`
+      `This context layer has **7 curated claims** and each claim links to source evidence. Stale direct-Stripe notes are auditable but excluded from exports.`,
+      `**Since PR #418**: Stripe is isolated behind BillingPort, invoice preview reads ledger state, and backend/payments/agent exports regenerate from that truth.`,
+      `The system diagram shows **SDK emit → ingestion → ledger → invoice preview / entitlements**. The highest-risk edge is reconciliation before entitlement unlock.`
     ],
     requests: [
-      `**2 requests are pending**: Promo code system for BloomFast and Dark mode support for Elara Games. Both need review before they can become accepted changes.`,
-      `The promo code request would affect **3 brain nodes**: Payment Integration, Buyer Ordering Flow, and Admin Panel.`,
+      `**2 requests are pending**: Billing export review for Northstar Cloud and Dark mode support for Elara Games. Both need review before they can become accepted changes.`,
+      `The billing export review would affect **3 brain nodes**: BillingPort, Ledger, and Agent Context Export.`,
       `**4 requests total**: 2 accepted and 2 pending. Accepted requests are already reflected in the Live Doc.`
     ],
     "project-overview": [
       `${projectName} is **34% complete** with a Jun 2026 deadline. Current status is HEALTHY. Sprint 2 of 8 is active and spend is tracking inside budget.`,
-      `**Team load**: SC is managing overall, MT and PK are on payment integration, and JW is on the florist dashboard. No one is currently flagged as overloaded.`,
-      `**Next critical deadline**: Payment Integration is due Apr 24. Marcus T and Priya K are assigned. Manager approval requirements were added last week.`
+      `**Team load**: SC is managing overall, MT owns BillingPort, PK owns tenant checks, and JW owns the billing surface. No one is currently flagged as overloaded.`,
+      `**Next critical deadline**: Billing context export is due May 29. Marcus T and Priya K are assigned. PR #418 changed the backend contract last week.`
     ]
   };
 
@@ -439,9 +439,9 @@ export function SocratesProvider({ children }: { children: ReactNode }) {
         const citations = includesAny(lowerContent, ["where", "source"])
           ? [
               {
-                source: `${projectName} PRD v2 · Section 3`,
-                excerpt: "Manager approval required before driver assignment confirmed.",
-                anchor: "driver-body"
+                source: `${projectName} context layer · BillingPort decision`,
+                excerpt: "Stripe remains isolated behind BillingPort; invoice preview reads ledger state only.",
+                anchor: "catalog-body"
               }
             ]
           : undefined;

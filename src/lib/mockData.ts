@@ -20,17 +20,17 @@ import type {
 } from "./types";
 
 export const mockProjects: ProjectCardItem[] = [
-  { id: "1", name: "BloomFast MVP", progress: 34, health: "HEALTHY", color: "rgba(45,74,62,0.10)" },
+  { id: "1", name: "Northstar Cloud", progress: 34, health: "HEALTHY", color: "rgba(45,74,62,0.10)" },
   { id: "2", name: "Elara Games", progress: 38, health: "AT RISK", color: "rgba(120,113,108,0.10)" },
   { id: "3", name: "API Gateway", progress: 79, health: "Critical", color: "rgba(194,136,64,0.12)" }
 ];
 
 export const mockProjectDetail: ProjectDetail = {
   id: "1",
-  name: "BloomFast MVP",
+  name: "Northstar Cloud",
   health: "HEALTHY",
   progress: 34,
-  description: "On-demand flower delivery marketplace. Buyer ordering, florist dashboard, driver assignment.",
+  description: "On-demand usage billing marketplace. Buyer ordering, tenant admin dashboard, billing worker assignment.",
   deadline: "Jun 2026",
   sprint: "2 of 8",
   budget: 85000,
@@ -53,7 +53,7 @@ export const mockProjectDetail: ProjectDetail = {
     { id: "s6", name: "Sentry", category: "Monitoring", cost: 26, billing: "monthly", status: "active" }
   ],
   recentChanges: [
-    { id: "rc1", title: "Manager approval required for driver assignment", status: "accepted", timeAgo: "2d ago" },
+    { id: "rc1", title: "Manager approval required for billing worker assignment", status: "accepted", timeAgo: "2d ago" },
     { id: "rc2", title: "Pro subscription deferred to v2", status: "accepted", timeAgo: "3d ago" },
     { id: "rc3", title: "OAuth removed from v1 scope", status: "accepted", timeAgo: "5d ago" },
     { id: "rc4", title: "Promo code system requested", status: "pending", timeAgo: "2h ago" }
@@ -66,7 +66,7 @@ export const mockProjectDetail: ProjectDetail = {
 export const mockDocs: Doc[] = [
   {
     id: "1",
-    name: "BloomFast PRD v2",
+    name: "Northstar Cloud PRD v2",
     type: "prd",
     size: "2.4 MB",
     pages: 24,
@@ -74,7 +74,7 @@ export const mockDocs: Doc[] = [
     uploadedBy: "SC",
     uploadedAt: "Apr 18, 2026",
     excerpt:
-      "BloomFast is an on-demand flower delivery marketplace connecting buyers to local florists. Client wants an MVP with buyer-facing ordering, florist-facing order management, and driver assignment."
+      "Northstar Cloud is an on-demand usage billing marketplace connecting buyers to local tenant admins. Client wants an MVP with buyer-facing ordering, tenant admin-facing order management, and billing worker assignment."
   },
   {
     id: "2",
@@ -86,7 +86,7 @@ export const mockDocs: Doc[] = [
     uploadedBy: "MT",
     uploadedAt: "Apr 17, 2026",
     excerpt:
-      "System requirements for BloomFast MVP. Covers authentication, order flow, payment integration, and driver assignment module specifications."
+      "System requirements for Northstar Cloud. Covers authentication, order flow, payment integration, and billing worker assignment module specifications."
   },
   {
     id: "3",
@@ -98,7 +98,7 @@ export const mockDocs: Doc[] = [
     uploadedBy: "SC",
     uploadedAt: "Apr 16, 2026",
     excerpt:
-      "Working end-to-end order flow for buyers and florists. No Pro subscription in MVP. Manager approval required before driver assignment."
+      "Working end-to-end order flow for buyers and tenant admins. No Pro subscription in MVP. Manager approval required before billing worker assignment."
   },
   {
     id: "4",
@@ -110,7 +110,7 @@ export const mockDocs: Doc[] = [
     uploadedBy: "SC",
     uploadedAt: "Apr 15, 2026",
     excerpt:
-      "Hey Sarah - one thing we forgot to mention. We need manager approval before any driver gets assigned to an order. The florist manager has to sign off first."
+      "Hey Sarah - one thing we forgot to mention. We need manager approval before any billing worker gets assigned to an order. The tenant admin manager has to sign off first."
   },
   {
     id: "5",
@@ -121,7 +121,7 @@ export const mockDocs: Doc[] = [
     status: "ready",
     uploadedBy: "JW",
     uploadedAt: "Apr 14, 2026",
-    excerpt: "Design mockups v3 · buyer ordering flow, florist dashboard, and driver assignment screens."
+    excerpt: "Design mockups v3 · buyer ordering flow, tenant admin dashboard, and billing worker assignment screens."
   },
   {
     id: "6",
@@ -144,7 +144,7 @@ export const mockDocs: Doc[] = [
     uploadedBy: "PK",
     uploadedAt: "Apr 13, 2026",
     excerpt:
-      "Can we add a Pro subscription for florists with better revenue share? Like 85% instead of 70%? I think it really helps retention."
+      "Can we add a Pro subscription for tenant admins with better revenue share? Like 85% instead of 70%? I think it really helps retention."
   },
   {
     id: "8",
@@ -173,21 +173,21 @@ export const mockFlowGraph: FlowGraph = {
     },
     {
       id: "n02",
-      label: "Florist Dashboard",
+      label: "Tenant Admin Dashboard",
       type: "module",
       status: "critical",
       description:
-        "Florist-facing order management interface. Shows incoming orders, fulfillment status, and inventory management.",
+        "Tenant Admin-facing order management interface. Shows incoming orders, fulfillment status, and inventory management.",
       docRefs: ["PRD v2 · Section 3.2"],
       position: { x: 580, y: 180 }
     },
     {
       id: "n03",
-      label: "Driver Assignment",
+      label: "Billing Worker Assignment",
       type: "flow",
       status: "at-risk",
       description:
-        "Automated and manual driver assignment logic. Manager approval required before any driver is assigned to an order.",
+        "Automated and manual billing worker assignment logic. Manager approval required before any billing worker is assigned to an order.",
       docRefs: ["SRS · Section 7", "Client Kickoff Transcript"],
       position: { x: 820, y: 300 }
     },
@@ -196,7 +196,7 @@ export const mockFlowGraph: FlowGraph = {
       label: "Payment Integration",
       type: "integration",
       status: "critical",
-      description: "Stripe payment integration. Covers buyer checkout, florist payouts, and revenue share model.",
+      description: "Stripe payment integration. Covers buyer checkout, tenant admin payouts, and revenue share model.",
       docRefs: ["Tech Spec · Section 4"],
       position: { x: 120, y: 300 }
     },
@@ -205,7 +205,7 @@ export const mockFlowGraph: FlowGraph = {
       label: "Subscription Model",
       type: "module",
       status: "unresolved",
-      description: "Pro subscription for florists. Revenue share percentages still under discussion. Not in MVP v1 scope.",
+      description: "Pro subscription for tenant admins. Revenue share percentages still under discussion. Not in MVP v1 scope.",
       docRefs: ["Stakeholder Email Thread"],
       position: { x: 580, y: 420 }
     },
@@ -223,16 +223,16 @@ export const mockFlowGraph: FlowGraph = {
       label: "Notifications",
       type: "integration",
       status: "stable",
-      description: "Push and email notifications for buyers and florists. Order status updates, delivery confirmations.",
+      description: "Push and email notifications for buyers and tenant admins. Order status updates, billing confirmations.",
       docRefs: ["SRS · Section 8"],
       position: { x: 340, y: 420 }
     },
     {
       id: "n08",
-      label: "Third-party Driver API",
+      label: "Third-party Billing Worker API",
       type: "integration",
       status: "unresolved",
-      description: "External driver network API integration. Provider not confirmed. Availability and pricing TBD.",
+      description: "External billing worker network API integration. Provider not confirmed. Availability and pricing TBD.",
       docRefs: ["Tech Spec · Section 9"],
       position: { x: 820, y: 480 }
     }
@@ -242,7 +242,7 @@ export const mockFlowGraph: FlowGraph = {
     { id: "e2", from: "n02", to: "n03", label: "confirms", style: "dashed" },
     { id: "e3", from: "n03", to: "n06", label: "exceptions", style: "solid" },
     { id: "e4", from: "n01", to: "n04", label: "checkout", style: "solid" },
-    { id: "e5", from: "n02", to: "n07", label: "alerts florist", style: "solid" },
+    { id: "e5", from: "n02", to: "n07", label: "alerts tenant admin", style: "solid" },
     { id: "e6", from: "n07", to: "n05", label: "", style: "solid" },
     { id: "e7", from: "n03", to: "n08", label: "availability", style: "dashed" }
   ]
@@ -250,7 +250,7 @@ export const mockFlowGraph: FlowGraph = {
 
 export const mockDocViewer: DocViewerPayload = {
   id: "1",
-  title: "BloomFast PRD v2",
+  title: "Northstar Cloud PRD v2",
   version: "v2.1",
   uploadedBy: "Sarah Chen",
   uploadedAt: "Apr 18, 2026",
@@ -261,7 +261,7 @@ export const mockDocViewer: DocViewerPayload = {
       anchorId: "overview",
       type: "heading",
       level: 1,
-      content: "BloomFast · Product Requirements Document",
+      content: "Northstar Cloud · Product Requirements Document",
       hasChange: false
     },
     {
@@ -269,7 +269,7 @@ export const mockDocViewer: DocViewerPayload = {
       anchorId: "summary",
       type: "paragraph",
       content:
-        "BloomFast is an on-demand flower delivery marketplace connecting buyers to local florists. The platform enables buyer-facing ordering, florist-facing order management, and driver assignment with real-time tracking.",
+        "Northstar Cloud is an on-demand usage billing marketplace connecting buyers to local tenant admins. The platform enables buyer-facing ordering, tenant admin-facing order management, and billing worker assignment with real-time tracking.",
       hasChange: false
     },
     {
@@ -285,7 +285,7 @@ export const mockDocViewer: DocViewerPayload = {
       anchorId: "scope-detail",
       type: "paragraph",
       content:
-        "The MVP covers three primary user flows: buyer ordering, florist dashboard, and driver assignment. Payment processing via Stripe. No Pro subscription in v1.",
+        "The MVP covers three primary user flows: buyer ordering, tenant admin dashboard, and billing worker assignment. Payment processing via Stripe. No Pro subscription in v1.",
       hasChange: true,
       changeId: "c1",
       citationIds: ["cite-1"]
@@ -302,25 +302,25 @@ export const mockDocViewer: DocViewerPayload = {
       id: "s6",
       anchorId: "auth-detail",
       type: "paragraph",
-      content: "OAuth 2.0 with Google SSO for buyers. Email/password for florists and drivers. JWT tokens with 24hr expiry.",
+      content: "OAuth 2.0 with Google SSO for buyers. Email/password for tenant admins and billing workers. JWT tokens with 24hr expiry.",
       hasChange: true,
       changeId: "c2",
       citationIds: ["cite-2"]
     },
     {
       id: "s7",
-      anchorId: "driver",
+      anchorId: "billing worker",
       type: "heading",
       level: 2,
-      content: "3. Driver Assignment",
+      content: "3. Billing Worker Assignment",
       hasChange: false
     },
     {
       id: "s8",
-      anchorId: "driver-detail",
+      anchorId: "billing worker-detail",
       type: "paragraph",
       content:
-        "Drivers are assigned automatically based on proximity and availability. Manager approval required before assignment is confirmed. Florist manager must sign off on each order.",
+        "Billing Workers are assigned automatically based on proximity and availability. Manager approval required before assignment is confirmed. Tenant Admin manager must sign off on each order.",
       hasChange: true,
       changeId: "c3",
       citationIds: ["cite-3"]
@@ -337,7 +337,7 @@ export const mockDocViewer: DocViewerPayload = {
       id: "s10",
       anchorId: "payments-detail",
       type: "paragraph",
-      content: "Stripe Connect for buyer payments and florist payouts. Revenue share: 70% florist, 30% platform. Payout batching weekly.",
+      content: "Stripe Connect for buyer payments and tenant admin payouts. Revenue share: 70% tenant admin, 30% platform. Payout batching weekly.",
       hasChange: false
     },
     {
@@ -353,7 +353,7 @@ export const mockDocViewer: DocViewerPayload = {
       anchorId: "notifications-detail",
       type: "paragraph",
       content:
-        "SMS notifications for order status updates. Email confirmations for buyers. Push notifications for florists and drivers via Firebase.",
+        "SMS notifications for order status updates. Email confirmations for buyers. Push notifications for tenant admins and billing workers via Firebase.",
       hasChange: false
     }
   ]
@@ -362,12 +362,12 @@ export const mockDocViewer: DocViewerPayload = {
 export const mockProvenance: Record<string, AnchorProvenance> = {
   "scope-detail": {
     anchorId: "scope-detail",
-    sourceDoc: "BloomFast PRD v2 · Section 1",
+    sourceDoc: "Northstar Cloud PRD v2 · Section 1",
     excerpt: "No Pro subscription in v1.",
     linkedMessages: [
       {
         id: "m1",
-        from: "Jack (BloomFast)",
+        from: "Jack (Northstar Cloud)",
         platform: "slack",
         content: "Confirmed · no Pro subscription for MVP. Keep it simple for launch.",
         sentAt: "Apr 14, 2026"
@@ -384,7 +384,7 @@ export const mockProvenance: Record<string, AnchorProvenance> = {
   },
   "auth-detail": {
     anchorId: "auth-detail",
-    sourceDoc: "BloomFast PRD v2 · Section 2",
+    sourceDoc: "Northstar Cloud PRD v2 · Section 2",
     excerpt: "OAuth removed from v1 scope.",
     linkedMessages: [
       {
@@ -404,24 +404,24 @@ export const mockProvenance: Record<string, AnchorProvenance> = {
       }
     ]
   },
-  "driver-detail": {
-    anchorId: "driver-detail",
+  "billing worker-detail": {
+    anchorId: "billing worker-detail",
     sourceDoc: "Client Kickoff Transcript",
-    excerpt: "Manager approval before driver assignment.",
+    excerpt: "Manager approval before billing worker assignment.",
     linkedMessages: [
       {
         id: "m3",
-        from: "Jack (BloomFast)",
+        from: "Jack (Northstar Cloud)",
         platform: "whatsapp",
         content:
-          "Hey Sarah - one thing we forgot to mention. We need manager approval before any driver gets assigned. The florist manager has to sign off first.",
+          "Hey Sarah - one thing we forgot to mention. We need manager approval before any billing worker gets assigned. The tenant admin manager has to sign off first.",
         sentAt: "Apr 14, 2026"
       }
     ],
     acceptedChanges: [
       {
         id: "c3",
-        summary: "Manager approval required before driver assignment",
+        summary: "Manager approval required before billing worker assignment",
         acceptedAt: "Apr 15, 2026",
         acceptedBy: "Sarah Chen"
       }
@@ -430,27 +430,33 @@ export const mockProvenance: Record<string, AnchorProvenance> = {
 };
 
 export const mockLiveDoc: LiveDocPayload = {
-  projectName: "BloomFast",
-  docType: "PRD",
-  version: "V1.2",
-  status: "DRAFT",
+  projectName: "Northstar Cloud",
+  docType: "CONTEXT LAYER",
+  version: "CTX-2026.05.23",
+  status: "ACCEPTED",
   sections: [
     {
       id: "sec-title",
       anchorId: "title",
       sectionLabel: "",
       type: "title",
-      content: "BloomFast delivery console",
+      content: "Current truth -> export as anything",
       sourceIds: []
     },
     {
       id: "sec-overview",
       anchorId: "overview",
       sectionLabel: "",
-      type: "body",
+      type: "highlighted",
       content:
-        "A dispatch-first web app for coordinating florist pickups, driver routes, and customer notifications across a single metro day-part model. The experience should feel calm under peak load and obvious when something needs human attention.",
-      sourceIds: ["c1"]
+        "Northstar Cloud is a multi-tenant developer platform for usage-based billing, entitlement checks, and account-scoped analytics. The current build is the billing confidence slice: SDK usage events, ingestion hardening, ledger reconciliation, invoice preview, entitlement reads, and partner-facing billing UI. The context layer keeps only decisions that still affect implementation, rollout, or agent handoff.",
+      highlight: {
+        text: "billing confidence slice",
+        start: 140,
+        end: 164
+      },
+      sourceIds: ["c1"],
+      exportTags: ["agent", "backend", "frontend"]
     },
     {
       id: "sec-goals-label",
@@ -466,18 +472,19 @@ export const mockLiveDoc: LiveDocPayload = {
       sectionLabel: "",
       type: "highlighted",
       content:
-        "Reduce missed same-day deliveries by giving dispatch a real-time view of capacity before 10:00 local, with guardrails when driver supply drops. Dispatchers should always see the next best action without opening secondary tools.",
+        "The launch goal is billing confidence, not feature breadth: every billable usage event must be traceable from SDK emit -> ingestion -> ledger row -> invoice preview before beta expansion. A design partner must be able to dispute a line item by giving support an event_id, workspace_id, and invoice_preview_id, and support must trace that path without asking engineering to query Stripe. Beta is blocked until replay, preview, webhook retry, and entitlement-read dashboards all agree on the same ledger snapshot.",
       highlight: {
-        text: "real-time view of capacity before 10:00 local",
-        start: 67,
-        end: 112
+        text: "SDK emit -> ingestion -> ledger row -> invoice preview",
+        start: 90,
+        end: 146
       },
-      sourceIds: ["c1"]
+      sourceIds: ["c2"],
+      exportTags: ["agent", "backend", "payments"]
     },
     {
       id: "sec-catalog-label",
       anchorId: "catalog",
-      sectionLabel: "CATALOG & INTEGRATIONS",
+      sectionLabel: "BACKEND CONTRACTS",
       type: "section-heading",
       content: "",
       sourceIds: []
@@ -488,18 +495,19 @@ export const mockLiveDoc: LiveDocPayload = {
       sectionLabel: "",
       type: "highlighted",
       content:
-        "Product catalog syncs from Shopify as the canonical SKU source. Warehouse inventory is polled every five minutes; writebacks are admin-only. Any mismatch surfaces as a single-line exception with a deep link to the originating order.",
+        "Stripe remains isolated behind BillingPort; no route, React loader, or invoice preview job may call Stripe directly. Ingestion writes immutable UsageEvent rows with idempotency_key, workspace_id, sdk_key_id, occurred_at, received_at, and raw_payload_hash; correction happens by appending reversal events, never by mutation. The ledger consumes only accepted events, invoice preview reads ledger state without calling Stripe directly, and reconciliation publishes entitlement_snapshot_id only after the ledger and Stripe adapter agree on period, plan, and customer mapping.",
       highlight: {
-        text: "Shopify as the canonical SKU source",
-        start: 27,
-        end: 62
+        text: "Stripe remains isolated behind BillingPort",
+        start: 0,
+        end: 42
       },
-      sourceIds: ["c2"]
+      sourceIds: ["c3"],
+      exportTags: ["agent", "backend", "payments"]
     },
     {
       id: "sec-auth-label",
       anchorId: "auth",
-      sectionLabel: "AUTHENTICATION",
+      sectionLabel: "AUTH + TENANCY",
       type: "section-heading",
       content: "",
       sourceIds: []
@@ -508,14 +516,20 @@ export const mockLiveDoc: LiveDocPayload = {
       id: "sec-auth",
       anchorId: "auth-body",
       sectionLabel: "",
-      type: "body",
-      content: "OAuth removed from v1 scope. Email and password authentication for all user types. JWT tokens with 24-hour expiry.",
-      sourceIds: []
+      type: "highlighted",
+      content: "All API requests must carry account_id, workspace_id, actor_id, and role from signed session claims; clients never send tenant IDs as trusted body fields. Row-level checks happen before entitlement checks so a denied tenant boundary cannot leak plan state. Admin impersonation must stamp impersonated_by and reason_code on audit rows, and service-to-service jobs use workspace-scoped tokens with explicit job_type claims rather than global admin bypass.",
+      highlight: {
+        text: "Row-level checks happen before entitlement checks",
+        start: 145,
+        end: 191
+      },
+      sourceIds: ["c4"],
+      exportTags: ["agent", "backend", "frontend"]
     },
     {
       id: "sec-payments-label",
       anchorId: "payments",
-      sectionLabel: "PAYMENTS",
+      sectionLabel: "PAYMENTS + ENTITLEMENTS",
       type: "section-heading",
       content: "",
       sourceIds: []
@@ -524,37 +538,159 @@ export const mockLiveDoc: LiveDocPayload = {
       id: "sec-payments",
       anchorId: "payments-body",
       sectionLabel: "",
-      type: "body",
+      type: "highlighted",
       content:
-        "Driver payouts must never block dispatch · if payout fails, queue and retry without cancelling the route. Stripe Connect for buyer payments and florist payouts. Revenue share: 70% florist, 30% platform.",
-      sourceIds: ["c3"]
+        "Entitlements are evaluated from the ledger snapshot, not directly from Stripe webhooks. A payment webhook can unlock a plan only after ledger reconciliation succeeds, because a Stripe subscription state alone cannot prove usage period completeness. Failed payments freeze upgrades but do not disable already-granted beta access until the current entitlement_snapshot expires; downgrade effects are queued as pending_entitlement_change rows and applied at the next snapshot boundary.",
+      highlight: {
+        text: "only after ledger reconciliation succeeds",
+        start: 111,
+        end: 151
+      },
+      sourceIds: ["c5"],
+      exportTags: ["agent", "backend", "payments"]
     },
     {
-      id: "sec-driver-label",
-      anchorId: "driver",
-      sectionLabel: "DRIVER ASSIGNMENT",
+      id: "sec-data-label",
+      anchorId: "data-model",
+      sectionLabel: "DATA MODEL",
       type: "section-heading",
       content: "",
       sourceIds: []
     },
     {
-      id: "sec-driver",
-      anchorId: "driver-body",
+      id: "sec-data",
+      anchorId: "data-model-body",
       sectionLabel: "",
       type: "highlighted",
       content:
-        "Drivers are matched to orders based on proximity, availability, and shift status. Manager approval is required before any driver is confirmed on an order. Florist manager must sign off. If a driver declines, the system automatically re-queues and finds the next closest available driver.",
+        "UsageEvent is the immutable ingestion fact table; LedgerEntry is the accounting projection; InvoicePreview is a read model keyed by ledger_snapshot_id; EntitlementSnapshot is the only source read by product gates. UsageEvent.raw_payload_hash and idempotency_key are unique per workspace and sdk_key_id, while LedgerEntry stores derived debit, credit, plan_code, unit_price_cents, and reversal_of_entry_id. Stripe customer/subscription IDs are adapter references, not product truth; the ledger snapshot is product truth after reconciliation.",
       highlight: {
-        text: "Manager approval is required before any driver is confirmed",
-        start: 89,
-        end: 148
+        text: "UsageEvent is the immutable ingestion fact table",
+        start: 0,
+        end: 46
       },
-      sourceIds: ["c4"]
+      sourceIds: ["c11"],
+      exportTags: ["agent", "backend", "payments"]
+    },
+    {
+      id: "sec-errors-label",
+      anchorId: "error-handling",
+      sectionLabel: "ERROR HANDLING + RETRIES",
+      type: "section-heading",
+      content: "",
+      sourceIds: []
+    },
+    {
+      id: "sec-errors",
+      anchorId: "error-handling-body",
+      sectionLabel: "",
+      type: "highlighted",
+      content:
+        "Ingestion accepts valid events before downstream billing jobs run; invoice preview, reconciliation, and webhook retries must never block event capture. Webhook retries use capped exponential backoff at 1m, 5m, 20m, 2h, and 12h with a dead-letter record after the fifth failure. Idempotency conflicts return the original accepted event_id when the payload hash matches and raise a review exception when the key matches but the hash differs.",
+      highlight: {
+        text: "must never block event capture",
+        start: 109,
+        end: 139
+      },
+      sourceIds: ["c12"],
+      exportTags: ["agent", "backend", "payments"]
+    },
+    {
+      id: "sec-observability-label",
+      anchorId: "observability",
+      sectionLabel: "OBSERVABILITY",
+      type: "section-heading",
+      content: "",
+      sourceIds: []
+    },
+    {
+      id: "sec-observability",
+      anchorId: "observability-body",
+      sectionLabel: "",
+      type: "highlighted",
+      content:
+        "Every billing trace carries trace_id, workspace_id, sdk_key_id, event_id, ledger_snapshot_id, and invoice_preview_id from ingestion through preview render. Alert when accepted_usage_events minus ledger_entries is greater than 25 for ten minutes, webhook_dlq_count is non-zero for a design partner, or entitlement_snapshot_age exceeds fifteen minutes. Logs must redact raw payload properties by default and allow debug reveal only for internal workspaces.",
+      highlight: {
+        text: "accepted_usage_events minus ledger_entries",
+        start: 142,
+        end: 184
+      },
+      sourceIds: ["c13"],
+      exportTags: ["agent", "backend"]
+    },
+    {
+      id: "sec-rate-label",
+      anchorId: "rate-limiting",
+      sectionLabel: "RATE LIMITING",
+      type: "section-heading",
+      content: "",
+      sourceIds: []
+    },
+    {
+      id: "sec-rate",
+      anchorId: "rate-limiting-body",
+      sectionLabel: "",
+      type: "highlighted",
+      content:
+        "Rate limits protect ingestion and ledger freshness, not invoice preview. Public SDK ingestion allows 600 events per workspace per minute with a 2x burst bucket; replay jobs bypass public limits only through a signed internal queue token with job_type usage_replay. When a workspace is throttled, the API returns retry_after_ms and preserves idempotency keys so clients can safely retry without duplicate ledger entries.",
+      highlight: {
+        text: "600 events per workspace per minute",
+        start: 74,
+        end: 109
+      },
+      sourceIds: ["c10"],
+      exportTags: ["agent", "backend"]
+    },
+    {
+      id: "sec-deployment-label",
+      anchorId: "deployment-rollout",
+      sectionLabel: "DEPLOYMENT + ROLLOUT",
+      type: "section-heading",
+      content: "",
+      sourceIds: []
+    },
+    {
+      id: "sec-deployment",
+      anchorId: "deployment-rollout-body",
+      sectionLabel: "",
+      type: "highlighted",
+      content:
+        "Rollout is feature-flagged by workspace: billing_ledger_v2, invoice_preview_v2, entitlement_snapshot_reads, and webhook_retry_dashboard. Three design partners remain pinned to beta until replay, preview, retry, and entitlement dashboards pass the May 29 gate; rollback disables entitlement_snapshot_reads first, then preview_v2, but never deletes accepted UsageEvent rows. Any migration that touches ledger math must ship with a replay fixture and a before/after invoice diff.",
+      highlight: {
+        text: "rollback disables entitlement_snapshot_reads first",
+        start: 223,
+        end: 269
+      },
+      sourceIds: ["c14"],
+      exportTags: ["agent", "backend", "frontend"]
+    },
+    {
+      id: "sec-frontend-label",
+      anchorId: "frontend",
+      sectionLabel: "FRONTEND SURFACES",
+      type: "section-heading",
+      content: "",
+      sourceIds: []
+    },
+    {
+      id: "sec-frontend",
+      anchorId: "frontend-body",
+      sectionLabel: "",
+      type: "highlighted",
+      content:
+        "The customer admin must show plan state, current usage, invoice preview, blocked actions, and the source event trail in one billing surface. The UI labels blocked features as plan limits, not errors, and every blocked action links to the entitlement_snapshot_id that caused it. Client state comes from /billing/summary and /invoice-preview, never from Stripe client SDK calls; optimistic UI is allowed for filter changes but not for plan unlocks.",
+      highlight: {
+        text: "blocked features as plan limits, not errors",
+        start: 119,
+        end: 161
+      },
+      sourceIds: ["c6"],
+      exportTags: ["agent", "frontend", "payments"]
     },
     {
       id: "sec-notifications-label",
       anchorId: "notifications",
-      sectionLabel: "NOTIFICATIONS",
+      sectionLabel: "ROLL OUT",
       type: "section-heading",
       content: "",
       sourceIds: []
@@ -563,15 +699,44 @@ export const mockLiveDoc: LiveDocPayload = {
       id: "sec-notifications",
       anchorId: "notifications-body",
       sectionLabel: "",
-      type: "body",
+      type: "highlighted",
       content:
-        "SMS notifications trigger at three points: order confirmed, driver en route, and delivery complete. Email confirmation sent to buyer at order placement. Push notifications to florists and drivers via Firebase Cloud Messaging. Notification failures must not block dispatch.",
-      sourceIds: ["c5"]
+        "Beta remains limited to three design partners until usage replay, invoice preview, and webhook retry dashboards all pass the May 29 release gate.",
+      highlight: {
+        text: "May 29 release gate",
+        start: 114,
+        end: 133
+      },
+      sourceIds: ["c7"],
+      exportTags: ["agent", "backend", "frontend"]
+    },
+    {
+      id: "sec-design-label",
+      anchorId: "design-system",
+      sectionLabel: "DESIGN SYSTEM",
+      type: "section-heading",
+      content: "",
+      sourceIds: []
+    },
+    {
+      id: "sec-design",
+      anchorId: "design-system-body",
+      sectionLabel: "",
+      type: "highlighted",
+      content:
+        "Northstar web uses a cool graphite-and-cyan system: canvas #F4F7FB, surface #FFFFFF, text #111827, muted #64748B, accent #2563EB, with Inter for product UI and JetBrains Mono for event IDs.",
+      highlight: {
+        text: "Inter for product UI and JetBrains Mono for event IDs",
+        start: 128,
+        end: 181
+      },
+      sourceIds: ["c9"],
+      exportTags: ["agent", "frontend"]
     },
     {
       id: "sec-scope-label",
       anchorId: "scope",
-      sectionLabel: "V1 SCOPE BOUNDARIES",
+      sectionLabel: "DROPPED AS STALE",
       type: "section-heading",
       content: "",
       sourceIds: []
@@ -582,13 +747,15 @@ export const mockLiveDoc: LiveDocPayload = {
       sectionLabel: "",
       type: "body",
       content:
-        "V1 is single-metro only. No Pro subscription for florists in v1 · deferred to v2. OAuth removed from scope · email and password only. Multi-driver routing and cross-region pooling deferred. Native mobile apps for drivers deferred · web-only for launch.",
-      sourceIds: ["c1"]
+        "The old direct-Stripe entitlement path, CSV-only invoice review, and per-service billing widgets are explicitly superseded. They stay in sources for audit, not in exports.",
+      sourceIds: ["c8"],
+      exportTags: ["agent"],
+      stalePolicy: "Superseded content is linked for audit but excluded from generated exports."
     },
     {
       id: "sec-diagrams-label",
       anchorId: "diagrams",
-      sectionLabel: "SYSTEM DIAGRAMS",
+      sectionLabel: "EXPORTABLE DIAGRAM",
       type: "section-heading",
       content: "",
       sourceIds: []
@@ -597,58 +764,246 @@ export const mockLiveDoc: LiveDocPayload = {
   comments: [
     {
       id: "c1",
-      authorInitials: "MC",
-      authorName: "Maya Chen",
-      time: "9:14 AM",
-      date: "12 Mar 2026",
+      authorInitials: "SK",
+      authorName: "Sarah Kim",
+      time: "10:12 AM",
+      date: "18 May 2026",
       content:
-        "We need same-day slots before 10am to feel credible for florists. If we miss that window, they won't trust us.",
-      source: 'Slack #bloomfast-client · thread "Same-day credibility"',
-      linkedSectionId: "sec-goals"
+        "Do not turn this into another wiki. Keep the few decisions that determine what an agent should build next.",
+      source: 'Slack #eng-billing · thread "context layer"',
+      linkedSectionId: "sec-overview"
     },
     {
       id: "c2",
-      authorInitials: "N",
-      authorName: "Notes",
-      time: "2:08 PM",
-      date: "14 Mar 2026",
-      content: "Confirmed Shopify is source of truth for SKUs; anything else is read-only mirror.",
-      source: "Kickoff call transcript (internal)",
-      linkedSectionId: "sec-catalog"
+      authorInitials: "AK",
+      authorName: "Arun Kapoor",
+      time: "3:41 PM",
+      date: "18 May 2026",
+      content: "The beta proof is traceability end to end: SDK emit, ingestion, ledger row, invoice preview.",
+      source: "Zoom transcript · Northstar billing beta review",
+      linkedSectionId: "sec-goals"
     },
     {
       id: "c3",
-      authorInitials: "JL",
-      authorName: "Jordan Lee",
-      time: "11:22 AM",
-      date: "18 Mar 2026",
+      authorInitials: "MT",
+      authorName: "Marcus Thompson",
+      time: "4:18 PM",
+      date: "19 May 2026",
       content:
-        "Driver payouts must never block dispatch · if payout fails, queue and retry without cancelling the route.",
-      source: 'Email ops@bloomfast.co · subject "Payouts vs dispatch"',
-      linkedSectionId: "sec-payments"
+        "Merged BillingPort adapter. Stripe must not be called from invoice preview or entitlement checks.",
+      source: "GitHub PR #418 · northstar-cloud/api",
+      linkedSectionId: "sec-catalog"
     },
     {
       id: "c4",
-      authorInitials: "JB",
-      authorName: "Jack BloomFast",
-      time: "3:18 PM",
-      date: "18 Mar 2026",
+      authorInitials: "PK",
+      authorName: "Priya Kaur",
+      time: "9:05 AM",
+      date: "20 May 2026",
       content:
-        "Manager approval is required before any driver is confirmed on an order. If a florist manager rejects it, the system should immediately re-queue and find the next closest available driver.",
-      source: "Kickoff follow-up · WhatsApp thread",
-      linkedSectionId: "sec-driver"
+        "Tenant boundary check has to run before entitlement evaluation. Otherwise a forbidden workspace can reveal plan state.",
+      source: "Security review · Linear SEC-117",
+      linkedSectionId: "sec-auth"
     },
     {
       id: "c5",
       authorInitials: "SC",
       authorName: "Sarah Chen",
-      time: "10:30 AM",
-      date: "19 Mar 2026",
-      content: "Notification failures must never block dispatch. Queue and retry independently.",
-      source: "Internal design review · Slack #engineering",
+      time: "11:27 AM",
+      date: "20 May 2026",
+      content: "No webhook should directly unlock a feature. Reconcile ledger first, then entitlements read the snapshot.",
+      source: 'Slack #eng-billing · thread "webhook ordering"',
+      linkedSectionId: "sec-payments"
+    },
+    {
+      id: "c6",
+      authorInitials: "JW",
+      authorName: "Jess Wong",
+      time: "2:16 PM",
+      date: "21 May 2026",
+      content: "The billing page needs plan state, usage, invoice preview, and blocked actions together. Blocked feature copy should say plan limit.",
+      source: "Figma comment · Billing surface v3",
+      linkedSectionId: "sec-frontend"
+    },
+    {
+      id: "c7",
+      authorInitials: "SK",
+      authorName: "Sarah Kim",
+      time: "5:44 PM",
+      date: "21 May 2026",
+      content: "Three design partners only until replay, preview, and webhook retry dashboards pass the May 29 gate.",
+      source: "Release plan · Notion northstar/billing-beta",
       linkedSectionId: "sec-notifications"
+    },
+    {
+      id: "c8",
+      authorInitials: "MT",
+      authorName: "Marcus Thompson",
+      time: "1:03 PM",
+      date: "22 May 2026",
+      content: "Deleting old per-service widget notes from context export. Sources stay searchable for audit only.",
+      source: 'Slack #eng-billing · thread "stale billing notes"',
+      linkedSectionId: "sec-scope"
+    },
+    {
+      id: "c9",
+      authorInitials: "JW",
+      authorName: "Jess Wong",
+      time: "4:22 PM",
+      date: "22 May 2026",
+      content: "Northstar billing UI should use the product token set from the web repo: cool canvas, blue accent, Inter, and JetBrains Mono for usage/event IDs.",
+      source: "northstar-cloud/web · tailwind.config.ts + Figma comment",
+      linkedSectionId: "sec-design"
+    },
+    {
+      id: "c10",
+      authorInitials: "MT",
+      authorName: "Marcus Thompson",
+      time: "10:36 AM",
+      date: "23 May 2026",
+      content: "Rate limits should protect ingestion from noisy SDK clients, but replay jobs need an internal signed queue bypass.",
+      source: "GitHub issue #431 · northstar-cloud/api",
+      linkedSectionId: "sec-rate-limit-authored"
+    },
+    {
+      id: "c11",
+      authorInitials: "MT",
+      authorName: "Marcus Thompson",
+      time: "1:18 PM",
+      date: "23 May 2026",
+      content: "UsageEvent is immutable. LedgerEntry is derived. InvoicePreview reads a ledger snapshot. Stripe IDs are adapter references, not product truth.",
+      source: "northstar-cloud/api · prisma/schema.prisma review",
+      linkedSectionId: "sec-data"
+    },
+    {
+      id: "c12",
+      authorInitials: "SC",
+      authorName: "Sarah Chen",
+      time: "2:04 PM",
+      date: "23 May 2026",
+      content: "Capture valid usage first. Retry billing jobs separately. A webhook outage should not stop SDK event ingestion.",
+      source: 'Slack #eng-billing · thread "retry boundaries"',
+      linkedSectionId: "sec-errors"
+    },
+    {
+      id: "c13",
+      authorInitials: "PK",
+      authorName: "Priya Kaur",
+      time: "3:22 PM",
+      date: "23 May 2026",
+      content: "Dashboard needs drift alerts: accepted usage minus ledger rows, webhook DLQ, and stale entitlement snapshots. Redact raw payload fields by default.",
+      source: "Datadog monitor draft · BILL-OBS-7",
+      linkedSectionId: "sec-observability"
+    },
+    {
+      id: "c14",
+      authorInitials: "SK",
+      authorName: "Sarah Kim",
+      time: "4:10 PM",
+      date: "23 May 2026",
+      content: "Rollout is flag-first. Roll back entitlement snapshot reads before preview, and never delete accepted UsageEvent rows.",
+      source: "Release plan · Notion northstar/billing-beta",
+      linkedSectionId: "sec-deployment"
     }
-  ]
+  ],
+  exports: [
+    {
+      id: "agent",
+      label: "Agent context",
+      extension: ".md",
+      lens: "Cursor / Claude Code handoff",
+      updatedAt: "23 May 2026 · 10:42",
+      regeneratedByEventIds: ["evt-pr-418"],
+      copy: "Copy agent.md",
+      preview:
+        "# Northstar Cloud agent context\n\n## Product slice\n- Build the billing confidence slice, not a broad billing redesign.\n- Required trace: SDK emit -> ingestion -> UsageEvent -> LedgerEntry -> ledger_snapshot_id -> InvoicePreview -> EntitlementSnapshot.\n- A support user must be able to trace a disputed line item from event_id, workspace_id, and invoice_preview_id without querying Stripe.\n\n## Backend contracts\n- Stripe is isolated behind BillingPort. Do not call Stripe from React loaders, invoice preview jobs, entitlement checks, or product routes.\n- UsageEvent is immutable and keyed by workspace_id, sdk_key_id, idempotency_key, occurred_at, received_at, and raw_payload_hash.\n- Corrections append reversal events and reversal ledger entries. Never mutate accepted usage rows.\n- LedgerEntry is the accounting projection. InvoicePreview reads ledger snapshots. EntitlementSnapshot is the only object product gates read.\n- Reconciliation publishes entitlement_snapshot_id only after ledger and Stripe adapter agree on period, plan, customer, and subscription mapping.\n\n## Auth + tenancy\n- All API requests use signed session claims for account_id, workspace_id, actor_id, and role.\n- Tenant body fields are never trusted. Row-level checks happen before entitlement checks.\n- Admin impersonation must write impersonated_by and reason_code to audit rows.\n- Service jobs use workspace-scoped job tokens with job_type claims, not global admin bypass.\n\n## Error handling + retries\n- Valid ingestion is accepted before downstream billing jobs run.\n- Invoice preview, reconciliation, and webhook retries must not block SDK event capture.\n- Webhook backoff: 1m, 5m, 20m, 2h, 12h, then dead-letter.\n- Idempotency conflicts return the original event when the payload hash matches; mismatch creates a review exception.\n\n## Observability\n- Trace fields: trace_id, workspace_id, sdk_key_id, event_id, ledger_snapshot_id, invoice_preview_id.\n- Alert if accepted_usage_events - ledger_entries > 25 for 10 minutes.\n- Alert if webhook_dlq_count is non-zero for any design partner.\n- Alert if entitlement_snapshot_age > 15 minutes.\n- Redact raw payload properties by default.\n\n## Rate limits\n- Public SDK ingestion: 600 events per workspace per minute with 2x burst.\n- Usage replay bypasses public limits only via signed internal queue token with job_type=usage_replay.\n- Throttled responses include retry_after_ms and preserve idempotency keys.\n\n## Rollout\n- Feature flags: billing_ledger_v2, invoice_preview_v2, entitlement_snapshot_reads, webhook_retry_dashboard.\n- Rollback order: disable entitlement_snapshot_reads first, then invoice_preview_v2. Never delete accepted UsageEvent rows.\n- Ledger math migrations require replay fixtures and before/after invoice diffs.\n\n## Design System\n- Canvas: #F4F7FB\n- Surface: #FFFFFF\n- Text: #111827\n- Muted: #64748B\n- Accent: #2563EB\n- Font: Inter for product UI; JetBrains Mono for event IDs and paths.\n- Radius: 10px cards, 999px pills; spacing: 4/8/12/16/24."
+    },
+    {
+      id: "backend",
+      label: "Backend",
+      extension: ".md",
+      lens: "API, workers, ledger contracts",
+      updatedAt: "23 May 2026 · 10:42",
+      regeneratedByEventIds: ["evt-pr-418"],
+      copy: "Copy backend.md",
+      preview:
+        "# Backend context\n\n## Boundaries\n- BillingPort owns all Stripe interaction. Product routes and invoice preview jobs must not import Stripe clients.\n- Stripe customer/subscription IDs are adapter references. The ledger snapshot is product truth after reconciliation.\n- Entitlement reads happen from EntitlementSnapshot, not from webhook payloads or subscription state.\n\n## Data model\n- UsageEvent: immutable ingestion fact. Required fields: workspace_id, sdk_key_id, idempotency_key, occurred_at, received_at, raw_payload_hash, event_id.\n- LedgerEntry: accounting projection from accepted usage. Stores debit, credit, plan_code, unit_price_cents, reversal_of_entry_id.\n- InvoicePreview: read model keyed by ledger_snapshot_id and invoice_preview_id.\n- EntitlementSnapshot: derived gate state for product features.\n- Correction pattern: append reversal UsageEvent/LedgerEntry, never update accepted rows in place.\n\n## Workers\n- ingestion-worker validates payload shape and writes UsageEvent.\n- ledger-worker consumes accepted events only and creates LedgerEntry rows.\n- preview-worker renders InvoicePreview from ledger snapshots only.\n- reconciliation-worker compares ledger period/customer/plan mapping to BillingPort results, then publishes EntitlementSnapshot.\n\n## Error handling\n- Ingestion availability is higher priority than preview freshness.\n- Webhook retry schedule: 1m, 5m, 20m, 2h, 12h, then DLQ.\n- Idempotency: matching key + matching hash returns original event_id; matching key + different hash creates review_exception.\n- Failed payments freeze upgrades but do not revoke current beta access until snapshot expiry.\n\n## Observability\n- Emit trace_id through ingestion, ledger, preview, reconciliation, and entitlement read.\n- Metrics: accepted_usage_events, ledger_entries_created, ledger_drift_count, webhook_dlq_count, entitlement_snapshot_age, preview_render_ms.\n- Alerts: drift > 25 for 10m, DLQ > 0 for design partners, snapshot age > 15m.\n\n## Rate limits\n- SDK ingestion limit: 600 events/workspace/minute, 2x burst bucket.\n- Replay jobs require signed internal queue token with job_type=usage_replay.\n- Throttled responses return retry_after_ms and preserve idempotency semantics."
+    },
+    {
+      id: "frontend",
+      label: "Frontend",
+      extension: ".md",
+      lens: "Billing UI and product copy",
+      updatedAt: "23 May 2026 · 09:58",
+      regeneratedByEventIds: [],
+      copy: "Copy frontend.md",
+      preview:
+        "# Frontend context\n\n## Billing surface\n- Show plan state, current usage, invoice preview, blocked actions, and source event trail in one billing surface.\n- Blocked actions are plan limits, not error states.\n- Every blocked action links to entitlement_snapshot_id.\n- Do not call Stripe client SDKs for plan unlock or invoice preview state.\n\n## Client data contracts\n- /billing/summary provides plan, entitlement_snapshot_id, usage totals, and blocked action metadata.\n- /invoice-preview provides invoice_preview_id, ledger_snapshot_id, line items, period, and stale/fresh status.\n- /usage-events supports trace lookup by event_id and workspace_id.\n- Optimistic UI is allowed for filters and row expansion, not for plan unlocks.\n\n## Auth/session handling\n- Client should read account_id, workspace_id, actor_id, and role from session context returned by the app shell.\n- Never let UI-provided tenant IDs override session claims.\n- For denied states, copy should say plan limit or unavailable for this workspace, not generic error.\n\n## States\n- Empty: no accepted usage for period.\n- Pending: usage accepted but ledger snapshot not yet current.\n- Review: idempotency hash mismatch or webhook DLQ affects preview freshness.\n- Blocked: entitlement_snapshot denies feature; show source snapshot ID.\n\n## Design System\n- Canvas: #F4F7FB\n- Surface: #FFFFFF\n- Text: #111827\n- Muted: #64748B\n- Accent: #2563EB\n- Font: Inter for product UI; JetBrains Mono for metadata, event IDs, and paths.\n- Radius: 10px cards, 999px pills.\n- Spacing scale: 4, 8, 12, 16, 24."
+    },
+    {
+      id: "payments",
+      label: "Payments relevant",
+      extension: ".md",
+      lens: "Custom lens for billing/payment work",
+      updatedAt: "23 May 2026 · 10:42",
+      regeneratedByEventIds: ["evt-pr-418"],
+      copy: "Copy payments.md",
+      preview:
+        "# Payments-relevant context\n\n## Stripe boundary\n- Stripe is behind BillingPort. No invoice preview, entitlement check, React loader, or product API route may call Stripe directly.\n- Stripe IDs are adapter references only. Product truth is ledger_snapshot_id after reconciliation.\n- Direct-Stripe entitlement paths are superseded and should stay out of generated code.\n\n## Reconciliation flow\n- Payment webhook enters BillingPort adapter.\n- Adapter writes reconciliation input, not entitlement state.\n- Reconciliation compares Stripe period, customer, subscription, and plan mapping to ledger snapshot.\n- EntitlementSnapshot is published only after ledger and BillingPort agree.\n- A webhook can unlock a plan only after ledger reconciliation succeeds.\n\n## Entitlement behavior\n- Entitlements are evaluated from EntitlementSnapshot.\n- Failed payments freeze upgrades but do not disable current beta access until snapshot expiry.\n- Downgrades become pending_entitlement_change rows and apply at the next snapshot boundary.\n- Blocked UI actions should link back to entitlement_snapshot_id.\n\n## Invoice preview\n- Reads ledger state only.\n- Must show invoice_preview_id and ledger_snapshot_id for support traceability.\n- Must expose stale/fresh status if ledger_snapshot_age is above threshold.\n- Must not render values directly from Stripe subscription state.\n\n## Failure handling\n- Webhook retries use 1m, 5m, 20m, 2h, 12h backoff, then DLQ.\n- Reconciliation failure must not block ingestion.\n- Idempotency mismatch creates review_exception and does not create ledger rows.\n\n## Observability\n- Metrics: ledger_drift_count, webhook_dlq_count, entitlement_snapshot_age, preview_render_ms.\n- Alerts: design partner DLQ > 0, snapshot age > 15 minutes, ledger drift > 25 for 10 minutes."
+    },
+    {
+      id: "diagram",
+      label: "Diagram",
+      extension: ".mmd",
+      lens: "Mermaid architecture export",
+      updatedAt: "23 May 2026 · 10:42",
+      regeneratedByEventIds: ["evt-pr-418"],
+      copy: "Copy diagram.mmd",
+      preview:
+        "flowchart LR\n  SDK[SDK emit\\nworkspace + sdk key] --> ING[Ingestion API\\nvalidate + idempotency]\n  ING --> UE[UsageEvent\\nimmutable fact]\n  UE --> LEDGER[Ledger worker\\naccepted events only]\n  LEDGER --> SNAP[LedgerSnapshot\\nperiod + customer + plan]\n  SNAP --> PREVIEW[Invoice preview\\nread model]\n  SNAP --> RECON[Reconciliation worker]\n  STRIPE[Stripe webhooks] --> PORT[BillingPort adapter]\n  PORT --> RECON\n  RECON --> ENT[EntitlementSnapshot\\nproduct gates]\n  ENT --> UI[Billing UI\\nplan limits + blocked actions]\n  UE --> OBS[Observability\\ntrace + drift alerts]\n  RECON --> OBS\n  PREVIEW --> OBS"
+    }
+  ],
+  designSystem: {
+    sourceSectionId: "sec-design",
+    sourceIds: ["c9"],
+    palette: [
+      { label: "Canvas", token: "bg.canvas", hex: "#F4F7FB" },
+      { label: "Surface", token: "surface.base", hex: "#FFFFFF" },
+      { label: "Text", token: "text.primary", hex: "#111827" },
+      { label: "Muted", token: "text.muted", hex: "#64748B" },
+      { label: "Accent", token: "brand.accent", hex: "#2563EB" }
+    ],
+    font: {
+      family: "Inter",
+      monoFamily: "JetBrains Mono",
+      sample: "Usage replay verified before entitlement unlock.",
+      meta: "FREE · GOOGLE FONTS + JETBRAINS"
+    },
+    tokens: [
+      { label: "radius.card", value: "10px" },
+      { label: "radius.pill", value: "999px" },
+      { label: "space", value: "4/8/12/16/24" }
+    ]
+  },
+  updateEvent: {
+    id: "evt-pr-418",
+    label: "PR #418 merged",
+    source: "GitHub · northstar-cloud/api",
+    timestamp: "10:42 AM",
+    targetSectionId: "sec-catalog",
+    previousText: "Invoice preview may read Stripe subscription state during beta.",
+    nextText: "Invoice preview reads ledger state without calling Stripe directly.",
+    regeneratedExportIds: ["agent", "backend", "payments", "diagram"]
+  },
+  contradictionDiff: {
+    id: "diff-slack-direct-stripe",
+    source: 'Slack #eng-billing · Sarah Kim · "let preview call Stripe for beta?"',
+    timestamp: "11:08 AM",
+    decisionSectionId: "sec-catalog",
+    existingDecision: "Stripe remains isolated behind BillingPort; invoice preview reads ledger state without calling Stripe directly.",
+    incomingClaim: "Allow invoice preview to call Stripe subscription state directly during beta.",
+    reason: "Contradicts the accepted BillingPort boundary from PR #418, so it requires confirm even in Auto mode."
+  }
 };
 
 function createDetailItems(
@@ -1021,10 +1376,10 @@ function createProjectBrainData({
 export const mockProjectBrains: Record<string, ProjectBrainData> = {
   "1": createProjectBrainData({
     projectId: "1",
-    projectName: "BloomFast MVP",
+    projectName: "Northstar Cloud",
     docs: [
       { label: "PRD v2", description: "Product scope, milestones, and launch priorities." },
-      { label: "SRS", description: "Functional requirements and delivery constraints." },
+      { label: "SRS", description: "Functional requirements and billing constraints." },
       { label: "Tech Spec", description: "Architecture notes for checkout and onboarding." }
     ],
     comms: [
@@ -1033,7 +1388,7 @@ export const mockProjectBrains: Record<string, ProjectBrainData> = {
       { label: "WhatsApp", description: "Fast-turn client feedback on launch blockers." }
     ],
     team: [
-      { label: "SC", description: "Sarah Chen coordinating delivery and client approvals." },
+      { label: "SC", description: "Sarah Chen coordinating billing and client approvals." },
       { label: "MT", description: "Marcus T owns backend integrations and QA handoff." },
       { label: "PK", description: "Priya K drives dashboard and onboarding UI." }
     ],
@@ -1089,11 +1444,11 @@ export const mockProjectBrains: Record<string, ProjectBrainData> = {
     team: [
       { label: "SC", description: "Sarah Chen coordinating launch dependencies." },
       { label: "MT", description: "Marcus T leading backend rollout and auth migration." },
-      { label: "AP", description: "Alex P supporting API testing and delivery QA." }
+      { label: "AP", description: "Alex P supporting API testing and billing QA." }
     ],
     changes: [
       { label: "OAuth removed", description: "Scope trimmed to ship the core auth module.", borderColor: "#9E3B2E", accentColor: "#9E3B2E" },
-      { label: "Retry queues", description: "Resilience update for webhook delivery failures.", borderColor: "#B8543D", accentColor: "#B8543D" }
+      { label: "Retry queues", description: "Resilience update for webhook billing failures.", borderColor: "#B8543D", accentColor: "#B8543D" }
     ],
     decisions: [
       { label: "Spec frozen", description: "Gateway contract is frozen until partner review clears." },
@@ -1103,16 +1458,16 @@ export const mockProjectBrains: Record<string, ProjectBrainData> = {
 };
 
 export const mockDeadlines: DeadlineItem[] = [
-  { id: "1", project: "BloomFast MVP", task: "Payment integration", dueDate: "Apr 24", daysLeft: 3, status: "on-track" },
+  { id: "1", project: "Northstar Cloud", task: "Payment integration", dueDate: "Apr 24", daysLeft: 3, status: "on-track" },
   { id: "2", project: "API Gateway", task: "Auth module handoff", dueDate: "Apr 26", daysLeft: 5, status: "at-risk" },
-  { id: "3", project: "Elara Games", task: "Dashboard v2 delivery", dueDate: "May 2", daysLeft: 11, status: "on-track" }
+  { id: "3", project: "Elara Games", task: "Dashboard v2 billing", dueDate: "May 2", daysLeft: 11, status: "on-track" }
 ];
 
 export const mockRequests: RequestItem[] = [
   {
     id: "1",
-    from: "Jack · BloomFast",
-    message: "Can we add a promo code system to checkout?",
+    from: "Jack · Northstar Cloud",
+    message: "Can we add a billing export review to checkout?",
     time: "2h ago",
     status: "pending",
     platform: "slack"
@@ -1135,8 +1490,8 @@ export const mockRequests: RequestItem[] = [
   },
   {
     id: "4",
-    from: "Jack · BloomFast",
-    message: "Florist onboarding flow needs a tutorial step",
+    from: "Jack · Northstar Cloud",
+    message: "Tenant Admin onboarding flow needs a tutorial step",
     time: "2d ago",
     status: "accepted",
     platform: "whatsapp"
@@ -1144,7 +1499,7 @@ export const mockRequests: RequestItem[] = [
 ];
 
 export const mockMeetings: MeetingItem[] = [
-  { id: "1", title: "BloomFast Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "BloomFast" },
+  { id: "1", title: "Northstar Cloud Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "Northstar Cloud" },
   { id: "2", title: "API Gateway Review", time: "11:30 AM", duration: "45 min", type: "review", project: "API Gateway" },
   { id: "3", title: "Client Sync · Elara", time: "2:00 PM", duration: "30 min", type: "client", project: "Elara Games" }
 ];
@@ -1152,7 +1507,7 @@ export const mockMeetings: MeetingItem[] = [
 export const mockCalendarEvents: Record<string, CalendarDayData> = {
   "2026-04-21": {
     meetings: [
-      { id: "1", title: "BloomFast Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "BloomFast" },
+      { id: "1", title: "Northstar Cloud Standup", time: "9:00 AM", duration: "15 min", type: "standup", project: "Northstar Cloud" },
       { id: "2", title: "API Gateway Review", time: "11:30 AM", duration: "45 min", type: "review", project: "API Gateway" },
       { id: "3", title: "Client Sync · Elara", time: "2:00 PM", duration: "30 min", type: "client", project: "Elara Games" }
     ],
@@ -1160,7 +1515,7 @@ export const mockCalendarEvents: Record<string, CalendarDayData> = {
   },
   "2026-04-22": {
     meetings: [
-      { id: "4", title: "Sprint Planning", time: "10:00 AM", duration: "60 min", type: "meeting", project: "BloomFast" }
+      { id: "4", title: "Sprint Planning", time: "10:00 AM", duration: "60 min", type: "meeting", project: "Northstar Cloud" }
     ],
     deadlines: []
   },
