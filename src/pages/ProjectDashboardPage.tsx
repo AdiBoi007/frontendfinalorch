@@ -5,9 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import Avatar from "../components/ui/Avatar";
 import { ArrowRightIcon, PlusIcon } from "../components/ui/AppIcons";
 import { BookOpenIcon, GitBranchIcon, MessageSquareIcon, SparklesIcon } from "../components/ui/AppIcons";
-import { getIntegrationStatuses, getLiveDoc, getProjectDetail, getProjectMembers } from "../lib/api";
+import { getChangelog, getIntegrationStatuses, getLiveDoc, getProjectDetail, getProjectMembers } from "../lib/api";
 import { mockMeetings, mockRequests } from "../lib/mockData";
-import type { IntegrationStatus, LiveDocPayload, ProjectDetail, ProjectMember, ProjectSubscription } from "../lib/types";
+import type { ChangelogEntry, IntegrationStatus, LiveDocPayload, ProjectDetail, ProjectMember, ProjectSubscription } from "../lib/types";
 
 const pageVariants = {
   hidden: {},
@@ -402,6 +402,7 @@ export function ProjectDashboardPage() {
   const [subscriptions, setSubscriptions] = useState<ProjectSubscription[]>([]);
   const [integrations, setIntegrations] = useState<IntegrationStatus[]>([]);
   const [liveDoc, setLiveDoc] = useState<LiveDocPayload | null>(null);
+  const [changelog, setChangelog] = useState<ChangelogEntry[]>([]);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [subscriptionName, setSubscriptionName] = useState("");
   const [subscriptionCategory, setSubscriptionCategory] = useState("");
@@ -415,14 +416,16 @@ export function ProjectDashboardPage() {
       getProjectDetail(id),
       getProjectMembers(id),
       getIntegrationStatuses(id),
-      getLiveDoc(id)
-    ]).then(([detail, nextMembers, nextIntegrations, doc]) => {
+      getLiveDoc(id),
+      getChangelog(id)
+    ]).then(([detail, nextMembers, nextIntegrations, doc, changelogEntries]) => {
       if (!isMounted) return;
       setProject(detail);
       setMembers(nextMembers);
       setSubscriptions(detail.subscriptions);
       setIntegrations(nextIntegrations);
       setLiveDoc(doc);
+      setChangelog(changelogEntries);
     });
 
     return () => {
@@ -673,16 +676,40 @@ export function ProjectDashboardPage() {
             </div>
 
             <motion.div initial="hidden" animate="visible" variants={listVariants} className="mt-2">
-              {project.recentChanges.map((change, index) => (
-                <motion.div
-                  key={change.id}
-                  variants={listItemVariants}
-                  className={index === project.recentChanges.length - 1 ? "py-3" : "border-b border-[#FAF8F5] py-3"}
-                >
-                  <p className="truncate font-sans text-[13px] font-medium text-[#1A1612]">{change.title}</p>
-                  <p className="mt-1 font-mono text-[11px] text-[#78716C]">{change.timeAgo}</p>
-                </motion.div>
-              ))}
+              {changelog.length > 0 ? (
+                changelog.map((entry, index) => (
+                  <motion.div
+                    key={entry.id}
+                    variants={listItemVariants}
+                    className={index === changelog.length - 1 ? "py-3" : "border-b border-[#FAF8F5] py-3"}
+                  >
+                    <div className="mt-1 flex items-center gap-2">
+                      <span
+                        className={[
+                          "rounded-full px-2 py-0.5 font-mono text-[10px] font-medium",
+                          entry.source === "manual"
+                            ? "bg-[rgba(26,22,18,0.06)] text-[#78716C]"
+                            : "bg-[rgba(184,84,61,0.08)] text-[#B8543D]"
+                        ].join(" ")}
+                      >
+                        {entry.source.toUpperCase()}
+                      </span>
+                      <span className="font-mono text-[10px] text-[#78716C]">{entry.timestamp}</span>
+                    </div>
+                  </motion.div>
+                ))
+              ) : (
+                project.recentChanges.map((change, index) => (
+                  <motion.div
+                    key={change.id}
+                    variants={listItemVariants}
+                    className={index === project.recentChanges.length - 1 ? "py-3" : "border-b border-[#FAF8F5] py-3"}
+                  >
+                    <p className="truncate font-sans text-[13px] font-medium text-[#1A1612]">{change.title}</p>
+                    <p className="mt-1 font-mono text-[11px] text-[#78716C]">{change.timeAgo}</p>
+                  </motion.div>
+                ))
+              )}
             </motion.div>
           </div>
         </motion.section>

@@ -3,8 +3,10 @@
 // AUTH = Authorization: Bearer localStorage.getItem("orchestra_token")
 
 import * as mock from "./mockData";
+import { useWorkspaceStore } from "../store/workspaceStore";
 import type {
   AnchorProvenance,
+  ChangelogEntry,
   ChatMessage,
   Doc,
   DocViewerPayload,
@@ -13,7 +15,8 @@ import type {
   LiveDocPayload,
   ProjectDetail,
   ProjectMember,
-  RoleOption
+  RoleOption,
+  UserRole
 } from "./types";
 
 export const getProjects = async () => mock.mockProjects;
@@ -24,6 +27,24 @@ export const getMeetings = async () => mock.mockMeetings;
 export const getCalendarEvents = async () => mock.mockCalendarEvents;
 // TODO: swap mockCalendarEvents with Google Calendar API
 export const getLoginRoles = async (): Promise<RoleOption[]> => mock.mockRoles;
+
+// TODO: GET /v1/users/me
+export const getUserRole = async (): Promise<UserRole> => useWorkspaceStore.getState().userRole;
+
+// TODO: PATCH /v1/users/me
+export const setUserRole = async (role: UserRole): Promise<void> => {
+  useWorkspaceStore.getState().setUserRole(role);
+};
+
+// TODO: POST /v1/users/me/onboarding-complete
+export const markOnboardingComplete = async (): Promise<void> => {
+  useWorkspaceStore.getState().setOnboardingComplete(true);
+};
+
+// TODO: GET /v1/projects/:projectId/changelog
+export const getChangelog = async (projectId: string): Promise<ChangelogEntry[]> => {
+  return mock.mockChangelog.filter((entry) => entry.projectId === projectId);
+};
 export const getSocratesSuggestions = async (page: "dashboard" | "project") => mock.mockSocratesSuggestions[page];
 export const getSocratesReply = async (page: "dashboard" | "project") => mock.mockSocratesReplies[page];
 export const getSocratesMessages = async (): Promise<ChatMessage[]> => mock.mockSocratesMessages;

@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRightIcon } from "../components/ui/AppIcons";
 import { Badge } from "../components/ui/Badge";
-import { mockProjects } from "../lib/mockData";
+import { getProjects } from "../lib/api";
 import type { ProjectCardItem } from "../lib/types";
 
 const pageVariants = {
@@ -95,6 +96,11 @@ function ProjectCard({ project, onClick }: { project: ProjectCardItem; onClick: 
 
 export function ProjectsPage() {
   const navigate = useNavigate();
+  const [projects, setProjects] = useState<ProjectCardItem[]>([]);
+
+  useEffect(() => {
+    void getProjects().then(setProjects);
+  }, []);
 
   return (
     <motion.div
@@ -111,11 +117,12 @@ export function ProjectsPage() {
               Projects
             </h1>
             <p className="mt-2 font-sans text-[13px] text-[#78716C]">
-              {mockProjects.length} active project{mockProjects.length !== 1 ? "s" : ""}
+              {projects.length} active project{projects.length !== 1 ? "s" : ""}
             </p>
           </div>
           <button
             type="button"
+            onClick={() => navigate("/onboarding")}
             className="border-b border-[#1A1612] bg-transparent px-0 py-1 font-sans text-[11px] tracking-[0.12em] text-[#1A1612] transition-opacity hover:opacity-60"
           >
             New project
@@ -127,7 +134,7 @@ export function ProjectsPage() {
         variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
       >
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {mockProjects.map((project) => (
+          {projects.map((project) => (
             <ProjectCard
               key={project.id}
               project={project}

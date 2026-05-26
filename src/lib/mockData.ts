@@ -3,6 +3,7 @@ import type {
   BrainDetailItem,
   BrainNodeData,
   CalendarDayData,
+  ChangelogEntry,
   ChatMessage,
   DeadlineItem,
   Doc,
@@ -17,8 +18,12 @@ import type {
   RequestItem,
   RoleOption,
   SocratesReplyGroups,
-  SocratesSuggestionGroups
+  SocratesSuggestionGroups,
+  UserRole
 } from "./types";
+
+export const mockUserRole: UserRole = "manager";
+export const mockOnboardingComplete = false;
 
 export const mockProjects: ProjectCardItem[] = [
   {
@@ -30,7 +35,9 @@ export const mockProjects: ProjectCardItem[] = [
     sprint: "2 of 8",
     progress: 34,
     health: "HEALTHY",
-    color: "rgba(45,74,62,0.10)"
+    color: "rgba(45,74,62,0.10)",
+    lastActivity: "2h ago",
+    teamInitials: ["SC", "MT", "PK", "JW"]
   },
   {
     id: "2",
@@ -41,7 +48,9 @@ export const mockProjects: ProjectCardItem[] = [
     sprint: "4 of 6",
     progress: 38,
     health: "AT RISK",
-    color: "rgba(120,113,108,0.10)"
+    color: "rgba(120,113,108,0.10)",
+    lastActivity: "Yesterday",
+    teamInitials: ["SC", "AP", "LF"]
   },
   {
     id: "3",
@@ -52,13 +61,55 @@ export const mockProjects: ProjectCardItem[] = [
     sprint: "6 of 8",
     progress: 79,
     health: "Critical",
-    color: "rgba(194,136,64,0.12)"
+    color: "rgba(194,136,64,0.12)",
+    lastActivity: "4d ago",
+    teamInitials: ["MT", "PK"]
+  }
+];
+
+export const mockChangelog: ChangelogEntry[] = [
+  {
+    id: "cl-1",
+    projectId: "1",
+    description: "Manager approval required before driver assignment is confirmed.",
+    source: "whatsapp",
+    timestamp: "Apr 15, 2026 · 2:14 PM"
+  },
+  {
+    id: "cl-2",
+    projectId: "1",
+    description: "Pro subscription deferred to v2 after client kickoff call.",
+    source: "slack",
+    timestamp: "Apr 14, 2026 · 11:02 AM"
+  },
+  {
+    id: "cl-3",
+    projectId: "1",
+    description: "SRS v2 uploaded and indexed as primary PDF source.",
+    source: "pdf",
+    timestamp: "Apr 13, 2026 · 4:45 PM"
+  },
+  {
+    id: "cl-4",
+    projectId: "1",
+    description: "Stripe payout schedule updated to weekly batching.",
+    source: "manual",
+    timestamp: "Apr 12, 2026 · 9:30 AM"
+  },
+  {
+    id: "cl-5",
+    projectId: "1",
+    description: "Client asked for promo code support in checkout flow.",
+    source: "gmail",
+    timestamp: "Apr 11, 2026 · 6:18 PM"
   }
 ];
 
 export const mockProjectDetail: ProjectDetail = {
   id: "1",
   name: "BloomFast MVP",
+  clientName: "BloomFast",
+  lastUpdated: "Apr 18, 2026 · 3:42 PM",
   health: "HEALTHY",
   progress: 34,
   description: "On-demand flower delivery marketplace. Buyer ordering, florist dashboard, driver assignment.",
@@ -1244,6 +1295,9 @@ export const mockIntegrationStatuses: Record<string, IntegrationStatus[]> = {
     { id: "i-slack",    name: "Slack",           category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T10:00:00Z" },
     { id: "i-gmail",    name: "Gmail",            category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T09:30:00Z" },
     { id: "i-whatsapp", name: "WhatsApp",         category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-14T18:00:00Z" },
+    { id: "i-fireflies", name: "Fireflies",       category: "comms",          connected: false, accountConnected: false },
+    { id: "i-jira",     name: "Jira",             category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-14T12:00:00Z" },
+    { id: "i-clickup",  name: "ClickUp",          category: "comms",          connected: false, accountConnected: false },
     { id: "i-gcal",     name: "Google Calendar",  category: "calendar",       connected: false, accountConnected: false },
     { id: "i-stripe",   name: "Stripe",           category: "payments",       connected: false, accountConnected: false },
     { id: "i-aws",      name: "AWS (EC2 + RDS)",  category: "infrastructure", connected: false, accountConnected: false },

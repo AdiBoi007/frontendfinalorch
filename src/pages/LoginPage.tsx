@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRightIcon, CodeIcon, EyeIcon, UserIcon } from "../components/ui/AppIcons";
 import { getLoginRoles } from "../lib/api";
 import type { RoleOption } from "../lib/types";
+import { useWorkspaceStore } from "../store/workspaceStore";
 
 const cardTransition = {
   duration: 0.4,
@@ -61,6 +62,19 @@ export function LoginPage() {
 
   const handleRoleSelect = (role: RoleOption["key"]) => {
     localStorage.setItem("orchestra_role", role);
+    useWorkspaceStore.getState().setUserRole(role === "dev" ? "developer" : "manager");
+
+    const { projects, onboardingComplete } = useWorkspaceStore.getState();
+    if (!onboardingComplete && projects.length === 0) {
+      navigate("/onboarding");
+      return;
+    }
+
+    if (role === "dev") {
+      navigate("/projects");
+      return;
+    }
+
     navigate("/dashboard");
   };
 

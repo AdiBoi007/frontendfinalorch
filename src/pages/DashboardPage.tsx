@@ -164,6 +164,7 @@ export function DashboardPage() {
 
           <button
             type="button"
+            onClick={() => navigate("/onboarding")}
             className="border-b border-[#1A1612] bg-transparent px-0 py-1 font-sans text-[11px] tracking-[0.12em] text-[#1A1612] transition-opacity hover:opacity-60"
           >
             New project

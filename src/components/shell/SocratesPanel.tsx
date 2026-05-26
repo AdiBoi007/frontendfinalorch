@@ -329,7 +329,7 @@ function SuggestionChips({ onSelect }: { onSelect: (value: string) => void }) {
   );
 }
 
-function SocratesPanelContent() {
+function SocratesPanelContent({ onClose }: { onClose?: () => void }) {
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -392,8 +392,13 @@ function SocratesPanelContent() {
   };
 
   return (
-    <aside className="flex h-screen w-[300px] flex-shrink-0 flex-col border-r border-[rgba(26,22,18,0.08)] bg-white">
-      <header className="px-6 pb-5 pt-8 text-center">
+    <aside className="flex h-full w-[300px] flex-shrink-0 flex-col bg-white">
+      <header className="relative px-6 pb-5 pt-8 text-center">
+        {onClose ? (
+          <button type="button" onClick={onClose} className="absolute right-4 top-4 font-sans text-[12px] text-[#78716C] hover:text-[#1A1612]">
+            Close
+          </button>
+        ) : null}
         <div className="mt-8 flex justify-center">
           <OmniLogo size={56} />
         </div>
@@ -466,10 +471,10 @@ function SocratesPanelContent() {
   );
 }
 
-export function SocratesPanel() {
+export function SocratesPanel({ onClose }: { onClose?: () => void }) {
   return (
     <SocratesProvider>
-      <SocratesPanelContent />
+      <SocratesPanelContent onClose={onClose} />
     </SocratesProvider>
   );
 }

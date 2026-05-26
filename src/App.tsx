@@ -12,6 +12,8 @@ import { ProjectConnectorsPage } from "./pages/ProjectConnectorsPage";
 import { ProjectRequestsPage } from "./pages/ProjectRequestsPage";
 import { ProjectsPage } from "./pages/ProjectsPage";
 import { SettingsPage } from "./pages/SettingsPage";
+import { OnboardingPage } from "./pages/OnboardingPage";
+import { useWorkspaceStore } from "./store/workspaceStore";
 
 function hasRole() {
   if (typeof window === "undefined") {
@@ -29,6 +31,14 @@ function ProtectedRoute() {
   return <Outlet />;
 }
 
+function OnboardingGuard() {
+  const onboardingComplete = useWorkspaceStore((s) => s.onboardingComplete);
+  if (!onboardingComplete) {
+    return <Navigate to="/onboarding" replace />;
+  }
+  return <Outlet />;
+}
+
 function ProjectMemoryRedirect() {
   const { id = "1" } = useParams();
 
@@ -40,25 +50,28 @@ export default function App() {
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<AppShell />}>
-          <Route index element={<DashboardPage />} />
-        </Route>
-        <Route path="/projects" element={<AppShell />}>
-          <Route index element={<ProjectsPage />} />
-        </Route>
-        <Route path="/settings" element={<AppShell />}>
-          <Route index element={<SettingsPage />} />
-        </Route>
-        <Route path="/projects/:id" element={<AppShell />}>
-          <Route index element={<ProjectDashboardPage />} />
-          <Route path="brain" element={<ProjectBrainPage />} />
-          <Route path="flow" element={<ProjectFlowchartPage />} />
-          <Route path="live-doc" element={<LiveDocPage />} />
-          <Route path="memory" element={<ProjectMemoryPage />} />
-          <Route path="docs" element={<ProjectMemoryRedirect />} />
-          <Route path="docs/:docId/view" element={<LiveDocViewerPage />} />
-          <Route path="connectors" element={<ProjectConnectorsPage />} />
-          <Route path="requests" element={<ProjectRequestsPage />} />
+        <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route element={<OnboardingGuard />}>
+          <Route path="/dashboard" element={<AppShell />}>
+            <Route index element={<DashboardPage />} />
+          </Route>
+          <Route path="/projects" element={<AppShell />}>
+            <Route index element={<ProjectsPage />} />
+          </Route>
+          <Route path="/settings" element={<AppShell />}>
+            <Route index element={<SettingsPage />} />
+          </Route>
+          <Route path="/projects/:id" element={<AppShell />}>
+            <Route index element={<ProjectDashboardPage />} />
+            <Route path="brain" element={<ProjectBrainPage />} />
+            <Route path="flow" element={<ProjectFlowchartPage />} />
+            <Route path="live-doc" element={<LiveDocPage />} />
+            <Route path="memory" element={<ProjectMemoryPage />} />
+            <Route path="docs" element={<ProjectMemoryRedirect />} />
+            <Route path="docs/:docId/view" element={<LiveDocViewerPage />} />
+            <Route path="connectors" element={<ProjectConnectorsPage />} />
+            <Route path="requests" element={<ProjectRequestsPage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

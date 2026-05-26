@@ -1,3 +1,15 @@
+export type UserRole = "manager" | "developer";
+
+export type ChangelogSource = "slack" | "whatsapp" | "gmail" | "manual" | "pdf";
+
+export interface ChangelogEntry {
+  id: string;
+  projectId: string;
+  description: string;
+  source: ChangelogSource;
+  timestamp: string;
+}
+
 export interface DeadlineItem {
   id: string;
   project: string;
@@ -34,12 +46,15 @@ export interface ProjectCardItem {
   id: string;
   name: string;
   clientName: string;
+  clientIndustry?: string;
   description: string;
   deadline: string;
   sprint: string;
   progress: number;
   health: "HEALTHY" | "AT RISK" | "Critical";
   color: string;
+  lastActivity: string;
+  teamInitials: string[];
 }
 
 export interface ProjectMember {
@@ -67,6 +82,8 @@ export interface ProjectRecentChange {
 export interface ProjectDetail {
   id: string;
   name: string;
+  clientName: string;
+  lastUpdated: string;
   health: "HEALTHY" | "AT RISK" | "Critical";
   progress: number;
   description: string;
