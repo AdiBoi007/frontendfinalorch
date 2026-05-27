@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { TbCheck, TbLink, TbPlugConnected } from "react-icons/tb";
+import { TbBrandGmail, TbBrandSlack } from "react-icons/tb";
 import { useParams } from "react-router-dom";
 import { getIntegrationStatuses } from "../lib/api";
-import { mockProjects } from "../lib/mockData";
 import type { IntegrationStatus } from "../lib/types";
 
 const cardVariants = {
@@ -15,236 +14,123 @@ const cardVariants = {
   }
 };
 
-const INTEGRATION_ICONS: Record<string, string> = {
-  "i-slack":    "SL",
-  "i-gmail":    "GM",
-  "i-whatsapp": "WA",
-  "i-gcal":     "GC",
-  "i-stripe":   "ST",
-  "i-aws":      "AW",
-  "i-supabase": "SB",
-  "i-firebase": "FB",
-  "i-vercel":   "VC",
-  "i-sentry":   "SN"
+const CONNECTOR_LOGOS: Record<string, React.ReactNode> = {
+  Slack: <TbBrandSlack size={22} color="#4A154B" aria-hidden />,
+  Gmail: <TbBrandGmail size={22} color="#EA4335" aria-hidden />,
+  Fireflies: (
+    <img src="https://cdn.simpleicons.org/fireflies/7B4DBE" alt="" className="h-[22px] w-[22px]" />
+  ),
+  GitHub: <img src="https://cdn.simpleicons.org/github/1A1612" alt="" className="h-[22px] w-[22px]" />,
+  Jira: <img src="https://cdn.simpleicons.org/jira/0052CC" alt="" className="h-[22px] w-[22px]" />,
+  ClickUp: <img src="https://cdn.simpleicons.org/clickup/7B68EE" alt="" className="h-[22px] w-[22px]" />,
+  WhatsApp: <img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="" className="h-[22px] w-[22px]" />,
+  "Google Calendar": (
+    <img src="https://cdn.simpleicons.org/googlecalendar/4285F4" alt="" className="h-[22px] w-[22px]" />
+  )
 };
 
-const INTEGRATION_COLORS: Record<string, string> = {
-  "i-slack":    "#4A154B",
-  "i-gmail":    "#EA4335",
-  "i-whatsapp": "#25D366",
-  "i-gcal":     "#4285F4",
-  "i-stripe":   "#635BFF",
-  "i-aws":      "#FF9900",
-  "i-supabase": "#3ECF8E",
-  "i-firebase": "#FFCA28",
-  "i-vercel":   "#000000",
-  "i-sentry":   "#362D59"
-};
-
-function ConnectorCard({
+function ConnectorTile({
   integration,
-  onLink
+  connecting,
+  onConnect
 }: {
-  integration: IntegrationStatus & { linked?: boolean };
-  onLink: (id: string) => void;
+  integration: IntegrationStatus;
+  connecting: boolean;
+  onConnect: (id: string) => void;
 }) {
-  const [linking, setLinking] = useState(false);
-  const [connecting, setConnecting] = useState(false);
-  const isLinked = integration.linked ?? false;
-
-  const handleLink = () => {
-    if (isLinked || linking) return;
-    setLinking(true);
-    window.setTimeout(() => {
-      onLink(integration.id);
-      setLinking(false);
-    }, 900);
-  };
-
-  const handleConnect = () => {
-    if (connecting) return;
-    setConnecting(true);
-    window.setTimeout(() => setConnecting(false), 1200);
-  };
-
-  const initials = INTEGRATION_ICONS[integration.id] ?? integration.name.slice(0, 2).toUpperCase();
-  const color = INTEGRATION_COLORS[integration.id] ?? "#78716C";
+  const logo = CONNECTOR_LOGOS[integration.name];
+  const isConnected = integration.connected;
 
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -2 }}
-      className="flex items-center gap-4 rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white p-5 transition-colors hover:border-[rgba(26,22,18,0.14)]"
+      className={[
+        "rounded-xl border bg-white p-4",
+        isConnected ? "border-[#2D4A3E]" : "border-[rgba(26,22,18,0.08)]"
+      ].join(" ")}
     >
-      <div
-        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl font-mono text-[11px] font-semibold text-white"
-        style={{ backgroundColor: color }}
-      >
-        {initials}
+      <div className="flex items-center gap-2.5">
+        <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#FAF8F5]">
+          {logo ?? (
+            <span className="font-mono text-[10px] font-medium text-[#78716C]">
+              {integration.name.slice(0, 2).toUpperCase()}
+            </span>
+          )}
+        </span>
+        <p className="font-sans text-[14px] font-medium text-[#1A1612]">{integration.name}</p>
       </div>
 
-      <div className="min-w-0 flex-1">
-        <p className="truncate font-sans text-[14px] font-medium text-[#1A1612]">{integration.name}</p>
-        {integration.accountConnected && integration.lastSyncedAt ? (
-          <p className="mt-0.5 font-mono text-[10px] tracking-[0.08em] text-[rgba(120,113,108,0.6)]">
-            account connected · synced{" "}
-            {new Intl.DateTimeFormat("en-AU", { day: "2-digit", month: "short" }).format(
-              new Date(integration.lastSyncedAt)
-            )}
-          </p>
-        ) : (
-          <p className="mt-0.5 font-mono text-[10px] tracking-[0.08em] text-[rgba(120,113,108,0.6)]">
-            not connected to account
-          </p>
-        )}
-      </div>
-
-      <div className="flex-shrink-0">
-        {integration.accountConnected ? (
-          isLinked ? (
-            <div className="inline-flex items-center gap-1.5 rounded-lg bg-[rgba(45,74,62,0.08)] px-3 py-1.5 font-sans text-[12px] font-medium text-[#2D4A3E]">
-              <TbCheck size={13} strokeWidth={2.2} />
-              Linked
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={handleLink}
-              disabled={linking}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#B8543D] px-3 py-1.5 font-sans text-[12px] font-medium text-[#B8543D] transition-colors hover:bg-[#B8543D] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <TbLink size={13} strokeWidth={1.8} />
-              {linking ? "Linking…" : "Link to project"}
-            </button>
-          )
-        ) : (
-          <button
-            type="button"
-            onClick={handleConnect}
-            disabled={connecting}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(26,22,18,0.16)] px-3 py-1.5 font-sans text-[12px] font-medium text-[#5A5450] transition-colors hover:border-[rgba(26,22,18,0.32)] hover:text-[#1A1612] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <TbPlugConnected size={13} strokeWidth={1.6} />
-            {connecting ? "Connecting…" : "Connect"}
-          </button>
-        )}
-      </div>
+      {isConnected ? (
+        <p className="mt-3 font-sans text-[12px] text-[#2D4A3E]">Connected</p>
+      ) : (
+        <button
+          type="button"
+          disabled={connecting}
+          className="orch-btn-secondary mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50"
+          onClick={() => onConnect(integration.id)}
+        >
+          {connecting ? "Connecting…" : "Connect"}
+        </button>
+      )}
     </motion.div>
   );
 }
 
 export function ProjectConnectorsPage() {
   const { id = "1" } = useParams();
-  const project = mockProjects.find((p) => p.id === id) ?? mockProjects[0];
   const [integrations, setIntegrations] = useState<IntegrationStatus[]>([]);
-  const [linked, setLinked] = useState<Set<string>>(new Set());
-  const [linkingAll, setLinkingAll] = useState(false);
+  const [connectingId, setConnectingId] = useState<string | null>(null);
 
   useEffect(() => {
-    getIntegrationStatuses(id).then(setIntegrations);
+    void getIntegrationStatuses(id).then(setIntegrations);
   }, [id]);
 
-  const accountIntegrations = integrations.filter((i) => i.accountConnected);
-  const otherIntegrations = integrations.filter((i) => !i.accountConnected);
-  const unlinkedAccountIntegrations = accountIntegrations.filter((i) => !linked.has(i.id));
+  const handleConnect = (integrationId: string) => {
+    console.log("TODO: connect integration", integrationId);
+    setConnectingId(integrationId);
 
-  const handleLink = (integrationId: string) => {
-    setLinked((prev) => new Set(prev).add(integrationId));
-  };
-
-  const handleLinkAll = () => {
-    if (linkingAll || unlinkedAccountIntegrations.length === 0) return;
-    setLinkingAll(true);
     window.setTimeout(() => {
-      setLinked(new Set(accountIntegrations.map((i) => i.id)));
-      setLinkingAll(false);
-    }, 1000);
+      setIntegrations((current) =>
+        current.map((integration) =>
+          integration.id === integrationId
+            ? {
+                ...integration,
+                connected: true,
+                accountConnected: true,
+                lastSyncedAt: new Date().toISOString()
+              }
+            : integration
+        )
+      );
+      setConnectingId(null);
+    }, 800);
   };
-
-  const allLinked = accountIntegrations.length > 0 && unlinkedAccountIntegrations.length === 0;
 
   return (
     <section className="h-full overflow-y-auto bg-bg px-8 py-10">
-      <div className="mb-8">
+      <div className="mb-8 max-w-[640px]">
         <p className="font-mono text-[11px] tracking-[0.18em] text-[#B8543D]">CONNECTORS</p>
-        <h1 className="mt-2 font-sans text-[40px] font-light leading-none tracking-tight text-[#1A1612]">
-          {project.name}
-        </h1>
+        <h1 className="mt-2 font-sans text-[40px] font-light leading-none tracking-tight text-[#1A1612]">Connectors</h1>
         <p className="mt-2 font-sans text-[13px] text-[#78716C]">
-          Manage integrations and data sources linked to this project.
+          Connect the tools Orchestra reads from to build your company knowledge base.
         </p>
       </div>
 
-      {accountIntegrations.length > 0 && (
-        <div className="mb-10">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <p className="font-mono text-[11px] tracking-[0.14em] text-[#1A1612]">ACCOUNT INTEGRATIONS</p>
-              <p className="mt-1 font-sans text-[12px] text-[#78716C]">
-                Already authenticated — link them to this project with one click.
-              </p>
-            </div>
-            {!allLinked && (
-              <button
-                type="button"
-                onClick={handleLinkAll}
-                disabled={linkingAll}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#1A1612] px-4 py-2 font-sans text-[12px] font-medium text-[#FAF8F5] transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <TbLink size={13} strokeWidth={1.8} />
-                {linkingAll ? "Linking all…" : "Link all to project"}
-              </button>
-            )}
-            {allLinked && (
-              <div className="inline-flex items-center gap-1.5 font-sans text-[12px] text-[#2D4A3E]">
-                <TbCheck size={14} strokeWidth={2.2} />
-                All linked
-              </div>
-            )}
-          </div>
-
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
-            className="space-y-3"
-          >
-            {accountIntegrations.map((integration) => (
-              <ConnectorCard
-                key={integration.id}
-                integration={{ ...integration, linked: linked.has(integration.id) }}
-                onLink={handleLink}
-              />
-            ))}
-          </motion.div>
-        </div>
-      )}
-
-      {otherIntegrations.length > 0 && (
-        <div>
-          <div className="mb-4">
-            <p className="font-mono text-[11px] tracking-[0.14em] text-[#1A1612]">ADD MORE INTEGRATIONS</p>
-            <p className="mt-1 font-sans text-[12px] text-[#78716C]">
-              Connect additional services to your account first, then link them here.
-            </p>
-          </div>
-
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-            className="space-y-3"
-          >
-            {otherIntegrations.map((integration) => (
-              <ConnectorCard
-                key={integration.id}
-                integration={integration}
-                onLink={handleLink}
-              />
-            ))}
-          </motion.div>
-        </div>
-      )}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      >
+        {integrations.map((integration) => (
+          <ConnectorTile
+            key={integration.id}
+            integration={integration}
+            connecting={connectingId === integration.id}
+            onConnect={handleConnect}
+          />
+        ))}
+      </motion.div>
     </section>
   );
 }

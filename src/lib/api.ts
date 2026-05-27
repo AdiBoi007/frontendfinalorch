@@ -131,7 +131,19 @@ export const saveLiveDocSection = async (projectId: string, sectionId: string, c
 // connected: true  → OAuth / API key verified by backend
 // connected: false → not yet authorised; frontend should prompt user to connect
 export const getIntegrationStatuses = async (projectId: string): Promise<IntegrationStatus[]> => {
-  return mock.mockIntegrationStatuses[projectId] ?? [];
+  const projectStatuses = mock.mockIntegrationStatuses[projectId] ?? [];
+  const statusById = new Map(projectStatuses.map((status) => [status.id, status]));
+
+  return mock.mockSupportedConnectors.map((connector) => {
+    const existing = statusById.get(connector.id);
+    if (existing) return existing;
+
+    return {
+      ...connector,
+      connected: false,
+      accountConnected: false
+    };
+  });
 };
 
 // TODO: POST /v1/projects/:projectId/brain/ask

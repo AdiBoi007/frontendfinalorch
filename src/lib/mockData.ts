@@ -1295,6 +1295,18 @@ export const mockSocratesReplies: SocratesReplyGroups = {
 
 export const mockSocratesMessages: ChatMessage[] = [];
 
+// Full catalog of connectors Orchestra supports (shown on Connectors page).
+export const mockSupportedConnectors: Pick<IntegrationStatus, "id" | "name" | "category">[] = [
+  { id: "i-slack", name: "Slack", category: "comms" },
+  { id: "i-gmail", name: "Gmail", category: "comms" },
+  { id: "i-fireflies", name: "Fireflies", category: "comms" },
+  { id: "i-github", name: "GitHub", category: "comms" },
+  { id: "i-jira", name: "Jira", category: "comms" },
+  { id: "i-clickup", name: "ClickUp", category: "comms" },
+  { id: "i-whatsapp", name: "WhatsApp", category: "comms" },
+  { id: "i-gcal", name: "Google Calendar", category: "calendar" }
+];
+
 // Integration connection status — one entry per external service per project.
 // connected: false = not yet authorised; lastSyncedAt only present when connected: true.
 export const mockIntegrationStatuses: Record<string, IntegrationStatus[]> = {
