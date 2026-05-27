@@ -64,8 +64,8 @@ export function LoginPage() {
     localStorage.setItem("orchestra_role", role);
     useWorkspaceStore.getState().setUserRole(role === "dev" ? "developer" : "manager");
 
-    const { projects, onboardingComplete } = useWorkspaceStore.getState();
-    if (!onboardingComplete && projects.length === 0) {
+    const { workspaceName, onboardingComplete } = useWorkspaceStore.getState();
+    if (!onboardingComplete && !workspaceName) {
       navigate("/onboarding");
       return;
     }

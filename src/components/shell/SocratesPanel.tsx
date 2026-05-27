@@ -16,14 +16,6 @@ const rotatingSuggestionPools = {
     "Find contradictions in the docs",
     "What was decided most recently?"
   ],
-  requests: [
-    "Which requests are blocking?",
-    "Summarize pending changes",
-    "What needs approval today?",
-    "Which request affects scope most?",
-    "Show accepted vs pending",
-    "What should I review first?"
-  ],
   connectors: [
     "Is VS Code connected?",
     "What does the extension sync?",
@@ -321,7 +313,7 @@ function SocratesPanelContent({ onClose }: { onClose?: () => void }) {
   }, [messages, isStreaming]);
 
   const emptyStateLabel = useMemo(() => {
-    return "Ask about your workspace memory, connectors, requests, or generate a diagram.";
+    return "Ask about your workspace memory, connectors, or generate a diagram.";
   }, []);
 
   const handleSubmit = async () => {

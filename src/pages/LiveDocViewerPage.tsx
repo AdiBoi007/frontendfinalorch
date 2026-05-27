@@ -2,8 +2,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeftIcon, CloseIcon, FileTextIcon } from "../components/ui/AppIcons";
-import { getAnchorProvenance, getDocViewer, getProjects } from "../lib/api";
-import { WORKSPACE_ID } from "../lib/workspace";
+import { getAnchorProvenance, getDocViewer } from "../lib/api";
+import { DEFAULT_WORKSPACE_NAME, WORKSPACE_ID } from "../lib/workspace";
+import { useWorkspaceStore } from "../store/workspaceStore";
 import type { AnchorProvenance, DocSection, DocViewerPayload } from "../lib/types";
 
 type SectionDrafts = Record<string, string>;
@@ -98,7 +99,8 @@ export function LiveDocViewerPage() {
   const id = WORKSPACE_ID;
   const provenanceRequestRef = useRef(0);
 
-  const [projectName, setProjectName] = useState("PROJECT");
+  const storedWorkspaceName = useWorkspaceStore((state) => state.workspaceName);
+  const [projectName, setProjectName] = useState(DEFAULT_WORKSPACE_NAME);
   const [viewer, setViewer] = useState<DocViewerPayload | null>(null);
   const [selectedAnchor, setSelectedAnchor] = useState<string | null>(null);
   const [provenance, setProvenance] = useState<AnchorProvenance | null>(null);
@@ -110,13 +112,12 @@ export function LiveDocViewerPage() {
     let isCancelled = false;
 
     const load = async () => {
-      const [projects, payload] = await Promise.all([getProjects(), getDocViewer(id, docId)]);
+      const payload = await getDocViewer(id, docId);
       if (isCancelled) {
         return;
       }
 
-      const project = projects.find((item) => item.id === id) ?? projects[0];
-      setProjectName(project?.name ?? "PROJECT");
+      setProjectName(storedWorkspaceName || DEFAULT_WORKSPACE_NAME);
       setViewer(payload);
       setSelectedAnchor(null);
       setProvenance(null);
@@ -129,7 +130,7 @@ export function LiveDocViewerPage() {
     return () => {
       isCancelled = true;
     };
-  }, [docId, id]);
+  }, [docId, id, storedWorkspaceName]);
 
   useEffect(() => {
     if (!selectedAnchor) {

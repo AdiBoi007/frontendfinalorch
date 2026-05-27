@@ -1,8 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
-import { WORKSPACE_ID } from "../lib/workspace";
+import { DEFAULT_WORKSPACE_NAME, WORKSPACE_ID } from "../lib/workspace";
+import { useWorkspaceStore } from "../store/workspaceStore";
 
-export type PageContext = "memory" | "requests" | "connectors";
+export type PageContext = "memory" | "connectors";
 
 export type Message = {
   id: string;
@@ -36,14 +37,7 @@ type SocratesContextType = {
 
 const PAGE_SUGGESTIONS: Record<PageContext, string[]> = {
   memory: ["Find all decisions about auth", "What did the client say about payments?", "Show changes from last week"],
-  requests: ["Which requests are blocking?", "Summarize pending changes", "What needs approval today?"],
   connectors: ["Is VS Code connected?", "What does the extension sync?", "How do I connect VS Code?"]
-};
-
-const PROJECT_NAMES: Record<string, string> = {
-  "1": "BloomFast",
-  "2": "Elara Games",
-  "3": "API Gateway"
 };
 
 let persistedMessages: Message[] = [];
@@ -70,10 +64,6 @@ function resolvePageContext(pathname: string): PageContext {
     return "memory";
   }
 
-  if (pathname.includes("/requests")) {
-    return "requests";
-  }
-
   if (pathname.includes("/connectors")) {
     return "connectors";
   }
@@ -81,8 +71,8 @@ function resolvePageContext(pathname: string): PageContext {
   return "memory";
 }
 
-function getProjectName(_projectId: string | null) {
-  return PROJECT_NAMES[WORKSPACE_ID] ?? "BloomFast";
+function getProjectName() {
+  return useWorkspaceStore.getState().workspaceName || DEFAULT_WORKSPACE_NAME;
 }
 
 function buildDependencyDiagram(projectName: string) {
@@ -171,11 +161,6 @@ function pickTextResponse(pageContext: PageContext, content: string, projectName
       `The client mentioned payments in **3 messages**. Stripe is confirmed, payouts must never block dispatch, and the revenue share is 70/30.`,
       `**Last week's changes**: OAuth removed, manager approval added to driver flow, and Pro subscription deferred. All 3 are accepted in project memory.`
     ],
-    requests: [
-      `**2 requests are pending**: Promo code system for BloomFast and Dark mode support for Elara Games. Both need review before they can become accepted changes.`,
-      `The promo code request would affect **Payment Integration**, **Buyer Ordering Flow**, and **Admin Panel** scope.`,
-      `**4 requests total**: 2 accepted and 2 pending. Accepted requests are already reflected in project memory.`
-    ],
     connectors: [
       `**VS Code** is not connected for ${projectName} yet. Connect it from the Connectors page to sync workspace context.`,
       `Once VS Code is connected, Orchestra can index open files, recent edits, and local project notes from your editor.`,
@@ -195,20 +180,6 @@ function pickTextResponse(pageContext: PageContext, content: string, projectName
     }
 
     if (includesAny(content, ["last week", "changes"])) {
-      return options[2];
-    }
-  }
-
-  if (pageContext === "requests") {
-    if (includesAny(content, ["block", "blocking"])) {
-      return options[0];
-    }
-
-    if (includesAny(content, ["summarize", "summary", "pending"])) {
-      return options[1];
-    }
-
-    if (includesAny(content, ["approval", "today"])) {
       return options[2];
     }
   }
@@ -275,7 +246,7 @@ export function SocratesProvider({ children }: { children: ReactNode }) {
       setIsStreaming(true);
 
       const lowerContent = trimmed.toLowerCase();
-      const projectName = getProjectName(projectId);
+      const projectName = getProjectName();
       const isDiagramRequest = includesAny(lowerContent, ["diagram", "flowchart", "dependency", "map", "sequence", "use case", "usecase"]);
       const isDependencyMap = includesAny(lowerContent, ["dependency", "map"]);
       const isSequenceDiagram = lowerContent.includes("sequence");

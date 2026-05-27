@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { markOnboardingComplete } from "../lib/api";
 import { storeConnectedIntegrationNames } from "../lib/integrationStorage";
+import { WORKSPACE_ID } from "../lib/workspace";
 import { useWorkspaceStore } from "../store/workspaceStore";
 
 const cardTransition = {
@@ -21,7 +22,6 @@ export function OnboardingPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [workspaceName, setWorkspaceName] = useState("");
-  const [newProjectId, setNewProjectId] = useState<string | null>(null);
   const [pdfFileName, setPdfFileName] = useState<string | null>(null);
   const [pdfUploaded, setPdfUploaded] = useState(false);
   const [connectedIntegrations, setConnectedIntegrations] = useState<string[]>([]);
@@ -34,21 +34,7 @@ export function OnboardingPage() {
     if (!canSetupWorkspace) return;
 
     const name = workspaceName.trim();
-    const id = Date.now().toString();
-    useWorkspaceStore.getState().addProject({
-      id,
-      name,
-      clientName: name,
-      description: `${name} workspace`,
-      deadline: "TBD",
-      sprint: "1 of 1",
-      progress: 0,
-      health: "HEALTHY",
-      color: "rgba(45,74,62,0.10)",
-      lastActivity: "Just now",
-      teamInitials: []
-    });
-    setNewProjectId(id);
+    useWorkspaceStore.getState().setWorkspaceName(name);
     setStep(2);
   };
 
@@ -65,10 +51,10 @@ export function OnboardingPage() {
   };
 
   useEffect(() => {
-    if (step !== 3 || !newProjectId) return;
+    if (step !== 3) return;
 
     if (connectedIntegrations.length > 0) {
-      storeConnectedIntegrationNames(newProjectId, connectedIntegrations);
+      storeConnectedIntegrationNames(WORKSPACE_ID, connectedIntegrations);
     }
 
     const timeout = window.setTimeout(() => {
@@ -78,7 +64,7 @@ export function OnboardingPage() {
     }, 3000);
 
     return () => window.clearTimeout(timeout);
-  }, [step, newProjectId, navigate, connectedIntegrations]);
+  }, [step, navigate, connectedIntegrations]);
 
   if (step === 3) {
     return (

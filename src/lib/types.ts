@@ -1,105 +1,5 @@
 export type UserRole = "manager" | "developer";
 
-export type ChangelogSource = "slack" | "whatsapp" | "gmail" | "github" | "jira" | "manual" | "pdf";
-
-export interface ChangelogEntry {
-  id: string;
-  projectId: string;
-  description: string;
-  source: ChangelogSource;
-  timestamp: string;
-}
-
-export interface DeadlineItem {
-  id: string;
-  project: string;
-  task: string;
-  dueDate: string;
-  daysLeft: number;
-  status: "on-track" | "at-risk" | "critical";
-}
-
-export interface RequestItem {
-  id: string;
-  from: string;
-  message: string;
-  time: string;
-  status: "pending" | "accepted";
-  platform: "slack" | "email" | "whatsapp";
-}
-
-export interface MeetingItem {
-  id: string;
-  title: string;
-  time: string;
-  duration: string;
-  type: "standup" | "review" | "client" | "meeting";
-  project: string;
-}
-
-export interface CalendarDayData {
-  meetings: MeetingItem[];
-  deadlines: DeadlineItem[];
-}
-
-export interface ProjectCardItem {
-  id: string;
-  name: string;
-  clientName: string;
-  clientIndustry?: string;
-  description: string;
-  deadline: string;
-  sprint: string;
-  progress: number;
-  health: "HEALTHY" | "AT RISK" | "Critical";
-  color: string;
-  lastActivity: string;
-  teamInitials: string[];
-}
-
-export interface ProjectMember {
-  initials: string;
-  name: string;
-  role: "manager" | "dev" | "client";
-}
-
-export interface ProjectSubscription {
-  id: string;
-  name: string;
-  category: string;
-  cost: number;
-  billing: "monthly" | "per-transaction";
-  status: "active";
-}
-
-export interface ProjectRecentChange {
-  id: string;
-  title: string;
-  status: "accepted" | "pending";
-  timeAgo: string;
-}
-
-export interface ProjectDetail {
-  id: string;
-  name: string;
-  clientName: string;
-  lastUpdated: string;
-  health: "HEALTHY" | "AT RISK" | "Critical";
-  progress: number;
-  description: string;
-  deadline: string;
-  sprint: string;
-  budget: number;
-  spent: number;
-  team: ProjectMember[];
-  openRoles: number;
-  subscriptions: ProjectSubscription[];
-  recentChanges: ProjectRecentChange[];
-  brainStatus: "ACTIVE";
-  docsCount: number;
-  docsReady: number;
-}
-
 export interface Doc {
   id: string;
   name: string;
@@ -111,8 +11,6 @@ export interface Doc {
   uploadedAt: string;
   excerpt: string;
 }
-
-export type DocFilter = "all" | "prd" | "srs" | "spec" | "transcript" | "audio" | "image" | "change" | "decision" | "context";
 
 export interface DocSection {
   id: string;
@@ -158,22 +56,6 @@ export interface RoleOption {
   key: "manager" | "dev" | "client";
   label: "Manager" | "Dev" | "Client";
   icon: "briefcase" | "code" | "eye";
-}
-
-export interface SocratesSuggestionGroups {
-  dashboard: string[];
-  project: string[];
-}
-
-export interface SocratesReplyGroups {
-  dashboard: string;
-  project: string;
-}
-
-export interface ChatMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
 }
 
 export type IntegrationCategory =

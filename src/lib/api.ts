@@ -5,26 +5,8 @@
 import * as mock from "./mockData";
 import { getStoredConnectedIntegrationIds } from "./integrationStorage";
 import { useWorkspaceStore } from "../store/workspaceStore";
-import type {
-  AnchorProvenance,
-  ChangelogEntry,
-  ChatMessage,
-  Doc,
-  DocViewerPayload,
-  IntegrationStatus,
-  ProjectDetail,
-  ProjectMember,
-  RoleOption,
-  UserRole
-} from "./types";
+import type { AnchorProvenance, Doc, DocViewerPayload, IntegrationStatus, RoleOption, UserRole } from "./types";
 
-export const getProjects = async () => mock.mockProjects;
-export const getDeadlines = async () => mock.mockDeadlines;
-export const getRequests = async () => mock.mockRequests;
-export const getMeetings = async () => mock.mockMeetings;
-// TODO: getMeetings -> Google Calendar OAuth
-export const getCalendarEvents = async () => mock.mockCalendarEvents;
-// TODO: swap mockCalendarEvents with Google Calendar API
 export const getLoginRoles = async (): Promise<RoleOption[]> => mock.mockRoles;
 
 // TODO: GET /v1/users/me
@@ -38,36 +20,6 @@ export const setUserRole = async (role: UserRole): Promise<void> => {
 // TODO: POST /v1/users/me/onboarding-complete
 export const markOnboardingComplete = async (): Promise<void> => {
   useWorkspaceStore.getState().setOnboardingComplete(true);
-};
-
-// TODO: GET /v1/projects/:projectId/changelog
-export const getChangelog = async (projectId: string): Promise<ChangelogEntry[]> => {
-  const entries = mock.mockChangelog.filter((entry) => entry.projectId === projectId);
-  if (entries.length > 0) {
-    return entries;
-  }
-
-  const storedIds = getStoredConnectedIntegrationIds(projectId);
-  if (storedIds.length > 0) {
-    return mock.mockChangelog.filter((entry) => entry.projectId === "1");
-  }
-
-  return [];
-};
-export const getSocratesSuggestions = async (page: "dashboard" | "project") => mock.mockSocratesSuggestions[page];
-export const getSocratesReply = async (page: "dashboard" | "project") => mock.mockSocratesReplies[page];
-export const getSocratesMessages = async (): Promise<ChatMessage[]> => mock.mockSocratesMessages;
-
-// TODO: GET /v1/projects/:projectId
-export const getProjectDetail = async (projectId: string): Promise<ProjectDetail> => {
-  void projectId;
-  return mock.mockProjectDetail;
-};
-
-// TODO: GET /v1/projects/:projectId/members
-export const getProjectMembers = async (projectId: string): Promise<ProjectMember[]> => {
-  void projectId;
-  return mock.mockProjectDetail.team;
 };
 
 // TODO: replace with GET /v1/projects/:projectId/documents
@@ -112,9 +64,6 @@ export const getAnchorProvenance = async (
 };
 
 // TODO: GET /v1/projects/:projectId/integrations
-// Returns connection status for every external service wired to this project.
-// connected: true  → OAuth / API key verified by backend
-// connected: false → not yet authorised; frontend should prompt user to connect
 export const getIntegrationStatuses = async (projectId: string): Promise<IntegrationStatus[]> => {
   const storedConnected = new Set(getStoredConnectedIntegrationIds(projectId));
   const projectStatuses = mock.mockIntegrationStatuses[projectId];
@@ -147,20 +96,4 @@ export const getIntegrationStatuses = async (projectId: string): Promise<Integra
       accountConnected: false
     };
   });
-};
-
-// TODO: POST /v1/projects/:projectId/brain/ask
-// Body: { nodeTitle: string; nodeContent: string; messages: { role: string; content: string }[] }
-// Response: { reply: string }
-export const askSocrates = async (
-  projectId: string,
-  nodeTitle: string,
-  nodeContent: string,
-  messages: { role: string; content: string }[]
-): Promise<string> => {
-  void projectId;
-  void nodeTitle;
-  void nodeContent;
-  void messages;
-  return "Socrates is not yet connected. Once the backend proxy is wired up, I will answer questions about this document using the full project context.";
 };

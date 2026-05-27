@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useMemo, useRef, useState, type ChangeEvent, type DragEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileTextIcon, SearchIcon, UploadCloudIcon, UploadIcon } from "../components/ui/AppIcons";
+import { FileTextIcon, SearchIcon } from "../components/ui/AppIcons";
 import { getDocs, uploadDoc } from "../lib/api";
 import { WORKSPACE_ID } from "../lib/workspace";
 import type { Doc } from "../lib/types";
@@ -19,18 +19,6 @@ const tabOptions: Array<{ id: MemoryTab; label: string }> = [
   { id: "communications", label: "COMMUNICATIONS" },
   { id: "decisions", label: "DECISIONS" },
   { id: "changes", label: "Changes" }
-];
-
-const uploadOptions: Array<{ id: Doc["type"]; label: string }> = [
-  { id: "prd", label: "PRD" },
-  { id: "srs", label: "SRS" },
-  { id: "spec", label: "SPEC" },
-  { id: "transcript", label: "TRANSCRIPT" },
-  { id: "audio", label: "AUDIO" },
-  { id: "image", label: "IMAGE" },
-  { id: "change", label: "CHANGE" },
-  { id: "decision", label: "DECISION" },
-  { id: "context", label: "CONTEXT" }
 ];
 
 const typeVisuals: Record<Doc["type"], TypeVisual> = {
@@ -56,14 +44,6 @@ const extensionMap: Record<Doc["type"], string> = {
   decision: ".txt",
   context: ".txt"
 };
-
-function formatFileSize(size: number) {
-  if (size >= 1024 * 1024) {
-    return `${(size / 1024 / 1024).toFixed(1)} MB`;
-  }
-
-  return `${Math.max(1, Math.round(size / 1024))} KB`;
-}
 
 function getDocTab(doc: Doc): Exclude<MemoryTab, "all"> {
   if (doc.type === "change") {
@@ -93,19 +73,14 @@ function getFilename(doc: Doc) {
   return `${doc.name}${extensionMap[doc.type]}`;
 }
 
-export function ProjectMemoryPage() {
+export function MemoryPage() {
   const navigate = useNavigate();
   const id = WORKSPACE_ID;
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const quickFileRef = useRef<HTMLInputElement | null>(null);
 
   const [docs, setDocs] = useState<Doc[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<MemoryTab>("all");
-  const [isUploadOpen, setIsUploadOpen] = useState(false);
-  const [selectedUploadType, setSelectedUploadType] = useState<Doc["type"] | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isDropActive, setIsDropActive] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [quickMode, setQuickMode] = useState<"pdf" | "md" | "context">("pdf");
   const [quickFile, setQuickFile] = useState<File | null>(null);
@@ -148,27 +123,6 @@ export function ProjectMemoryPage() {
     });
   }, [activeTab, docs, searchQuery]);
 
-  const closeUploadModal = () => {
-    setIsUploadOpen(false);
-    setSelectedUploadType(null);
-    setSelectedFile(null);
-    setIsDropActive(false);
-    setIsUploading(false);
-  };
-
-  const handleFileSelection = (file: File | null) => {
-    if (!file) {
-      return;
-    }
-
-    setSelectedFile(file);
-    setIsDropActive(false);
-  };
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    handleFileSelection(event.target.files?.[0] ?? null);
-  };
-
   const handleQuickFileSelect = (file: File | null) => {
     if (!file) return;
     setQuickFile(file);
@@ -200,23 +154,6 @@ export function ProjectMemoryPage() {
     } finally {
       setIsUploading(false);
     }
-  };
-
-  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setIsDropActive(false);
-    handleFileSelection(event.dataTransfer.files?.[0] ?? null);
-  };
-
-  const handleUpload = async () => {
-    if (!selectedFile || !selectedUploadType) {
-      return;
-    }
-
-    setIsUploading(true);
-    const nextDoc = await uploadDoc(id, selectedFile, selectedUploadType);
-    setDocs((current) => [{ ...nextDoc }, ...current]);
-    closeUploadModal();
   };
 
   return (
@@ -454,118 +391,6 @@ export function ProjectMemoryPage() {
           </div>
         </div>
       </div>
-
-      <motion.button
-        type="button"
-        onClick={() => setIsUploadOpen(true)}
-      whileHover={{ scale: 1.04, backgroundColor: "#B8543D" }}
-      whileTap={{ scale: 0.98 }}
-      className="fixed bottom-8 z-20 inline-flex items-center gap-2 rounded-full bg-[#1A1612] px-6 py-[14px] font-sans text-[14px] tracking-[0.08em] text-white"
-      style={{ right: "340px" }}
-    >
-      <UploadIcon className="h-4 w-4" />Upload</motion.button>
-
-      <AnimatePresence>
-        {isUploadOpen ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeUploadModal}
-            className="fixed inset-0 z-30 flex items-center justify-center bg-[rgba(0,0,0,0.4)]"
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              onClick={(event) => event.stopPropagation()}
-              className="w-full max-w-[420px] rounded-2xl bg-white p-8"
-            >
-              <p className="font-sans text-[20px] tracking-[0.06em] text-[#1A1612]">Upload document</p>
-              <p className="mb-5 mt-2 font-sans text-[13px] text-[#78716C]">Add a new file to the project docs library.</p>
-
-              <div
-                role="presentation"
-                onDragOver={(event) => {
-                  event.preventDefault();
-                  setIsDropActive(true);
-                }}
-                onDragLeave={() => setIsDropActive(false)}
-                onDrop={handleDrop}
-                onClick={() => inputRef.current?.click()}
-                className="cursor-pointer rounded-2xl border-2 border-dashed bg-[#FAF8F5] px-6 py-8 text-center transition-colors"
-                style={{
-                  borderColor: isDropActive ? "#B8543D" : "rgba(26,22,18,0.08)",
-                  background: isDropActive ? "rgba(184,84,61,0.04)" : "#FAF8F5"
-                }}
-              >
-                <div className="flex justify-center text-[rgba(120,113,108,0.6)]">
-                  <UploadCloudIcon className="h-8 w-8" />
-                </div>
-
-                {selectedFile ? (
-                  <>
-                    <p className="mt-3 font-sans text-[14px] font-medium text-[#1A1612]">{selectedFile.name}</p>
-                    <p className="mt-1 font-mono text-[11px] text-[rgba(120,113,108,0.6)]">{formatFileSize(selectedFile.size)}</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="mt-2 font-sans text-[14px] text-[#78716C]">Drop files here</p>
-                    <p className="mt-1 font-sans text-[12px] text-[#B8543D] underline">or click to browse</p>
-                    <p className="mt-2 font-mono text-[11px] text-[rgba(120,113,108,0.6)]">PDF · DOCX · TXT · MP3 · MP4 · PNG · JPG</p>
-                  </>
-                )}
-
-                <input
-                  ref={inputRef}
-                  type="file"
-                  accept=".pdf,.docx,.txt,.mp3,.mp4,.png,.jpg,.jpeg"
-                  className="hidden"
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="mt-5">
-                <p className="mb-2 font-sans text-[10px] tracking-[0.16em] text-[rgba(120,113,108,0.6)]">DOCUMENT TYPE</p>
-                <div className="grid grid-cols-4 gap-2">
-                  {uploadOptions.map((option) => {
-                    const active = selectedUploadType === option.id;
-
-                    return (
-                      <button
-                        key={option.id}
-                        type="button"
-                        onClick={() => setSelectedUploadType(option.id)}
-                        className={[
-                          "rounded-xl border px-3 py-3 text-center font-sans text-[11px] tracking-[0.1em] transition-colors",
-                          active
-                            ? "border-[#B8543D] bg-[rgba(184,84,61,0.06)] text-[#1A1612]"
-                            : "border-[rgba(26,22,18,0.08)] bg-white text-[#5A5450] hover:border-[#B8543D]"
-                        ].join(" ")}
-                      >
-                        {option.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="mt-6 flex justify-end gap-3">
-                <button type="button" onClick={closeUploadModal} className="font-sans text-[13px] text-[#78716C]">
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  disabled={!selectedFile || !selectedUploadType || isUploading}
-                  onClick={() => void handleUpload()}
-                  className="rounded-xl bg-[#1A1612] px-5 py-2.5 font-sans text-[13px] tracking-[0.08em] text-white transition-colors hover:bg-[#B8543D] disabled:cursor-not-allowed disabled:bg-[rgba(120,113,108,0.6)]"
-                >Upload</button>
-              </div>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
     </section>
   );
 }

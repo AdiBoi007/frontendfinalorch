@@ -2,9 +2,8 @@ import { Navigate, Outlet, Route, Routes, useParams } from "react-router-dom";
 import { AppShell } from "./components/shell/AppShell";
 import { LoginPage } from "./pages/LoginPage";
 import { LiveDocViewerPage } from "./pages/LiveDocViewerPage";
-import { ProjectMemoryPage } from "./pages/ProjectDocsPage";
-import { ProjectConnectorsPage } from "./pages/ProjectConnectorsPage";
-import { ProjectRequestsPage } from "./pages/ProjectRequestsPage";
+import { MemoryPage } from "./pages/MemoryPage";
+import { ConnectorsPage } from "./pages/ConnectorsPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { OnboardingPage } from "./pages/OnboardingPage";
 import { useWorkspaceStore } from "./store/workspaceStore";
@@ -48,10 +47,9 @@ export default function App() {
         <Route path="/onboarding" element={<OnboardingPage />} />
         <Route element={<OnboardingGuard />}>
           <Route element={<AppShell />}>
-            <Route path="/memory" element={<ProjectMemoryPage />} />
+            <Route path="/memory" element={<MemoryPage />} />
             <Route path="/memory/docs/:docId/view" element={<LiveDocViewerPage />} />
-            <Route path="/connectors" element={<ProjectConnectorsPage />} />
-            <Route path="/requests" element={<ProjectRequestsPage />} />
+            <Route path="/connectors" element={<ConnectorsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
         </Route>
@@ -63,6 +61,7 @@ export default function App() {
       <Route path="/projects/:id/connectors" element={<Navigate to="/connectors" replace />} />
       <Route path="/projects/:id/docs/:docId/view" element={<LegacyDocRedirect />} />
       <Route path="/projects/:id/*" element={<Navigate to="/memory" replace />} />
+      <Route path="/requests" element={<Navigate to="/memory" replace />} />
     </Routes>
   );
 }

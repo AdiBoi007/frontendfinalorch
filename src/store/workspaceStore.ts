@@ -1,16 +1,16 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { ProjectCardItem, UserRole } from "../lib/types";
+import type { UserRole } from "../lib/types";
 
 interface WorkspaceState {
   userRole: UserRole;
   profileName: string;
   profileEmail: string;
-  projects: ProjectCardItem[];
+  workspaceName: string;
   onboardingComplete: boolean;
   setUserRole: (role: UserRole) => void;
   setProfile: (name: string, email: string) => void;
-  addProject: (project: ProjectCardItem) => void;
+  setWorkspaceName: (name: string) => void;
   setOnboardingComplete: (value: boolean) => void;
 }
 
@@ -20,11 +20,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       userRole: "manager",
       profileName: "Sarah Chen",
       profileEmail: "sarah@orchestra.app",
-      projects: [],
+      workspaceName: "",
       onboardingComplete: false,
       setUserRole: (role) => set({ userRole: role }),
       setProfile: (name, email) => set({ profileName: name, profileEmail: email }),
-      addProject: (project) => set((state) => ({ projects: [...state.projects, project] })),
+      setWorkspaceName: (name) => set({ workspaceName: name }),
       setOnboardingComplete: (value) => set({ onboardingComplete: value })
     }),
     { name: "orchestra_workspace" }

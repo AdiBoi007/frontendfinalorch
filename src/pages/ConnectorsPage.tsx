@@ -63,7 +63,7 @@ function ConnectorTile({
   );
 }
 
-export function ProjectConnectorsPage() {
+export function ConnectorsPage() {
   const id = WORKSPACE_ID;
   const [integrations, setIntegrations] = useState<IntegrationStatus[]>([]);
   const [connectingId, setConnectingId] = useState<string | null>(null);
