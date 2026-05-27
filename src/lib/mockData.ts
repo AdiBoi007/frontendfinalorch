@@ -109,6 +109,13 @@ export const mockChangelog: ChangelogEntry[] = [
     description: "PR #142 merged: driver assignment webhook and retry policy.",
     source: "github",
     timestamp: "Apr 10, 2026 · 3:22 PM"
+  },
+  {
+    id: "cl-7",
+    projectId: "1",
+    description: "Sprint 14 scope locked — custom reporting deferred to v2.",
+    source: "jira",
+    timestamp: "Apr 9, 2026 · 10:15 AM"
   }
 ];
 

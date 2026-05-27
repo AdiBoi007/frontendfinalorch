@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { TbBrandGmail, TbBrandSlack } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { markOnboardingComplete } from "../lib/api";
+import { storeConnectedIntegrationNames } from "../lib/integrationStorage";
 import { useWorkspaceStore } from "../store/workspaceStore";
 
 const cardTransition = {
@@ -75,6 +76,10 @@ export function OnboardingPage() {
   useEffect(() => {
     if (step !== 3 || !newProjectId) return;
 
+    if (connectedIntegrations.length > 0) {
+      storeConnectedIntegrationNames(newProjectId, connectedIntegrations);
+    }
+
     const timeout = window.setTimeout(() => {
       void markOnboardingComplete().then(() => {
         navigate(`/projects/${newProjectId}`);
@@ -82,7 +87,7 @@ export function OnboardingPage() {
     }, 3000);
 
     return () => window.clearTimeout(timeout);
-  }, [step, newProjectId, navigate]);
+  }, [step, newProjectId, navigate, connectedIntegrations]);
 
   if (step === 3) {
     return (

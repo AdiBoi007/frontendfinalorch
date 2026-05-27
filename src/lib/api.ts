@@ -3,6 +3,7 @@
 // AUTH = Authorization: Bearer localStorage.getItem("orchestra_token")
 
 import * as mock from "./mockData";
+import { getStoredConnectedIntegrationIds } from "./integrationStorage";
 import { useWorkspaceStore } from "../store/workspaceStore";
 import type {
   AnchorProvenance,
@@ -43,7 +44,11 @@ export const markOnboardingComplete = async (): Promise<void> => {
 
 // TODO: GET /v1/projects/:projectId/changelog
 export const getChangelog = async (projectId: string): Promise<ChangelogEntry[]> => {
-  return mock.mockChangelog.filter((entry) => entry.projectId === projectId);
+  const entries = mock.mockChangelog.filter((entry) => entry.projectId === projectId);
+  if (entries.length > 0) {
+    return entries;
+  }
+  return mock.mockChangelog.filter((entry) => entry.projectId === "1");
 };
 export const getSocratesSuggestions = async (page: "dashboard" | "project") => mock.mockSocratesSuggestions[page];
 export const getSocratesReply = async (page: "dashboard" | "project") => mock.mockSocratesReplies[page];
@@ -131,18 +136,31 @@ export const saveLiveDocSection = async (projectId: string, sectionId: string, c
 // connected: true  → OAuth / API key verified by backend
 // connected: false → not yet authorised; frontend should prompt user to connect
 export const getIntegrationStatuses = async (projectId: string): Promise<IntegrationStatus[]> => {
-  const projectStatuses = mock.mockIntegrationStatuses[projectId] ?? [];
+  const storedIds = getStoredConnectedIntegrationIds(projectId);
+  const projectStatuses =
+    mock.mockIntegrationStatuses[projectId] ??
+    (storedIds.length === 0 ? mock.mockIntegrationStatuses["1"] ?? [] : []);
   const statusById = new Map(projectStatuses.map((status) => [status.id, status]));
+  const storedConnected = new Set(storedIds);
 
   return mock.mockSupportedConnectors.map((connector) => {
     const existing = statusById.get(connector.id);
-    if (existing) return existing;
-
-    return {
+    const base: IntegrationStatus = existing ?? {
       ...connector,
       connected: false,
       accountConnected: false
     };
+
+    if (storedConnected.has(connector.id)) {
+      return {
+        ...base,
+        connected: true,
+        accountConnected: true,
+        lastSyncedAt: base.lastSyncedAt ?? new Date().toISOString()
+      };
+    }
+
+    return base;
   });
 };
 

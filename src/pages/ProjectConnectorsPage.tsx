@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { TbBrandGmail, TbBrandSlack } from "react-icons/tb";
 import { useParams } from "react-router-dom";
 import { getIntegrationStatuses } from "../lib/api";
+import { storeConnectedIntegrationId } from "../lib/integrationStorage";
 import type { IntegrationStatus } from "../lib/types";
 
 const cardVariants = {
@@ -90,6 +91,7 @@ export function ProjectConnectorsPage() {
     setConnectingId(integrationId);
 
     window.setTimeout(() => {
+      storeConnectedIntegrationId(id, integrationId);
       setIntegrations((current) =>
         current.map((integration) =>
           integration.id === integrationId
