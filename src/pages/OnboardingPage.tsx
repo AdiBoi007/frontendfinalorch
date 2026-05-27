@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { TbBrandGmail, TbBrandSlack } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { markOnboardingComplete } from "../lib/api";
 import { useWorkspaceStore } from "../store/workspaceStore";
@@ -9,35 +10,44 @@ const cardTransition = {
   ease: [0.22, 1, 0.36, 1] as const
 };
 
-const INDUSTRIES = ["Software", "Finance", "Healthcare", "Retail", "Other"] as const;
-
-const INTEGRATIONS = ["Slack", "WhatsApp", "Gmail", "Fireflies"] as const;
+const INTEGRATIONS = [
+  { name: "Slack", logo: <TbBrandSlack size={22} color="#4A154B" aria-hidden /> },
+  { name: "Gmail", logo: <TbBrandGmail size={22} color="#EA4335" aria-hidden /> },
+  {
+    name: "Fireflies",
+    logo: (
+      <img
+        src="https://cdn.simpleicons.org/fireflies/7B4DBE"
+        alt=""
+        className="h-[22px] w-[22px]"
+      />
+    )
+  }
+] as const;
 
 export function OnboardingPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [projectName, setProjectName] = useState("");
-  const [clientName, setClientName] = useState("");
-  const [clientIndustry, setClientIndustry] = useState<string>(INDUSTRIES[0]);
+  const [workspaceName, setWorkspaceName] = useState("");
   const [newProjectId, setNewProjectId] = useState<string | null>(null);
   const [pdfFileName, setPdfFileName] = useState<string | null>(null);
   const [pdfUploaded, setPdfUploaded] = useState(false);
   const [connectedIntegrations, setConnectedIntegrations] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const canCreateProject = projectName.trim().length > 0 && clientName.trim().length > 0;
+  const canSetupWorkspace = workspaceName.trim().length > 0;
   const canGenerateSource = pdfUploaded || connectedIntegrations.length > 0;
 
-  const handleCreateProject = () => {
-    if (!canCreateProject) return;
+  const handleSetupWorkspace = () => {
+    if (!canSetupWorkspace) return;
 
+    const name = workspaceName.trim();
     const id = Date.now().toString();
     useWorkspaceStore.getState().addProject({
       id,
-      name: projectName.trim(),
-      clientName: clientName.trim(),
-      clientIndustry,
-      description: `${clientName.trim()} project`,
+      name,
+      clientName: name,
+      description: `${name} workspace`,
       deadline: "TBD",
       sprint: "1 of 1",
       progress: 0,
@@ -119,59 +129,35 @@ export function OnboardingPage() {
 
         {step === 1 ? (
           <div className="mt-10">
-            <h2 className="text-center font-sans text-[22px] font-medium text-[#1A1612]">Start your first project</h2>
+            <h2 className="text-center font-sans text-[22px] font-medium text-[#1A1612]">Set up your workspace</h2>
 
-            <p className="mt-8 font-mono text-[10px] tracking-[3px] text-[rgba(120,113,108,0.6)]">PROJECT DETAILS</p>
+            <p className="mt-8 font-mono text-[10px] tracking-[3px] text-[rgba(120,113,108,0.6)]">WORKSPACE</p>
 
-            <div className="mt-4 space-y-3">
-              <div>
-                <label className="font-sans text-[12px] text-[#78716C]">Project name</label>
-                <input
-                  required
-                  value={projectName}
-                  onChange={(e) => setProjectName(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-[rgba(26,22,18,0.08)] px-3.5 py-2.5 font-sans text-[13px] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
-                />
-              </div>
-              <div>
-                <label className="font-sans text-[12px] text-[#78716C]">Client name</label>
-                <input
-                  required
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-[rgba(26,22,18,0.08)] px-3.5 py-2.5 font-sans text-[13px] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
-                />
-              </div>
-              <div>
-                <label className="font-sans text-[12px] text-[#78716C]">Client industry</label>
-                <select
-                  value={clientIndustry}
-                  onChange={(e) => setClientIndustry(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-[rgba(26,22,18,0.08)] px-3.5 py-2.5 font-sans text-[13px] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
-                >
-                  {INDUSTRIES.map((industry) => (
-                    <option key={industry} value={industry}>
-                      {industry}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="mt-4">
+              <label className="font-sans text-[12px] text-[#78716C]">Workspace name</label>
+              <input
+                required
+                value={workspaceName}
+                onChange={(e) => setWorkspaceName(e.target.value)}
+                placeholder="e.g. Acme Product Team"
+                className="mt-1.5 w-full rounded-xl border border-[rgba(26,22,18,0.08)] px-3.5 py-2.5 font-sans text-[13px] text-[#1A1612] outline-none transition-colors focus:border-[#B8543D]"
+              />
             </div>
 
             <motion.button
               type="button"
-              disabled={!canCreateProject}
-              whileHover={canCreateProject ? { scale: 1.01 } : undefined}
-              whileTap={canCreateProject ? { scale: 0.98 } : undefined}
-              onClick={handleCreateProject}
+              disabled={!canSetupWorkspace}
+              whileHover={canSetupWorkspace ? { scale: 1.01 } : undefined}
+              whileTap={canSetupWorkspace ? { scale: 0.98 } : undefined}
+              onClick={handleSetupWorkspace}
               className={[
                 "mt-8 flex h-[56px] w-full items-center justify-center rounded-2xl border border-[rgba(26,22,18,0.08)] font-sans text-[18px] tracking-[0.06em] transition-colors duration-200",
-                canCreateProject
+                canSetupWorkspace
                   ? "bg-[#B8543D] text-white hover:border-[#B8543D]"
                   : "cursor-not-allowed bg-white text-[#1A1612] opacity-40"
               ].join(" ")}
             >
-              Create project
+              Continue
             </motion.button>
           </div>
         ) : null}
@@ -180,7 +166,7 @@ export function OnboardingPage() {
           <div className="mt-10">
             <h2 className="text-center font-sans text-[22px] font-medium text-[#1A1612]">Connect your first source</h2>
             <p className="mt-2 text-center font-sans text-[13px] text-[#78716C]">
-              Orchestra will read from this source and build your living document.
+              Orchestra will build your company&apos;s knowledge base
             </p>
 
             <button
@@ -204,24 +190,29 @@ export function OnboardingPage() {
             <p className="mt-8 font-sans text-[14px] font-medium text-[#1A1612]">Or connect an integration</p>
 
             <div className="mt-4 grid grid-cols-2 gap-3">
-              {INTEGRATIONS.map((name) => {
-                const connected = connectedIntegrations.includes(name);
+              {INTEGRATIONS.map((integration) => {
+                const connected = connectedIntegrations.includes(integration.name);
                 return (
                   <div
-                    key={name}
+                    key={integration.name}
                     className={[
                       "rounded-xl border bg-white p-4",
                       connected ? "border-[#2D4A3E]" : "border-[rgba(26,22,18,0.08)]"
                     ].join(" ")}
                   >
-                    <p className="font-sans text-[14px] font-medium text-[#1A1612]">{name}</p>
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#FAF8F5]">
+                        {integration.logo}
+                      </span>
+                      <p className="font-sans text-[14px] font-medium text-[#1A1612]">{integration.name}</p>
+                    </div>
                     {connected ? (
                       <p className="mt-3 font-sans text-[12px] text-[#2D4A3E]">Connected</p>
                     ) : (
                       <button
                         type="button"
                         className="orch-btn-secondary mt-3 w-full"
-                        onClick={() => handleConnectIntegration(name)}
+                        onClick={() => handleConnectIntegration(integration.name)}
                       >
                         Connect
                       </button>
