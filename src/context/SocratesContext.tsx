@@ -1,14 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { WORKSPACE_ID } from "../lib/workspace";
 
-export type PageContext =
-  | "dashboard"
-  | "brain"
-  | "flowchart"
-  | "memory"
-  | "live-doc"
-  | "requests"
-  | "project-overview";
+export type PageContext = "memory" | "requests" | "connectors";
 
 export type Message = {
   id: string;
@@ -41,13 +35,9 @@ type SocratesContextType = {
 };
 
 const PAGE_SUGGESTIONS: Record<PageContext, string[]> = {
-  dashboard: ["What's due this week?", "Any pending requests?", "Today's meetings?"],
-  brain: ["Explain the core product flows", "Which areas are still unresolved?", "What changed most recently?"],
-  flowchart: ["What are the critical paths?", "Which nodes have the most risk?", "Generate a dependency map"],
   memory: ["Find all decisions about auth", "What did the client say about payments?", "Show changes from last week"],
-  "live-doc": ["Summarize this document", "What changed since v1?", "Generate a system diagram"],
   requests: ["Which requests are blocking?", "Summarize pending changes", "What needs approval today?"],
-  "project-overview": ["How is BloomFast tracking?", "Who is overloaded?", "What's the next critical deadline?"]
+  connectors: ["Is VS Code connected?", "What does the extension sync?", "How do I connect VS Code?"]
 };
 
 const PROJECT_NAMES: Record<string, string> = {
@@ -57,8 +47,7 @@ const PROJECT_NAMES: Record<string, string> = {
 };
 
 let persistedMessages: Message[] = [];
-let persistedPageContext: PageContext = "dashboard";
-let persistedProjectId: string | null = null;
+let persistedPageContext: PageContext = "memory";
 
 function delay(ms: number) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -77,44 +66,28 @@ function includesAny(content: string, terms: string[]) {
 }
 
 function resolvePageContext(pathname: string): PageContext {
-  if (pathname === "/dashboard") {
-    return "dashboard";
-  }
-
-  if (pathname.includes("/brain")) {
-    return "brain";
-  }
-
-  if (pathname.includes("/flow")) {
-    return "flowchart";
-  }
-
   if (pathname.includes("/memory") || pathname.includes("/docs/")) {
     return "memory";
-  }
-
-  if (pathname.includes("/live-doc")) {
-    return "live-doc";
   }
 
   if (pathname.includes("/requests")) {
     return "requests";
   }
 
-  return "project-overview";
-}
-
-function getProjectName(projectId: string | null) {
-  if (!projectId) {
-    return "Portfolio";
+  if (pathname.includes("/connectors")) {
+    return "connectors";
   }
 
-  return PROJECT_NAMES[projectId] ?? "BloomFast";
+  return "memory";
+}
+
+function getProjectName(_projectId: string | null) {
+  return PROJECT_NAMES[WORKSPACE_ID] ?? "BloomFast";
 }
 
 function buildDependencyDiagram(projectName: string) {
   return `graph LR
-  Brief([${projectName} Brief]) --> DAG([Brain DAG])
+  Brief([${projectName} Brief]) --> DAG([Delivery DAG])
   DAG --> Build([Build Scope])
   Messages([Client Messages]) -.-> Changes([Accepted Changes])
   Changes -.-> Decisions([Decisions])
@@ -193,86 +166,24 @@ function buildUseCaseDiagram(projectName: string) {
 
 function pickTextResponse(pageContext: PageContext, content: string, projectName: string) {
   const responses: Record<PageContext, string[]> = {
-    dashboard: [
-      `You have **3 deadlines this week**: Payment Integration (3 days), Auth Module Handoff (5 days), and Dashboard v2 Delivery (11 days). ${projectName === "Portfolio" ? "BloomFast" : projectName} has the most urgent items.`,
-      `**2 pending requests** need your attention: Jack from BloomFast wants a promo code system, and Elena from Elara Games is requesting dark mode support.`,
-      `You have **3 meetings today**: BloomFast Standup at 9:00 AM, API Gateway Review at 11:30 AM, and Client Sync · Elara at 2:00 PM.`
-    ],
-    brain: [
-      `${projectName} has **8 documents** indexed. The core flows are: Buyer Ordering → Florist Dashboard → Driver Assignment. Two nodes are still unresolved: Subscription Model and Third-party Driver API.`,
-      `**Recent changes**: Manager approval requirement was added to Driver Assignment, OAuth was removed from auth scope, and Pro subscription was deferred to v2.`,
-      `**Unresolved areas**: The Third-party Driver API provider has not been confirmed. The Subscription Model pricing is still under discussion between the client and your team.`
-    ],
-    flowchart: [
-      `The critical path runs through **Buyer Ordering Flow → Driver Assignment → Admin Panel**. Driver Assignment is the highest-risk node because it depends on the unconfirmed Third-party Driver API.`,
-      `**3 nodes are at risk**: Driver Assignment, Subscription Model, and Third-party Driver API.`,
-      `The most connected node is **Order Service**. It depends on Payment, Driver Assignment, Florist Dashboard, and Notifications.`
-    ],
     memory: [
       `Found **4 documents** mentioning authentication. The key decision was OAuth removal. Current truth: email/password only for v1.`,
       `The client mentioned payments in **3 messages**. Stripe is confirmed, payouts must never block dispatch, and the revenue share is 70/30.`,
-      `**Last week's changes**: OAuth removed, manager approval added to driver flow, and Pro subscription deferred. All 3 are accepted and reflected in the Live Doc.`
-    ],
-    "live-doc": [
-      `This document has **6 sections** with accepted changes marked. The most recently changed section is Authentication.`,
-      `**Since v1**: Manager approval was added to Driver Assignment, OAuth was removed from auth, and Pro subscription moved to v2.`,
-      `The system diagram shows **8 components** with 7 connections. The highest-risk connection is Driver Assignment → Third-party Driver API.`
+      `**Last week's changes**: OAuth removed, manager approval added to driver flow, and Pro subscription deferred. All 3 are accepted in project memory.`
     ],
     requests: [
       `**2 requests are pending**: Promo code system for BloomFast and Dark mode support for Elara Games. Both need review before they can become accepted changes.`,
-      `The promo code request would affect **3 brain nodes**: Payment Integration, Buyer Ordering Flow, and Admin Panel.`,
-      `**4 requests total**: 2 accepted and 2 pending. Accepted requests are already reflected in the Live Doc.`
+      `The promo code request would affect **Payment Integration**, **Buyer Ordering Flow**, and **Admin Panel** scope.`,
+      `**4 requests total**: 2 accepted and 2 pending. Accepted requests are already reflected in project memory.`
     ],
-    "project-overview": [
-      `${projectName} is **34% complete** with a Jun 2026 deadline. Current status is HEALTHY. Sprint 2 of 8 is active and spend is tracking inside budget.`,
-      `**Team load**: SC is managing overall, MT and PK are on payment integration, and JW is on the florist dashboard. No one is currently flagged as overloaded.`,
-      `**Next critical deadline**: Payment Integration is due Apr 24. Marcus T and Priya K are assigned. Manager approval requirements were added last week.`
+    connectors: [
+      `**VS Code** is not connected for ${projectName} yet. Connect it from the Connectors page to sync workspace context.`,
+      `Once VS Code is connected, Orchestra can index open files, recent edits, and local project notes from your editor.`,
+      `The VS Code extension keeps context fresh without leaving your development flow.`
     ]
   };
 
   const options = responses[pageContext];
-
-  if (pageContext === "dashboard") {
-    if (includesAny(content, ["due", "deadline", "week"])) {
-      return options[0];
-    }
-
-    if (includesAny(content, ["request", "pending", "approval"])) {
-      return options[1];
-    }
-
-    if (includesAny(content, ["meeting", "today", "calendar"])) {
-      return options[2];
-    }
-  }
-
-  if (pageContext === "brain") {
-    if (includesAny(content, ["flow", "core", "explain"])) {
-      return options[0];
-    }
-
-    if (includesAny(content, ["change", "recent"])) {
-      return options[1];
-    }
-
-    if (includesAny(content, ["unresolved", "risk"])) {
-      return options[2];
-    }
-  }
-
-  if (pageContext === "flowchart") {
-    if (includesAny(content, ["critical", "path"])) {
-      return options[0];
-    }
-
-    if (includesAny(content, ["risk", "risky"])) {
-      return options[1];
-    }
-
-    if (includesAny(content, ["connected", "dependency"])) {
-      return options[2];
-    }
-  }
 
   if (pageContext === "memory") {
     if (includesAny(content, ["auth", "authentication"])) {
@@ -284,20 +195,6 @@ function pickTextResponse(pageContext: PageContext, content: string, projectName
     }
 
     if (includesAny(content, ["last week", "changes"])) {
-      return options[2];
-    }
-  }
-
-  if (pageContext === "live-doc") {
-    if (includesAny(content, ["summarize", "summary", "document"])) {
-      return options[0];
-    }
-
-    if (includesAny(content, ["v1", "changed", "since"])) {
-      return options[1];
-    }
-
-    if (includesAny(content, ["diagram", "system"])) {
       return options[2];
     }
   }
@@ -316,16 +213,16 @@ function pickTextResponse(pageContext: PageContext, content: string, projectName
     }
   }
 
-  if (pageContext === "project-overview") {
-    if (includesAny(content, ["tracking", "status", projectName.toLowerCase()])) {
+  if (pageContext === "connectors") {
+    if (includesAny(content, ["connected", "connect", "setup"])) {
       return options[0];
     }
 
-    if (includesAny(content, ["overloaded", "load", "team"])) {
+    if (includesAny(content, ["sync", "extension", "index"])) {
       return options[1];
     }
 
-    if (includesAny(content, ["deadline", "critical", "next"])) {
+    if (includesAny(content, ["how", "vscode", "code"])) {
       return options[2];
     }
   }
@@ -337,11 +234,10 @@ export const SocratesContext = createContext<SocratesContextType | null>(null);
 
 export function SocratesProvider({ children }: { children: ReactNode }) {
   const location = useLocation();
-  const { id } = useParams<{ id?: string }>();
   const [messages, setMessages] = useState<Message[]>(persistedMessages);
   const [isStreaming, setIsStreaming] = useState(false);
   const [pageContext, setPageContextState] = useState<PageContext>(persistedPageContext);
-  const [projectId, setProjectId] = useState<string | null>(persistedProjectId);
+  const projectId = WORKSPACE_ID;
 
   const derivedPageContext = useMemo(() => resolvePageContext(location.pathname), [location.pathname]);
 
@@ -350,20 +246,12 @@ export function SocratesProvider({ children }: { children: ReactNode }) {
   }, [derivedPageContext]);
 
   useEffect(() => {
-    setProjectId(id ?? null);
-  }, [id]);
-
-  useEffect(() => {
     persistedMessages = messages;
   }, [messages]);
 
   useEffect(() => {
     persistedPageContext = pageContext;
   }, [pageContext]);
-
-  useEffect(() => {
-    persistedProjectId = projectId;
-  }, [projectId]);
 
   const suggestions = PAGE_SUGGESTIONS[pageContext];
 
@@ -441,7 +329,7 @@ export function SocratesProvider({ children }: { children: ReactNode }) {
               {
                 source: `${projectName} PRD v2 · Section 3`,
                 excerpt: "Manager approval required before driver assignment confirmed.",
-                anchor: "driver-body"
+                anchor: "overview"
               }
             ]
           : undefined;

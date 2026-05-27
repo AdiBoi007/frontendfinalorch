@@ -138,7 +138,7 @@ export function ProjectsPage() {
             <ProjectCard
               key={project.id}
               project={project}
-              onClick={() => navigate(`/projects/${project.id}`)}
+              onClick={() => navigate(`/projects/${project.id}/memory`)}
             />
           ))}
         </div>

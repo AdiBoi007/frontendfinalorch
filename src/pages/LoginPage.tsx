@@ -71,11 +71,12 @@ export function LoginPage() {
     }
 
     if (role === "dev") {
-      navigate("/projects");
+      navigate("/memory");
       return;
     }
 
-    navigate("/dashboard");
+
+    navigate("/memory");
   };
 
   return (

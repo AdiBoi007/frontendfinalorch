@@ -4,7 +4,7 @@ import { TbBrandSlack, TbBrandWhatsapp, TbMail } from "react-icons/tb";
 import { CalendarCard } from "../components/dashboard/CalendarCard";
 import Avatar from "../components/ui/Avatar";
 import { PlusIcon } from "../components/ui/AppIcons";
-import { mockCalendarEvents, mockDeadlines, mockProjects, mockRequests } from "../lib/mockData";
+import { mockCalendarEvents, mockDeadlines, mockRequests } from "../lib/mockData";
 import type { RequestItem } from "../lib/types";
 
 const pageVariants = {
@@ -143,8 +143,6 @@ function TeamHeadcountCard() {
 
 export function DashboardPage() {
   const navigate = useNavigate();
-  const projects = mockProjects;
-
   return (
     <motion.div
       initial="hidden"
@@ -162,39 +160,29 @@ export function DashboardPage() {
             <p className="mt-2 font-sans text-[13px] font-normal text-[#78716C]">{getTodayLabel()}</p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => navigate("/onboarding")}
-            className="border-b border-[#1A1612] bg-transparent px-0 py-1 font-sans text-[11px] tracking-[0.12em] text-[#1A1612] transition-opacity hover:opacity-60"
-          >
-            New project
-          </button>
         </header>
       </motion.section>
 
       <motion.section variants={childVariants} className="mb-14">
-        <p className="section-label mb-8">Your projects</p>
+        <p className="section-label mb-8">Workspace</p>
 
-        <div className="grid gap-0 divide-y divide-[rgba(26,22,18,0.06)] border-t border-[rgba(26,22,18,0.06)] xl:grid-cols-3 xl:divide-x xl:divide-y-0">
-          {projects.map((project) => (
-            <button
-              key={project.id}
-              type="button"
-              onClick={() => navigate(`/projects/${project.id}`)}
-              className="group px-0 py-7 text-left transition-colors hover:bg-[rgba(26,22,18,0.02)] xl:px-8 xl:first:pl-0"
-            >
-              <p className="truncate font-sans text-[15px] font-normal text-[#1A1612]">{project.name}</p>
-
-              <div className="mt-5 h-px overflow-hidden bg-[rgba(26,22,18,0.06)]">
-                <div
-                  className="h-full bg-[#1A1612] transition-all duration-500 group-hover:bg-[#B8543D]"
-                  style={{ width: `${project.progress}%` }}
-                />
-              </div>
-
-              <p className="mt-3 font-mono text-[11px] tracking-wide text-[#78716C]">{project.progress}%</p>
-            </button>
-          ))}
+        <div className="grid gap-0 divide-y divide-[rgba(26,22,18,0.06)] border-t border-[rgba(26,22,18,0.06)] sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+          <button
+            type="button"
+            onClick={() => navigate("/memory")}
+            className="group px-0 py-7 text-left transition-colors hover:bg-[rgba(26,22,18,0.02)] sm:px-8 sm:first:pl-0"
+          >
+            <p className="font-sans text-[15px] font-normal text-[#1A1612]">Memory</p>
+            <p className="mt-2 font-sans text-[13px] text-[#78716C]">Documents, decisions, and project context</p>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/connectors")}
+            className="group px-0 py-7 text-left transition-colors hover:bg-[rgba(26,22,18,0.02)] sm:px-8"
+          >
+            <p className="font-sans text-[15px] font-normal text-[#1A1612]">Connectors</p>
+            <p className="mt-2 font-sans text-[13px] text-[#78716C]">VS Code and other workspace integrations</p>
+          </button>
         </div>
       </motion.section>
 

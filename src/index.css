@@ -177,3 +177,41 @@ textarea::placeholder {
   color: var(--purple);
   background: var(--purple-bg);
 }
+
+@layer components {
+  .orch-page {
+    @apply h-full overflow-y-auto bg-bg;
+  }
+
+  .orch-container {
+    @apply mx-auto w-full max-w-3xl px-10 py-10;
+  }
+
+  .orch-card {
+    @apply rounded-2xl border border-[rgba(26,22,18,0.08)] bg-white p-6 shadow-[0_4px_20px_rgba(26,22,18,0.04)];
+  }
+
+  .orch-input {
+    @apply w-full rounded-lg border border-[rgba(26,22,18,0.08)] bg-white px-3 py-2.5 font-sans text-[14px] text-[#1A1612] placeholder:text-[rgba(120,113,108,0.55)];
+  }
+
+  .orch-btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-[#B8543D] px-5 py-2.5 font-sans text-[14px] font-medium text-white transition-colors hover:bg-[#A04830] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .orch-btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border border-[rgba(26,22,18,0.08)] bg-white px-5 py-2.5 font-sans text-[14px] font-medium text-[#1A1612] transition-colors hover:border-[rgba(26,22,18,0.16)] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .orch-pill-green {
+    @apply inline-flex rounded-full px-2.5 py-0.5 font-sans text-[11px] font-medium;
+    color: var(--success-text);
+    background: var(--success-bg);
+  }
+
+  .orch-pill-red {
+    @apply inline-flex rounded-full px-2.5 py-0.5 font-sans text-[11px] font-medium;
+    color: var(--danger-text);
+    background: var(--danger-bg);
+  }
+}

@@ -1,35 +1,17 @@
 import type { ReactNode } from "react";
-import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Avatar from "../ui/Avatar";
-import {
-  ArrowLeftIcon,
-  BooksIcon,
-  FileDescriptionIcon,
-  FoldersIcon,
-  GitBranchIcon,
-  Grid2x2Icon,
-  LayoutDashboardIcon,
-  MessageSquareIcon,
-  SettingsIcon,
-  SparklesIcon
-} from "../ui/AppIcons";
+import { BooksIcon, MessageSquareIcon, SettingsIcon } from "../ui/AppIcons";
 
 export const NAV_BAR_WIDTH = 148;
 
-type NavItem =
-  | {
-      key: string;
-      kind?: "item";
-      label: string;
-      icon: ReactNode;
-      route: string;
-      active: boolean;
-    }
-  | {
-      key: string;
-      kind: "divider";
-    };
+type NavItem = {
+  key: string;
+  label: string;
+  icon: ReactNode;
+  route: string;
+  active: boolean;
+};
 
 const viewerByRole = {
   manager: { initials: "SC", label: "Manager", seed: "Sarah Chen" },
@@ -50,7 +32,7 @@ function getCurrentRole() {
   return "manager";
 }
 
-function NavItemButton({ item, onClick }: { item: Extract<NavItem, { kind?: "item" }>; onClick: () => void }) {
+function NavItemButton({ item, onClick }: { item: NavItem; onClick: () => void }) {
   return (
     <button
       type="button"
@@ -75,27 +57,20 @@ export function NavBar() {
   const role = getCurrentRole();
   const viewer = viewerByRole[role];
 
-  const currentProjectId = useMemo(() => {
-    const matchedProject = pathname.match(/^\/projects\/([^/]+)/);
-    return matchedProject?.[1] ?? "1";
-  }, [pathname]);
-
-  const isProjectRoute = pathname.startsWith("/projects/");
-
-  const generalItems: NavItem[] = [
+  const items: NavItem[] = [
     {
-      key: "dashboard",
-      label: "DASHBOARD",
-      icon: <Grid2x2Icon />,
-      route: "/dashboard",
-      active: pathname === "/dashboard"
+      key: "memory",
+      label: "MEMORY",
+      icon: <BooksIcon />,
+      route: "/memory",
+      active: pathname === "/memory" || pathname.startsWith("/memory/docs/")
     },
     {
-      key: "projects",
-      label: "PROJECTS",
-      icon: <FoldersIcon />,
-      route: "/projects",
-      active: pathname === "/projects"
+      key: "connectors",
+      label: "CONNECTORS",
+      icon: <MessageSquareIcon />,
+      route: "/connectors",
+      active: pathname === "/connectors"
     },
     {
       key: "settings",
@@ -105,61 +80,6 @@ export function NavBar() {
       active: pathname === "/settings"
     }
   ];
-
-  const projectItems: NavItem[] = [
-    {
-      key: "back",
-      label: "BACK",
-      icon: <ArrowLeftIcon />,
-      route: "/projects",
-      active: false
-    },
-    { key: "project-divider", kind: "divider" },
-    {
-      key: "overview",
-      label: "OVERVIEW",
-      icon: <LayoutDashboardIcon />,
-      route: `/projects/${currentProjectId}`,
-      active: new RegExp(`^/projects/${currentProjectId}$`).test(pathname)
-    },
-    {
-      key: "brain",
-      label: "BRAIN",
-      icon: <SparklesIcon />,
-      route: `/projects/${currentProjectId}/brain`,
-      active: new RegExp(`^/projects/${currentProjectId}/brain$`).test(pathname)
-    },
-    {
-      key: "flowchart",
-      label: "FLOWCHART",
-      icon: <GitBranchIcon />,
-      route: `/projects/${currentProjectId}/flow`,
-      active: new RegExp(`^/projects/${currentProjectId}/flow$`).test(pathname)
-    },
-    {
-      key: "memory",
-      label: "MEMORY",
-      icon: <BooksIcon />,
-      route: `/projects/${currentProjectId}/memory`,
-      active: new RegExp(`^/projects/${currentProjectId}/(?:memory|docs(?:/.*)?)$`).test(pathname)
-    },
-    {
-      key: "live-doc",
-      label: "LIVE DOC",
-      icon: <FileDescriptionIcon />,
-      route: `/projects/${currentProjectId}/live-doc`,
-      active: new RegExp(`^/projects/${currentProjectId}/live-doc$`).test(pathname)
-    },
-    {
-      key: "connectors",
-      label: "CONNECTORS",
-      icon: <MessageSquareIcon />,
-      route: `/projects/${currentProjectId}/connectors`,
-      active: new RegExp(`^/projects/${currentProjectId}/connectors$`).test(pathname)
-    }
-  ];
-
-  const items = isProjectRoute ? projectItems : generalItems;
 
   return (
     <aside
@@ -175,13 +95,9 @@ export function NavBar() {
       </div>
 
       <div className="flex-1 pt-1">
-        {items.map((item) => {
-          if (item.kind === "divider") {
-            return <div key={item.key} className="mx-3 my-1.5 h-px bg-[rgba(255,255,255,0.1)]" />;
-          }
-
-          return <NavItemButton key={item.key} item={item} onClick={() => navigate(item.route)} />;
-        })}
+        {items.map((item) => (
+          <NavItemButton key={item.key} item={item} onClick={() => navigate(item.route)} />
+        ))}
       </div>
 
       <div className="mb-3 px-3">

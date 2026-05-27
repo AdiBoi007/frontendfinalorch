@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeftIcon, CloseIcon, FileTextIcon } from "../components/ui/AppIcons";
 import { getAnchorProvenance, getDocViewer, getProjects } from "../lib/api";
+import { WORKSPACE_ID } from "../lib/workspace";
 import type { AnchorProvenance, DocSection, DocViewerPayload } from "../lib/types";
 
 type SectionDrafts = Record<string, string>;
@@ -93,7 +94,8 @@ function sectionValue(section: DocSection, drafts: SectionDrafts) {
 
 export function LiveDocViewerPage() {
   const navigate = useNavigate();
-  const { id = "1", docId = "1" } = useParams();
+  const { docId = "1" } = useParams();
+  const id = WORKSPACE_ID;
   const provenanceRequestRef = useRef(0);
 
   const [projectName, setProjectName] = useState("PROJECT");

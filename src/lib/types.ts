@@ -103,7 +103,7 @@ export interface ProjectDetail {
 export interface Doc {
   id: string;
   name: string;
-  type: "prd" | "srs" | "spec" | "transcript" | "audio" | "image" | "change" | "decision";
+  type: "prd" | "srs" | "spec" | "transcript" | "audio" | "image" | "change" | "decision" | "context";
   size: string;
   pages: number;
   status: "ready" | "processing" | "failed";
@@ -112,30 +112,7 @@ export interface Doc {
   excerpt: string;
 }
 
-export type DocFilter = "all" | "prd" | "srs" | "spec" | "transcript" | "audio" | "image" | "change" | "decision";
-
-export interface FlowNode {
-  id: string;
-  label: string;
-  type: "flow" | "module" | "integration" | "approval" | "unresolved";
-  status: "critical" | "at-risk" | "stable" | "unresolved";
-  description: string;
-  docRefs: string[];
-  position: { x: number; y: number };
-}
-
-export interface FlowEdge {
-  id: string;
-  from: string;
-  to: string;
-  label: string;
-  style: "solid" | "dashed";
-}
-
-export interface FlowGraph {
-  nodes: FlowNode[];
-  edges: FlowEdge[];
-}
+export type DocFilter = "all" | "prd" | "srs" | "spec" | "transcript" | "audio" | "image" | "change" | "decision" | "context";
 
 export interface DocSection {
   id: string;
@@ -177,81 +154,6 @@ export interface AnchorProvenance {
   }[];
 }
 
-export interface LiveDocSection {
-  id: string;
-  anchorId: string;
-  sectionLabel: string;
-  type: "title" | "section-heading" | "body" | "highlighted";
-  content: string;
-  highlight?: {
-    text: string;
-    start: number;
-    end: number;
-  };
-  sourceIds: string[];
-}
-
-export interface LiveDocComment {
-  id: string;
-  authorInitials: string;
-  authorName: string;
-  time: string;
-  date: string;
-  content: string;
-  source: string;
-  linkedSectionId: string;
-}
-
-export interface LiveDocPayload {
-  projectName: string;
-  docType: string;
-  version: string;
-  status: "DRAFT" | "REVIEW" | "ACCEPTED";
-  sections: LiveDocSection[];
-  comments: LiveDocComment[];
-}
-
-export type BrainCategoryId = "docs" | "comms" | "team" | "changes" | "decisions";
-
-export type BrainNodeKind = "core" | "category" | "sub";
-
-export type BrainIconKey = "file-text" | "message-square" | "users" | "git-branch" | "git-pull-request" | "check-square";
-
-export type BrainItemAction = "detail" | "navigate-docs" | "navigate-requests";
-
-export interface BrainDetailItem {
-  id: string;
-  label: string;
-  description: string;
-  action: BrainItemAction;
-}
-
-export interface BrainNodeData {
-  id: string;
-  kind: BrainNodeKind;
-  label: string;
-  x: number;
-  y: number;
-  size: number;
-  category?: BrainCategoryId;
-  parentId?: string;
-  icon?: BrainIconKey;
-  background: string;
-  borderColor: string;
-  textColor: string;
-  accentColor?: string;
-  shadow?: string;
-  tooltip: string;
-  countLabel: string;
-  detailItems?: BrainDetailItem[];
-}
-
-export interface ProjectBrainData {
-  projectId: string;
-  projectName: string;
-  nodes: BrainNodeData[];
-}
-
 export interface RoleOption {
   key: "manager" | "dev" | "client";
   label: "Manager" | "Dev" | "Client";
@@ -275,6 +177,7 @@ export interface ChatMessage {
 }
 
 export type IntegrationCategory =
+  | "editor"
   | "comms"
   | "calendar"
   | "payments"

@@ -1,5 +1,6 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { ArrowRightIcon, CheckIcon, FileTextIcon, GitBranchIcon, MessageSquareIcon, SparklesNodeIcon } from "../components/ui/AppIcons";
+import { useNavigate } from "react-router-dom";
+import { WORKSPACE_ID } from "../lib/workspace";
+import { ArrowRightIcon, CheckIcon, FileTextIcon, MessageSquareIcon, SparklesNodeIcon } from "../components/ui/AppIcons";
 import { mockProjects, mockRequests } from "../lib/mockData";
 
 const platformLabels = {
@@ -36,7 +37,7 @@ const demoFlow = [
     eyebrow: "Living docs",
     title: "PRD and flow update drafted",
     body: "The accepted change can update the V1 scope boundary and checkout requirements with the source citation still visible.",
-    meta: "Generated from Brain + accepted changes",
+    meta: "Generated from accepted changes",
     icon: FileTextIcon
   }
 ] as const;
@@ -49,7 +50,7 @@ const evidenceRows = [
 ];
 
 export function ProjectRequestsPage() {
-  const { id = "1" } = useParams();
+  const id = WORKSPACE_ID;
   const navigate = useNavigate();
   const project = mockProjects.find((item) => item.id === id) ?? mockProjects[0];
   const projectToken = project.name.split(" ")[0];
@@ -123,22 +124,14 @@ export function ProjectRequestsPage() {
               ))}
             </div>
 
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-5">
               <button
                 type="button"
-                onClick={() => navigate(`/projects/${id}/live-doc`)}
+                onClick={() => navigate("/memory")}
                 className="inline-flex items-center gap-2 rounded-full bg-[#1A1612] px-4 py-2 font-sans text-[12px] font-medium text-white"
               >
-                View live doc
+                View memory
                 <ArrowRightIcon className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate(`/projects/${id}/brain`)}
-                className="inline-flex items-center gap-2 rounded-full border border-[#D8D3CD] bg-white px-4 py-2 font-sans text-[12px] font-medium text-[#1A1612]"
-              >
-                Open Brain
-                <GitBranchIcon className="h-4 w-4" />
               </button>
             </div>
           </aside>

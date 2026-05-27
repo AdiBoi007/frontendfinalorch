@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type DragEvent } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FileTextIcon, SearchIcon, UploadCloudIcon, UploadIcon } from "../components/ui/AppIcons";
 import { getDocs, uploadDoc } from "../lib/api";
+import { WORKSPACE_ID } from "../lib/workspace";
 import type { Doc } from "../lib/types";
 
 type MemoryTab = "all" | "source-docs" | "communications" | "decisions" | "changes";
@@ -28,7 +29,8 @@ const uploadOptions: Array<{ id: Doc["type"]; label: string }> = [
   { id: "audio", label: "AUDIO" },
   { id: "image", label: "IMAGE" },
   { id: "change", label: "CHANGE" },
-  { id: "decision", label: "DECISION" }
+  { id: "decision", label: "DECISION" },
+  { id: "context", label: "CONTEXT" }
 ];
 
 const typeVisuals: Record<Doc["type"], TypeVisual> = {
@@ -39,7 +41,8 @@ const typeVisuals: Record<Doc["type"], TypeVisual> = {
   audio: { bg: "rgba(194,136,64,0.12)", iconColor: "#B8543D" },
   image: { bg: "#fff0f8", iconColor: "#e05590" },
   change: { bg: "rgba(158,59,46,0.10)", iconColor: "#9E3B2E" },
-  decision: { bg: "rgba(120,113,108,0.10)", iconColor: "#5A5450" }
+  decision: { bg: "rgba(120,113,108,0.10)", iconColor: "#5A5450" },
+  context: { bg: "rgba(120,113,108,0.10)", iconColor: "#5A5450" }
 };
 
 const extensionMap: Record<Doc["type"], string> = {
@@ -50,7 +53,8 @@ const extensionMap: Record<Doc["type"], string> = {
   audio: ".mp3",
   image: ".png",
   change: ".md",
-  decision: ".txt"
+  decision: ".txt",
+  context: ".txt"
 };
 
 function formatFileSize(size: number) {
@@ -91,8 +95,9 @@ function getFilename(doc: Doc) {
 
 export function ProjectMemoryPage() {
   const navigate = useNavigate();
-  const { id = "1" } = useParams();
+  const id = WORKSPACE_ID;
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const quickFileRef = useRef<HTMLInputElement | null>(null);
 
   const [docs, setDocs] = useState<Doc[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -102,6 +107,10 @@ export function ProjectMemoryPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDropActive, setIsDropActive] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [quickMode, setQuickMode] = useState<"pdf" | "md" | "context">("pdf");
+  const [quickFile, setQuickFile] = useState<File | null>(null);
+  const [contextText, setContextText] = useState("");
+  const [contextTitle, setContextTitle] = useState("");
 
   useEffect(() => {
     let isCancelled = false;
@@ -160,6 +169,39 @@ export function ProjectMemoryPage() {
     handleFileSelection(event.target.files?.[0] ?? null);
   };
 
+  const handleQuickFileSelect = (file: File | null) => {
+    if (!file) return;
+    setQuickFile(file);
+  };
+
+  const handleQuickUpload = async () => {
+    if (isUploading) return;
+
+    setIsUploading(true);
+    try {
+      if (quickMode === "context") {
+        const body = contextText.trim();
+        if (!body) return;
+        const title = (contextTitle.trim() || "Context note").slice(0, 80);
+        const contextFile = new File([body], `${title}.txt`, { type: "text/plain" });
+        const nextDoc = await uploadDoc(id, contextFile, "context");
+        setDocs((current) => [{ ...nextDoc }, ...current]);
+        setContextText("");
+        setContextTitle("");
+        return;
+      }
+
+      if (!quickFile) return;
+      const type = quickMode === "pdf" ? ("spec" as const) : ("change" as const);
+      const nextDoc = await uploadDoc(id, quickFile, type);
+      setDocs((current) => [{ ...nextDoc }, ...current]);
+      setQuickFile(null);
+      if (quickFileRef.current) quickFileRef.current.value = "";
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setIsDropActive(false);
@@ -194,8 +236,97 @@ export function ProjectMemoryPage() {
               </p>
             </div>
 
+            <div className="mb-10 rounded-[20px] border border-[rgba(26,22,18,0.08)] bg-white p-6 shadow-[0_4px_20px_rgba(26,22,18,0.04)]">
+              <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                <div className="min-w-0">
+                  <p className="font-mono text-[11px] tracking-[0.16em] text-[rgba(120,113,108,0.65)]">UPLOAD</p>
+                  <p className="mt-2 font-sans text-[18px] font-medium text-[#1A1612]">Add documents or context</p>
+                  <p className="mt-2 max-w-[520px] font-sans text-[13px] leading-6 text-[#78716C]">
+                    Upload PDFs, Markdown files, or paste free-form context to keep everything in one workspace memory.
+                  </p>
+                </div>
+                <div className="flex flex-shrink-0 items-center gap-2">
+                  {([
+                    { id: "pdf" as const, label: "PDF" },
+                    { id: "md" as const, label: "Markdown" },
+                    { id: "context" as const, label: "Context" }
+                  ] as const).map((option) => (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => {
+                        setQuickMode(option.id);
+                        setQuickFile(null);
+                        if (quickFileRef.current) quickFileRef.current.value = "";
+                      }}
+                      className={[
+                        "rounded-full px-3 py-1.5 font-sans text-[12px] transition-colors",
+                        quickMode === option.id
+                          ? "bg-[rgba(184,84,61,0.12)] text-[#B8543D]"
+                          : "bg-[#FAF8F5] text-[#5A5450] hover:bg-[rgba(26,22,18,0.06)]"
+                      ].join(" ")}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6">
+                {quickMode === "context" ? (
+                  <div className="space-y-3">
+                    <input
+                      value={contextTitle}
+                      onChange={(e) => setContextTitle(e.target.value)}
+                      placeholder="Title (optional)"
+                      className="w-full rounded-xl border border-[rgba(26,22,18,0.08)] bg-white px-4 py-3 font-sans text-[13px] text-[#1A1612] outline-none"
+                    />
+                    <textarea
+                      value={contextText}
+                      onChange={(e) => setContextText(e.target.value)}
+                      placeholder="Paste context here (notes, constraints, snippets, decisions, etc.)"
+                      rows={6}
+                      className="w-full resize-none rounded-xl border border-[rgba(26,22,18,0.08)] bg-white px-4 py-3 font-sans text-[13px] leading-6 text-[#1A1612] outline-none"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <input
+                      ref={quickFileRef}
+                      type="file"
+                      accept={quickMode === "pdf" ? ".pdf,application/pdf" : ".md,text/markdown"}
+                      onChange={(e) => handleQuickFileSelect(e.target.files?.[0] ?? null)}
+                      className="w-full rounded-xl border border-[rgba(26,22,18,0.08)] bg-white px-4 py-3 font-sans text-[13px] text-[#1A1612]"
+                    />
+                    <div className="flex items-center justify-between gap-3 sm:justify-end">
+                      <span className="truncate font-sans text-[12px] text-[#78716C]">
+                        {quickFile ? quickFile.name : "No file selected"}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="font-sans text-[12px] text-[#78716C]">
+                  {quickMode === "pdf" ? "Saved as SPEC." : quickMode === "md" ? "Saved as CHANGE." : "Saved as CONTEXT."}
+                </p>
+                <button
+                  type="button"
+                  disabled={
+                    isUploading ||
+                    (quickMode === "context" ? contextText.trim().length === 0 : quickFile === null)
+                  }
+                  onClick={() => void handleQuickUpload()}
+                  className="inline-flex items-center justify-center rounded-xl bg-[#1A1612] px-5 py-3 font-sans text-[13px] font-medium text-white transition-colors hover:bg-[#2A241F] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isUploading ? "Uploading…" : "Upload"}
+                </button>
+              </div>
+            </div>
+
             <div
-              className="mb-10 flex h-16 items-center gap-4 rounded-[20px] border-[1.5px] border-[rgba(255,255,255,0.9)] bg-[rgba(255,255,255,0.7)] px-6-[20px]"
+              className="mb-10 flex h-16 items-center gap-4 rounded-[20px] border-[1.5px] border-[rgba(255,255,255,0.9)] bg-[rgba(255,255,255,0.7)] px-6"
             >
               <div className="flex-shrink-0 text-[rgba(120,113,108,0.6)]">
                 <SearchIcon className="h-5 w-5" />
@@ -259,7 +390,7 @@ export function ProjectMemoryPage() {
                           roundedClass,
                           index > 0 ? "-mt-px" : ""
                         ].join(" ")}
-                        onClick={() => navigate(`/projects/${id}/docs/${doc.id}/view`)}
+                        onClick={() => navigate(`/memory/docs/${doc.id}/view`)}
                       >
                         <div className="flex items-start gap-4">
                           <div

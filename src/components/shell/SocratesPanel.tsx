@@ -8,30 +8,6 @@ import { SocratesProvider, useSocrates, type Message } from "../../context/Socra
 import OmniLogo from "../ui/OmniLogo";
 
 const rotatingSuggestionPools = {
-  dashboard: [
-    "What's due this week?",
-    "Any pending requests?",
-    "Today's meetings?",
-    "Which project needs attention first?",
-    "Show me the biggest risks",
-    "What changed since yesterday?"
-  ],
-  brain: [
-    "Explain the core product flows",
-    "Which areas are still unresolved?",
-    "What changed most recently?",
-    "Show me the critical dependencies",
-    "What is blocking delivery?",
-    "Summarize the current system state"
-  ],
-  flowchart: [
-    "What are the critical paths?",
-    "Which nodes have the most risk?",
-    "Generate a dependency map",
-    "Show the highest impact edge",
-    "What breaks if payments fail?",
-    "Summarize the main bottleneck"
-  ],
   memory: [
     "Find all decisions about auth",
     "What did the client say about payments?",
@@ -39,14 +15,6 @@ const rotatingSuggestionPools = {
     "Which sources mention approvals?",
     "Find contradictions in the docs",
     "What was decided most recently?"
-  ],
-  "live-doc": [
-    "Summarize this document",
-    "What changed since v1?",
-    "Generate a system diagram",
-    "Show unresolved sections",
-    "Which changes came from the client?",
-    "What needs another review?"
   ],
   requests: [
     "Which requests are blocking?",
@@ -56,13 +24,13 @@ const rotatingSuggestionPools = {
     "Show accepted vs pending",
     "What should I review first?"
   ],
-  "project-overview": [
-    "How is BloomFast tracking?",
-    "Who is overloaded?",
-    "What's the next critical deadline?",
-    "What should we ship next?",
-    "Show current project risks",
-    "Summarize team workload"
+  connectors: [
+    "Is VS Code connected?",
+    "What does the extension sync?",
+    "How do I connect VS Code?",
+    "What workspace context is indexed?",
+    "Does it read open files?",
+    "When was the last sync?"
   ]
 } as const;
 
@@ -334,7 +302,7 @@ function SocratesPanelContent({ onClose }: { onClose?: () => void }) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [query, setQuery] = useState("");
-  const { messages, isStreaming, sendMessage, projectId, pageContext } = useSocrates();
+  const { messages, isStreaming, sendMessage, projectId } = useSocrates();
 
   const lastMessage = messages[messages.length - 1];
   const showStreamingIndicator = isStreaming && lastMessage?.role === "assistant";
@@ -353,12 +321,8 @@ function SocratesPanelContent({ onClose }: { onClose?: () => void }) {
   }, [messages, isStreaming]);
 
   const emptyStateLabel = useMemo(() => {
-    if (pageContext === "dashboard") {
-      return "Ask about deadlines, meetings, or requests.";
-    }
-
-    return "Ask about this project, its documents, or generate a diagram.";
-  }, [pageContext]);
+    return "Ask about your workspace memory, connectors, requests, or generate a diagram.";
+  }, []);
 
   const handleSubmit = async () => {
     const trimmed = query.trim();
@@ -388,7 +352,7 @@ function SocratesPanelContent({ onClose }: { onClose?: () => void }) {
       return;
     }
 
-    void navigate(`/projects/${projectId}/live-doc#${anchor}`);
+    void navigate(`/memory/docs/1/view#${anchor}`);
   };
 
   return (

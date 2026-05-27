@@ -11,9 +11,7 @@ import type {
   ChatMessage,
   Doc,
   DocViewerPayload,
-  FlowGraph,
   IntegrationStatus,
-  LiveDocPayload,
   ProjectDetail,
   ProjectMember,
   RoleOption,
@@ -95,14 +93,6 @@ export const uploadDoc = async (projectId: string, file: File, type: string): Pr
   };
 };
 
-// TODO: replace mock with real fetch when backend ready
-// GET /v1/projects/:projectId/brain/graph/current
-// Returns: { nodes: FlowNode[], edges: FlowEdge[] }
-export const getFlowGraph = async (projectId: string): Promise<FlowGraph> => {
-  void projectId;
-  return mock.mockFlowGraph;
-};
-
 // TODO: GET /v1/projects/:projectId/documents/:documentId/view
 export const getDocViewer = async (projectId: string, docId: string): Promise<DocViewerPayload> => {
   void projectId;
@@ -119,22 +109,6 @@ export const getAnchorProvenance = async (
   void projectId;
   void docId;
   return mock.mockProvenance[anchorId] ?? null;
-};
-
-// TODO: GET /v1/projects/:projectId/brain/current
-// Returns compiled living doc built from brain + accepted changes
-export const getLiveDoc = async (projectId: string): Promise<LiveDocPayload> => {
-  void projectId;
-  return mock.mockLiveDoc;
-};
-
-// TODO: PATCH /v1/projects/:projectId/brain/current
-// Saves edits to live doc section
-export const saveLiveDocSection = async (projectId: string, sectionId: string, content: string) => {
-  void projectId;
-  void sectionId;
-  void content;
-  return { success: true };
 };
 
 // TODO: GET /v1/projects/:projectId/integrations

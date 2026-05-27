@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { TbBrandGmail, TbBrandSlack } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { markOnboardingComplete } from "../lib/api";
 import { storeConnectedIntegrationNames } from "../lib/integrationStorage";
@@ -12,17 +11,9 @@ const cardTransition = {
 };
 
 const INTEGRATIONS = [
-  { name: "Slack", logo: <TbBrandSlack size={22} color="#4A154B" aria-hidden /> },
-  { name: "Gmail", logo: <TbBrandGmail size={22} color="#EA4335" aria-hidden /> },
   {
-    name: "Fireflies",
-    logo: (
-      <img
-        src="https://cdn.simpleicons.org/fireflies/7B4DBE"
-        alt=""
-        className="h-[22px] w-[22px]"
-      />
-    )
+    name: "VS Code",
+    logo: <img src="https://cdn.simpleicons.org/visualstudiocode/007ACC" alt="" className="h-[22px] w-[22px]" />
   }
 ] as const;
 
@@ -82,7 +73,7 @@ export function OnboardingPage() {
 
     const timeout = window.setTimeout(() => {
       void markOnboardingComplete().then(() => {
-        navigate(`/projects/${newProjectId}`);
+        navigate("/memory");
       });
     }, 3000);
 
