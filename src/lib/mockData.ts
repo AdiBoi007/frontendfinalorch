@@ -76,11 +76,32 @@ export const mockChangelog: ChangelogEntry[] = [
     timestamp: "Apr 15, 2026 · 2:14 PM"
   },
   {
+    id: "cl-1b",
+    projectId: "1",
+    description: "Florist confirmed same-day cutoff moved to 2:00 PM local.",
+    source: "whatsapp",
+    timestamp: "Apr 14, 2026 · 5:40 PM"
+  },
+  {
     id: "cl-2",
     projectId: "1",
     description: "Pro subscription deferred to v2 after client kickoff call.",
     source: "slack",
     timestamp: "Apr 14, 2026 · 11:02 AM"
+  },
+  {
+    id: "cl-2b",
+    projectId: "1",
+    description: "Engineering agreed to ship driver retry queue before launch.",
+    source: "slack",
+    timestamp: "Apr 13, 2026 · 9:18 AM"
+  },
+  {
+    id: "cl-2c",
+    projectId: "1",
+    description: "Design review signed off on florist dashboard empty states.",
+    source: "slack",
+    timestamp: "Apr 12, 2026 · 4:55 PM"
   },
   {
     id: "cl-3",
@@ -104,6 +125,20 @@ export const mockChangelog: ChangelogEntry[] = [
     timestamp: "Apr 11, 2026 · 6:18 PM"
   },
   {
+    id: "cl-5b",
+    projectId: "1",
+    description: "Legal approved updated buyer refund policy language.",
+    source: "gmail",
+    timestamp: "Apr 10, 2026 · 2:05 PM"
+  },
+  {
+    id: "cl-5c",
+    projectId: "1",
+    description: "Stakeholder thread closed: OAuth removed from v1 scope.",
+    source: "gmail",
+    timestamp: "Apr 9, 2026 · 11:30 AM"
+  },
+  {
     id: "cl-6",
     projectId: "1",
     description: "PR #142 merged: driver assignment webhook and retry policy.",
@@ -111,11 +146,25 @@ export const mockChangelog: ChangelogEntry[] = [
     timestamp: "Apr 10, 2026 · 3:22 PM"
   },
   {
+    id: "cl-6b",
+    projectId: "1",
+    description: "PR #138 opened: Stripe Connect payout reconciliation job.",
+    source: "github",
+    timestamp: "Apr 8, 2026 · 1:48 PM"
+  },
+  {
     id: "cl-7",
     projectId: "1",
     description: "Sprint 14 scope locked — custom reporting deferred to v2.",
     source: "jira",
     timestamp: "Apr 9, 2026 · 10:15 AM"
+  },
+  {
+    id: "cl-7b",
+    projectId: "1",
+    description: "Ticket BF-214 accepted: manager approval gate on driver assign.",
+    source: "jira",
+    timestamp: "Apr 7, 2026 · 3:00 PM"
   }
 ];
 

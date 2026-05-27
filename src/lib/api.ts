@@ -48,7 +48,13 @@ export const getChangelog = async (projectId: string): Promise<ChangelogEntry[]>
   if (entries.length > 0) {
     return entries;
   }
-  return mock.mockChangelog.filter((entry) => entry.projectId === "1");
+
+  const storedIds = getStoredConnectedIntegrationIds(projectId);
+  if (storedIds.length > 0) {
+    return mock.mockChangelog.filter((entry) => entry.projectId === "1");
+  }
+
+  return [];
 };
 export const getSocratesSuggestions = async (page: "dashboard" | "project") => mock.mockSocratesSuggestions[page];
 export const getSocratesReply = async (page: "dashboard" | "project") => mock.mockSocratesReplies[page];
@@ -136,15 +142,12 @@ export const saveLiveDocSection = async (projectId: string, sectionId: string, c
 // connected: true  → OAuth / API key verified by backend
 // connected: false → not yet authorised; frontend should prompt user to connect
 export const getIntegrationStatuses = async (projectId: string): Promise<IntegrationStatus[]> => {
-  const storedIds = getStoredConnectedIntegrationIds(projectId);
-  const projectStatuses =
-    mock.mockIntegrationStatuses[projectId] ??
-    (storedIds.length === 0 ? mock.mockIntegrationStatuses["1"] ?? [] : []);
-  const statusById = new Map(projectStatuses.map((status) => [status.id, status]));
-  const storedConnected = new Set(storedIds);
+  const storedConnected = new Set(getStoredConnectedIntegrationIds(projectId));
+  const projectStatuses = mock.mockIntegrationStatuses[projectId];
+  const hasProjectMock = projectStatuses !== undefined;
 
   return mock.mockSupportedConnectors.map((connector) => {
-    const existing = statusById.get(connector.id);
+    const existing = projectStatuses?.find((status) => status.id === connector.id);
     const base: IntegrationStatus = existing ?? {
       ...connector,
       connected: false,
@@ -160,7 +163,15 @@ export const getIntegrationStatuses = async (projectId: string): Promise<Integra
       };
     }
 
-    return base;
+    if (hasProjectMock && existing?.connected) {
+      return existing;
+    }
+
+    return {
+      ...base,
+      connected: false,
+      accountConnected: false
+    };
   });
 };
 

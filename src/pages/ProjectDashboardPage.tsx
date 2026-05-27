@@ -159,9 +159,10 @@ export function ProjectDashboardPage() {
 
     for (const integration of connectedIntegrations) {
       const source = changelogSourceForIntegration(integration.name);
-      const entries = source
+      const entries = (source
         ? changelog.filter((entry) => entry.source === source)
-        : changelog.filter((entry) => entry.source === integration.name.toLowerCase());
+        : []
+      ).slice(0, 5);
       grouped.set(integration.id, entries);
     }
 
