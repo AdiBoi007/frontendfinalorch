@@ -102,6 +102,13 @@ export const mockChangelog: ChangelogEntry[] = [
     description: "Client asked for promo code support in checkout flow.",
     source: "gmail",
     timestamp: "Apr 11, 2026 · 6:18 PM"
+  },
+  {
+    id: "cl-6",
+    projectId: "1",
+    description: "PR #142 merged: driver assignment webhook and retry policy.",
+    source: "github",
+    timestamp: "Apr 10, 2026 · 3:22 PM"
   }
 ];
 
@@ -1294,6 +1301,7 @@ export const mockIntegrationStatuses: Record<string, IntegrationStatus[]> = {
   "1": [
     { id: "i-slack",    name: "Slack",           category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T10:00:00Z" },
     { id: "i-gmail",    name: "Gmail",            category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T09:30:00Z" },
+    { id: "i-github",   name: "GitHub",           category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-15T08:00:00Z" },
     { id: "i-whatsapp", name: "WhatsApp",         category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-14T18:00:00Z" },
     { id: "i-fireflies", name: "Fireflies",       category: "comms",          connected: false, accountConnected: false },
     { id: "i-jira",     name: "Jira",             category: "comms",          connected: true,  accountConnected: true,  lastSyncedAt: "2024-05-14T12:00:00Z" },

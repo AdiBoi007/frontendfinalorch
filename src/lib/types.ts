@@ -1,6 +1,6 @@
 export type UserRole = "manager" | "developer";
 
-export type ChangelogSource = "slack" | "whatsapp" | "gmail" | "manual" | "pdf";
+export type ChangelogSource = "slack" | "whatsapp" | "gmail" | "github" | "manual" | "pdf";
 
 export interface ChangelogEntry {
   id: string;
